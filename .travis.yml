@@ -36,6 +36,8 @@ matrix:
       osx_image: xcode11.1
 
 script:
-  - cmake .
+  - mkdir build
+  - cd build
+  - cmake ..
   - make
   - if [ -z "$CROSS" ]; then make test; fi
