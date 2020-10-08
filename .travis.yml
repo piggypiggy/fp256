@@ -1,0 +1,41 @@
+language: c
+
+dist:
+  -focal
+
+branches:
+  only:
+  - master
+
+matrix:
+  include:
+    - os: linux
+      arch: amd64
+      compiler: gcc    
+
+    - os: linux
+      arch: amd64
+      compiler: clang
+
+    - os: linux
+      addons:
+        apt:
+          packages:
+            - binutils-mingw-w64
+            - gcc-mingw-w64
+      compiler: x86_64-w64-mingw32-gcc
+      env: CROSS=mingw
+
+    - os: osx
+      arch: amd64
+      osx_image: xcode10.2
+      compiler: clang
+
+    - os: osx
+      arch: amd64
+      osx_image: xcode11.1
+
+script:
+  - cmake .
+  - make
+  - if [ -z "$CROSS" ]; then make test; fi

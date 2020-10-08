@@ -1,0 +1,20 @@
+*.asm
+*.def
+*.dll
+*.dylib
+*.exe
+*.lib
+*.o
+*.s
+*.so
+*.S
+*~
+/bin/
+/build/
+/.vscode/
+
+# generated header
+config.h
+
+# my test vector generator
+test_vector.py

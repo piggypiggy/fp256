@@ -1,0 +1,43 @@
+cmake_minimum_required(VERSION 3.1.0)
+
+project(bench)
+
+include_directories(${FP256_DIR}/)
+include_directories(${FP256_INCLUDE_DIR}/)
+
+SET(BENCH_HEADER
+    ${FP256_DIR}/config.h
+    ${FP256_DIR}/bench/bench.h
+)
+
+set(BENCH_SRC
+    ${SPEED_HEADER}
+    bench.c
+    ../test/simple_thread.h
+    ../test/simple_thread.c
+    ../test/test.c
+)
+
+add_executable(bench ${BENCH_SRC})
+
+set(static_lib fp256_static)
+set(shared_lib fp256_shared)
+
+# dependency
+# prefer static library :)
+if(BUILD_STATIC)
+    set(dep_lib ${static_lib})
+    target_compile_definitions(bench PRIVATE BUILD_STATIC)
+elseif(BUILD_SHARED)
+    set(dep_lib ${shared_lib})
+    target_compile_definitions(bench PRIVATE BUILD_SHARED)
+else()
+    message(FATAL_ERROR "no library compiled")
+endif()
+
+set(speed_DEP ${dep_lib})
+if(HAVE_PTHREAD)
+    list(APPEND speed_DEP pthread)
+endif()
+
+target_link_libraries(bench ${speed_DEP})
