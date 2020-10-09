@@ -3,19 +3,31 @@ language: c
 dist:
   -focal
 
-branches:
-  only:
-  - master
-
 matrix:
   include:
     - os: linux
       arch: amd64
-      compiler: gcc    
+      compiler: gcc
+      env: 
+        - option=-DCMAKE_BUILD_TYPE=Debug
+
+    - os: linux
+      arch: amd64
+      compiler: gcc
+      env: 
+        - option=-DCMAKE_BUILD_TYPE=Release
 
     - os: linux
       arch: amd64
       compiler: clang
+      env: 
+        - option=-DCMAKE_BUILD_TYPE=Debug
+
+    - os: linux
+      arch: amd64
+      compiler: clang
+      env: 
+        - option=-DCMAKE_BUILD_TYPE=Release
 
     - os: linux
       addons:
@@ -24,20 +36,27 @@ matrix:
             - binutils-mingw-w64
             - gcc-mingw-w64
       compiler: x86_64-w64-mingw32-gcc
-      env: CROSS=mingw
+      env: 
+        - CROSS=1
+        - toolchain=-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/x86_64-windows-mingw64.cmake
+        - option=-DCMAKE_BUILD_TYPE=Release
 
     - os: osx
       arch: amd64
       osx_image: xcode10.2
       compiler: clang
+      env: 
+        - option=-DCMAKE_BUILD_TYPE=Debug
 
     - os: osx
       arch: amd64
       osx_image: xcode11.1
+      env: 
+        - option=-DCMAKE_BUILD_TYPE=Release
 
 script:
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake $toolchain $option ..
   - make
   - if [ -z "$CROSS" ]; then make test; fi
