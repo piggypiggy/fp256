@@ -50,6 +50,7 @@ mod add                 |           330         |     6340000      |
 mod sqr                 |           491         |     4260000      |
 mod mul                 |           509         |     4110000      |
 mod inv                 |          4628         |      453000      |
+mont mul                |           130         |    16000000      |
 
 # license
 Apache 2.0
