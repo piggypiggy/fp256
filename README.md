@@ -41,7 +41,7 @@ high level api operates on 256 bit integer.
 
 # benchmark
 Some of benchmark results are listed below. Run build/bench/bench to get more.
-### AMD Ryzen 5 4600U, Ubuntu 20.04 LTS, gcc-9.3.0
+### AMD Ryzen 5 4600U 2.1GHz, Ubuntu 20.04 LTS, gcc-9.3.0
 arithmetic(256 bit)     |      cycles / op      |      op / s      |
 ------------------------|-----------------------|------------------|
 naive div               |           428         |     4890000      |
