@@ -201,6 +201,12 @@ void test_fp256_print_hex(const char *desp, const fp256 *a)
     fp256_print_hex(a);
 }
 
+void test_fp256_print_mont_ctx(const char *desp, const mont_ctx *mctx)
+{
+    printf("%s", desp);
+    fp256_print_mont_ctx(mctx);
+}
+
 int run_func(char *name, void*(*func)(void*), int64_t N, int64_t T)
 {
     TEST_THREAD_DATA thread_data;

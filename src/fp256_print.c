@@ -33,3 +33,18 @@ int fp256_print_hex(const fp256 *r)
     printf("%s\n", hex);
     return FP256_OK;
 }
+
+int fp256_print_mont_ctx(const mont_ctx *mctx)
+{
+    if (mctx == NULL)
+        return FP256_ERR;
+
+    printf("w  = %lu\n", mctx->w);
+    printf("N  = ");
+    fp256_print_hex(&mctx->N);
+    printf("RR = ");
+    fp256_print_hex(&mctx->RR);
+    printf("k0 = %llu\n\n", mctx->k0);
+
+    return FP256_OK;
+}

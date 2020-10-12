@@ -19,11 +19,14 @@
 #include "test.h"
 #include "test_local.h"
 
+#include "test.h"
+#include "test_local.h"
+
 void* fp256_mont_mul_test(void *p)
 {
     int64_t i, N;
-    fp256 r, odd, mod, k0;
-    size_t ol, w;
+    fp256 r, tr1, tr2, a, b, A, B, odd, mod, k0;
+    size_t al, bl, ol, w;
     mont_ctx mctx;
     TEST_THREAD_DATA *td;
 
@@ -35,8 +38,11 @@ void* fp256_mont_mul_test(void *p)
     for (i = 0; i < N; i++) {
         /* random odd modulo and corresponding R */
         do {
-            ol = rand();
-            ol %= 5;
+            al = rand() % 4 + 1;
+            fp256_rand_limbs(&a, al, 0);
+            bl = rand() % 4 + 1;
+            fp256_rand_limbs(&b, bl, 0);
+            ol = 4;
             fp256_rand_limbs(&odd, ol, 0);
             w = ol;
         } while (fp256_is_odd(&odd) != 1);
@@ -49,14 +55,36 @@ void* fp256_mont_mul_test(void *p)
         fp256_mod_neg(&r, &r, &mod);
         if (fp256_is_one(&r) != 1) {
             printf("fp256_mont_mul check k0 %" PRId64 " failed\n", i + 1);
-            test_fp256_print_hex("k0 = ", &k0);
-            test_fp256_print_hex("N  = ", &mctx.N);
+            test_fp256_print_mont_ctx("mont ctx:\n", &mctx);
             test_fp256_print_hex("r  = ", &r);
             goto end;
         }
 
-        /* TODO : mont mul/sqr test */
+        /* A = aR mod N */
+        fp256_to_mont(&A, &a, &mctx);
+        /* B = bR mod N */
+        fp256_to_mont(&B, &b, &mctx);
+        /* r = abR mod N */
+        fp256_mont_mul(&r, &A, &B, &mctx);
+        // fp256_mont_mul(&r, &a, &b, &mctx);
+        /* tr1 = Ab mod N = abR mod N */
+        fp256_mod_mul(&tr1, &A, &b, &mctx.N);
+        /* tr2 = aB mod N = abR mod N */
+        fp256_mod_mul(&tr2, &a, &B, &mctx.N);
 
+        /* check r = tr1 = tr2 */
+        if (fp256_cmp(&r, &tr1) != 0 || fp256_cmp(&r, &tr2) != 0) {
+            printf("fp256_mont_mul %" PRId64 " failed\n", i + 1);
+            test_fp256_print_mont_ctx("mont ctx:\n", &mctx);
+            test_fp256_print_hex("a   = ", &a);
+            test_fp256_print_hex("A   = ", &A);
+            test_fp256_print_hex("b   = ", &b);
+            test_fp256_print_hex("B   = ", &B);
+            test_fp256_print_hex("r   = ", &r);
+            test_fp256_print_hex("tr1 = ", &tr1);
+            test_fp256_print_hex("tr2 = ", &tr2);
+            goto end;
+        }
     }
 
     printf("fp256_mont_mul test passed \n");

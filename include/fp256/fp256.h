@@ -180,6 +180,8 @@ FP256_EXPORT int fp256_to_hex(u8 hex[FP256_LIMBS*16], const fp256 *a);
 /* convert big integer to hex string, then print it */
 FP256_EXPORT int fp256_print_hex(const fp256 *a);
 
+FP256_EXPORT int fp256_print_mont_ctx(const mont_ctx *mctx);
+
 /* left shift a by n bits, r stores lower 256 bit result */ 
 FP256_EXPORT int fp256_lshift(fp256 *r, const fp256 *a, size_t n);
 

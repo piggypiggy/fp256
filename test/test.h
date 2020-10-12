@@ -81,6 +81,7 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args);
 void set_test_args(TEST_ARGS *args, int64_t N, int64_t t);
 
 void test_fp256_print_hex(const char *desp, const fp256 *a);
+void test_fp256_print_mont_ctx(const char *desp, const mont_ctx *mctx);
 
 int run_test(char *name, int(*test_case)(void), void*(*test_func)(void*), int64_t N, int64_t T);
 
