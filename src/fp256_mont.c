@@ -66,9 +66,14 @@ int fp256_mont_mul(fp256 *r, const fp256 *a, const fp256 *b, const mont_ctx *mct
 
 int fp256_mont_sqr(fp256 *r, const fp256 *a, const mont_ctx *mctx)
 {
-    (void) r;
-    (void) a;
-    (void) mctx;
+    u64 rd[4];
+
+    if (r == NULL || a == NULL || mctx == NULL)
+        return FP256_ERR;
+
+    ll_u256_mont_sqr(rd, a->d, mctx->N.d, mctx->k0);
+    fp256_set_limbs(r, rd, 4, 0);
+
     return FP256_OK;
 }
 
