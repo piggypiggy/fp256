@@ -51,6 +51,7 @@ mod sqr                 |           491         |     4260000      |
 mod mul                 |           509         |     4110000      |
 mod inv                 |          4628         |      453000      |
 mont mul                |           130         |    16000000      |
+mont sqr                |           117         |    17800000      |
 
 # license
 Apache 2.0

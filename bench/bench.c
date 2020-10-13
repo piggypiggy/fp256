@@ -514,6 +514,51 @@ static void bench_fp256_mont_mul_clear(void *data)
     free(data);
 }
 
+/*************************** fp256_mont_sqr ***************************/
+typedef struct {
+    fp256 r;
+    fp256 a;
+    mont_ctx mctx;
+}FP256_MONT_SQR_DATA;
+
+static void* bench_fp256_mont_sqr_setup(void)
+{
+    int k;
+    fp256 N;
+    FP256_MONT_SQR_DATA *data;
+
+    data = malloc(NUM * sizeof(FP256_MONT_SQR_DATA));
+    /* random a, b, modulo */
+    for (k = 0; k < NUM; k++) {
+        fp256_rand_limbs(&data[k].a, 4, 0);
+        do {
+            fp256_rand_limbs(&N, 4, 0);
+        } while (fp256_is_zero(&N));
+        fp256_mont_ctx_init(&data[k].mctx, 4, &N);
+    }
+
+    return data;
+}
+
+static void bench_fp256_mont_sqr_run(void *_data, int64_t N)
+{
+    int k;
+    int64_t i;
+    FP256_MONT_SQR_DATA *data;
+
+    k = 0;
+    data = (FP256_MONT_SQR_DATA*)_data;
+    for (i = 0; i < N; i++) {
+        fp256_mont_sqr(&data[k].r, &data[k].a, &data[k].mctx);
+        k = (k + 1) % NUM;
+    }
+}
+
+static void bench_fp256_mont_sqr_clear(void *data)
+{
+    free(data);
+}
+
 static void* _run_bench(void *thread_data)
 {
     TEST_THREAD_DATA *ttd;
@@ -614,6 +659,9 @@ int main(int argc, char **argv)
 
     if (args.do_which.do_mont_mul)
         run_bench("fp256_mont_mul", bench_fp256_mont_mul_setup, bench_fp256_mont_mul_run, bench_fp256_mont_mul_clear, args.N, args.T);
+
+    if (args.do_which.do_mont_sqr)
+        run_bench("fp256_mont_sqr", bench_fp256_mont_sqr_setup, bench_fp256_mont_sqr_run, bench_fp256_mont_sqr_clear, args.N, args.T);
 
     fp256_deinit();
     return 0;
