@@ -210,7 +210,7 @@ int fp256_montmul_test_vector(void)
             test_fp256_print_mont_ctx("mont ctx:\n", &mctx);
             test_fp256_print_hex("tr  = ", &tr);
             test_fp256_print_hex("a   = ", &a);
-            test_fp256_print_hex("m   = ", &b);
+            test_fp256_print_hex("b   = ", &b);
             printf("tr should be :\n");
             test_fp256_print_hex("r = ", &r);
             return FP256_ERR;
