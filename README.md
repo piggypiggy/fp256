@@ -40,7 +40,7 @@ high level api operates on 256 bit integer.
 * more tests.
 
 # benchmark
-Some of benchmark results are listed below. Run build/bench/bench to get more.
+Some of benchmark results are listed below. Build and run build/bench/bench to get more.
 ### AMD Ryzen 5 4600U 2.1GHz, Ubuntu 20.04 LTS, gcc-9.3.0
 arithmetic(256 bit)     |      cycles / op      |      op / s      |
 ------------------------|-----------------------|------------------|

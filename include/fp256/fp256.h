@@ -188,16 +188,16 @@ FP256_EXPORT int fp256_lshift(fp256 *r, const fp256 *a, size_t n);
 /* right shift a by n bits */ 
 FP256_EXPORT int fp256_rshift(fp256 *r, const fp256 *a, size_t n);
 
-/*  */
+/* generate random r in range[0, 2^(64*nlimbs)) */
 FP256_EXPORT int fp256_rand_limbs(fp256 *r, size_t nlimbs, int neg);
 
-/*  */
+/* generate random r in range[0, 2^(8*nbytes)) */
 FP256_EXPORT int fp256_rand_bytes(fp256 *r, size_t nbytes, int neg);
 
-/*  */
+/* generate random r in range[0, 2^(nbits)) */
 FP256_EXPORT int fp256_rand_bits(fp256 *r, size_t nbits, int neg);
 
-/* */
+/* generate random r in range[0, range) */
 FP256_EXPORT int fp256_rand_range(fp256 *r, const fp256 *range);
 
 /* r = a + b, r stores lower 256 bit result */

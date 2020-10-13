@@ -41,7 +41,7 @@ my ($a0,$a1,$a2,$a3,$b)=("%rbp","%rbx","%r8","%rsi","%rdi");
 my ($acc0,$acc1,$acc2,$acc3,$acc4,$acc5)=("%r10","%r11","%r12","%r13","%r14","%r15");
 
 $code.=<<___;
-# void ll_u256_mont_mul(u64 r[4], const u64 a[4], const u64 b[4], const u64 N[4], u64 k0);
+# void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 Nd[4], u64 k0);
 .globl	ll_u256_mont_mul
 .type	ll_u256_mont_mul,\@function,5
 .align	32
@@ -368,7 +368,7 @@ my ($N0,$N1,$N2,$N3)=("%r12","%r13","%r14","%r15");
 my ($acc0,$acc1,$acc2,$acc3,$acc4,$acc5,$acc6,$acc7)=("%r8","%r9","%r10","%r11","%r12","%r13","%r14","%r15");
 
 $code.=<<___;
-# void ll_u256_mont_sqr(u64 r[4], const u64 a[4], const u64 N[4], u64 k0);
+# void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 .globl	ll_u256_mont_sqr
 .type	ll_u256_mont_sqr,\@function,4
 .align	32

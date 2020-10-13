@@ -161,8 +161,17 @@ FP256_EXPORT void ll_u256_mul(u64 rd[4*2], const u64 ad[4], const u64 bd[4]);
  */
 FP256_EXPORT void ll_u256_sqr(u64 rd[4*2], const u64 ad[4]);
 
-FP256_EXPORT void ll_u256_mont_mul(u64 r[4], const u64 a[4], const u64 b[4], const u64 p[4], u64 k0);
-FP256_EXPORT void ll_u256_mont_sqr(u64 r[4], const u64 a[4], const u64 N[4], u64 k0);
+/* rd = montgomery multiplication of ad and bd, 
+ * or rd = ad * bd * R^{-1} mod Nd, R = 2^256.
+ * ad and bd should be less than Nd.
+ */
+FP256_EXPORT void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 Nd[4], u64 k0);
+
+/* rd = montgomery multiplication of ad and ad, 
+ * or rd = ad^2 * R^{-1} mod Nd, R = 2^256.
+ * ad should be less than Nd.
+ */
+FP256_EXPORT void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 
 /* divide nd by dd
  * rd = nd % dd
@@ -271,7 +280,7 @@ FP256_EXPORT int ll_rand_bits(u64 *ad, size_t nbits);
 /* random integer in [0, range) */
 FP256_EXPORT int ll_rand_range(u64 *ad, const u64 *range, size_t rl);
 
-/*  */
+/* convert rd to hex array and print it */
 FP256_EXPORT int ll_print_hex(const u64 *rd, size_t rl);
 
 /* convert s to hex array and print it */

@@ -39,7 +39,7 @@ int fp256_print_mont_ctx(const mont_ctx *mctx)
     if (mctx == NULL)
         return FP256_ERR;
 
-    printf("w  = %lu\n", mctx->w);
+    printf("w  = %zu\n", mctx->w);
     printf("N  = ");
     fp256_print_hex(&mctx->N);
     printf("RR = ");
