@@ -1,7 +1,6 @@
 #include <fp256/fp256_ll.h>
 #include <stdio.h>
 
-/* TODO */
 int ll_print_hex(const u64 *rd, size_t rl)
 {
     u8 *hex;

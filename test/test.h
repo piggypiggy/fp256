@@ -68,7 +68,6 @@ typedef struct {
     int ok;
 } TEST_THREAD_DATA;
 
-
 /* start n threads */
 int test_start_n_thread(void* (*func)(void*), TEST_THREAD_DATA *thread_data);
 

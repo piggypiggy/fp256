@@ -19,7 +19,7 @@
 #include "test.h"
 #include "test_local.h"
 
-/* gcd = gcd(a, b) */
+/* gcd = greatest common divisor of (a, b) */
 typedef struct {
     char *gcd;
     char *a;
