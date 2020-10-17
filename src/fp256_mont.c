@@ -22,10 +22,12 @@
 int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
 {
     u64 RRN[4], tmp[9], k0;
-    ssize_t kl;
     size_t RRNl;
 
     if (mctx == NULL || N == NULL || w == 0 || w >= 5)
+        return FP256_ERR;
+
+    if (fp256_is_even(N) == 1)
         return FP256_ERR;
 
     mctx->w = w;
@@ -37,16 +39,35 @@ int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
     ll_div(RRN, NULL, &RRNl, NULL, tmp, N->d, 9, N->nlimbs);
     fp256_set_limbs(&mctx->RR, RRN, RRNl, 0);
 
+#if 0
+    ssize_t kl;
     /* tmp = 2^64 */
     ll_clear_set_bit(tmp, 64, 2);
     /* k0 = N^(-1) mod 2^64 */
-    ll_lehmer_exgcd(NULL, &k0, NULL, &kl, NULL, N->d, tmp, N->nlimbs, 2, 1);
+    ll_lehmer_exgcd(NULL, &k0, NULL, &kl, NULL, N->d, tmp, 1, 2, 1);
     assert(kl == 1 || kl == -1);
     if (kl == 1) {
         /* k0 = 2^64 - k0 */
         k0 = (~k0) + 1;
     }
     mctx->k0 = k0;
+#else
+    /* faster inversion mod 2^64 
+     * k*N = 1 mod 2^n
+     * => (k*N - 1)^2 = 0 mod 2^(2n)
+     * => k * (2 - k*N) * N = 1 mod 2^(2n)
+     */
+    u64 N0;
+    N0 = N->d[0];
+    k0 = (((N0 + 2u) & 4u) << 1) + N0; /* k0 * N = 1 mod 2^4 */
+    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^8 */
+    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^16 */
+    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^32 */
+    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^64 */
+    k0 = (~k0) + 1; /* -k0 mod 2^64 */
+    mctx->k0 = k0;
+
+#endif
 
     return FP256_OK;
 }
