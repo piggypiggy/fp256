@@ -98,7 +98,7 @@ ll_muladd_limb:
     test $rl, $rl
     jz .ll_muladd_limb_done     # if max{rl, al} = 0, do nothing.
 
-.ll_muladd_limb_loop:           # rd[0:al-1] += ad * b
+.ll_muladd_limb_loop:           # rd[0, al-1] += ad * b
     test $al, $al
     jz .ll_muladd_limb_loop_end
     mov 0($a_ptr), %rax
@@ -120,7 +120,7 @@ ll_muladd_limb:
     jge .ll_muladd_limb_loop_r
     jmp .ll_muladd_limb_loop_r_done
 
-.ll_muladd_limb_loop_r:         # rl >= al, rd[al:rl-1] += t1
+.ll_muladd_limb_loop_r:         # rl >= al, rd[al, rl-1] += t1
     test $t3, $t3
     jz .ll_muladd_limb_loop_r_done
     mov 0($r_ptr), $t2
@@ -163,7 +163,7 @@ ll_mulsub_limb:
     test $rl, $rl
     jz .ll_mulsub_limb_done      # if rl = 0, do nothing.
 
-.ll_mulsub_limb_loop:            # rd[0:al-1] -= ad * b
+.ll_mulsub_limb_loop:            # rd[0, al-1] -= ad * b
     test $al, $al
     jz .ll_mulsub_limb_loop_end
     mov 0($r_ptr), $t0
@@ -186,7 +186,7 @@ ll_mulsub_limb:
     jnz .ll_mulsub_limb_loop_r
     jmp .ll_mulsub_limb_loop_r_done
 
-.ll_mulsub_limb_loop_r:          # rl >= al, rd[al:rl-1] -= t1
+.ll_mulsub_limb_loop_r:          # rl >= al, rd[al, rl-1] -= t1
     test $t3, $t3
     jz .ll_mulsub_limb_loop_r_done
     mov 0($r_ptr), $t2

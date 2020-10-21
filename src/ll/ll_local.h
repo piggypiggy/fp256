@@ -6,6 +6,28 @@
 extern "C" {
 #endif
 
+// # ifndef USE_ASM
+/* very slow multiplication */
+# define LL_MUL64(rh, rl, a, b) do { \
+    u64 t1, t2, ah, al, bh, bl; \
+    ah = (a) >> 32; \
+    al = (a) & 0xffffffffULL; \
+    bh = (b) >> 32; \
+    bl = (b) & 0xffffffffULL; \
+    t1 = al * bh; \
+    t2 = ah * bl; \
+    (rl) = al * bl; \
+    (rh) = ah * bh; \
+    t1 += ((rl) >> 32); \
+    (rl) &= 0xffffffffULL; \
+    t1 += t2; \
+    if (t1 < t2) \
+        (rh) += 0x100000000ULL; \
+    (rl) |= (t1 << 32); \
+    (rh) += (t1 >> 32); \
+} while(0);
+// # endif
+
 /* rd = ad + b,
  * return carry */
 u64 ll_add_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
