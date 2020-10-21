@@ -252,11 +252,24 @@ FP256_EXPORT int fp256_gcd(fp256 *r, const fp256 *a, const fp256 *b);
  */
 FP256_EXPORT int fp256_is_coprime(const fp256 *a, const fp256 *b);
 
+/* initialize precomputed values for montgomery multiplication 
+ * R = 2^(64w),
+ * mctx->RR = 2^(128w) mod N
+ * mctx->k0 = -N^{-1} mod 2^64
+ */
 FP256_EXPORT int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N);
-FP256_EXPORT int fp256_mont_mul(fp256 *r, const fp256 *a, const fp256 *b, const mont_ctx *mctx);
-FP256_EXPORT int fp256_mont_sqr(fp256 *r, const fp256 *a, const mont_ctx *mctx);
-FP256_EXPORT int fp256_to_mont(fp256 *r, const fp256 *a, const mont_ctx *mctx);
-FP256_EXPORT int fp256_from_mont(fp256 *r, const fp256 *a, const mont_ctx *mctx);
+
+/* r = A * B * R^{-1} mod N */
+FP256_EXPORT int fp256_mont_mul(fp256 *r, const fp256 *A, const fp256 *B, const mont_ctx *mctx);
+
+/* r = A^2 * R^{-1} mod N */
+FP256_EXPORT int fp256_mont_sqr(fp256 *r, const fp256 *A, const mont_ctx *mctx);
+
+/* A = a * R mod N */
+FP256_EXPORT int fp256_to_mont(fp256 *A, const fp256 *a, const mont_ctx *mctx);
+
+/* a = A * R^{-1} mod N */
+FP256_EXPORT int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx);
 
 FP256_EXPORT int fp256_has_neon(void);
 FP256_EXPORT int fp256_has_sse2(void);

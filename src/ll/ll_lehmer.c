@@ -226,7 +226,7 @@ size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl,
                 ll_copy_limbs(td, v0, vl);
             if (tl != NULL)
                 *tl = (ssize_t)-vl;
-                
+
             if (sd != NULL) {
                 /* sd = (bd * v0 + gcd) / ad */
                 tsl = ll_mul(tsd, bd, v0, bl, vl);

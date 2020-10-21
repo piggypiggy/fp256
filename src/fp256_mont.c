@@ -72,47 +72,47 @@ int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
     return FP256_OK;
 }
 
-int fp256_mont_mul(fp256 *r, const fp256 *a, const fp256 *b, const mont_ctx *mctx)
+int fp256_mont_mul(fp256 *r, const fp256 *A, const fp256 *B, const mont_ctx *mctx)
 {
     u64 rd[4];
 
-    if (r == NULL || a == NULL || b == NULL || mctx == NULL)
+    if (r == NULL || A == NULL || B == NULL || mctx == NULL)
         return FP256_ERR;
 
-    ll_u256_mont_mul(rd, a->d, b->d, mctx->N.d, mctx->k0);
+    ll_u256_mont_mul(rd, A->d, B->d, mctx->N.d, mctx->k0);
     fp256_set_limbs(r, rd, 4, 0);
 
     return FP256_OK;
 }
 
-int fp256_mont_sqr(fp256 *r, const fp256 *a, const mont_ctx *mctx)
+int fp256_mont_sqr(fp256 *r, const fp256 *A, const mont_ctx *mctx)
 {
     u64 rd[4];
 
-    if (r == NULL || a == NULL || mctx == NULL)
+    if (r == NULL || A == NULL || mctx == NULL)
         return FP256_ERR;
 
-    ll_u256_mont_sqr(rd, a->d, mctx->N.d, mctx->k0);
+    ll_u256_mont_sqr(rd, A->d, mctx->N.d, mctx->k0);
     fp256_set_limbs(r, rd, 4, 0);
 
     return FP256_OK;
 }
 
-int fp256_to_mont(fp256 *r, const fp256 *a, const mont_ctx *mctx)
+int fp256_to_mont(fp256 *A, const fp256 *a, const mont_ctx *mctx)
 {
-    if (r == NULL || a == NULL || mctx == NULL)
+    if (A == NULL || a == NULL || mctx == NULL)
         return FP256_ERR;
 
-    return fp256_mont_mul(r, a, &mctx->RR, mctx);
+    return fp256_mont_mul(A, a, &mctx->RR, mctx);
 }
 
-int fp256_from_mont(fp256 *r, const fp256 *a, const mont_ctx *mctx)
+int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
 {
     fp256 one;
 
-    if (r == NULL || a == NULL || mctx == NULL)
+    if (a == NULL || A == NULL || mctx == NULL)
         return FP256_ERR;
 
     fp256_set_one(&one);
-    return fp256_mont_mul(r, a, &one, mctx);
+    return fp256_mont_mul(a, A, &one, mctx);
 }
