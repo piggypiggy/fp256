@@ -276,7 +276,7 @@ int fp256_clear_set_bit(fp256 *a, size_t idx)
     return FP256_OK;
 }
 
-void fp256_clear(fp256 *a)
+void fp256_cleanse(fp256 *a)
 {
     size_t i;
     volatile u8 *p;

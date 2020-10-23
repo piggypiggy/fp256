@@ -163,7 +163,7 @@ FP256_EXPORT int fp256_set_bit(fp256 *a, size_t idx);
 FP256_EXPORT int fp256_clear_set_bit(fp256 *a, size_t idx);
 
 /* clear data in fp256 structure */
-FP256_EXPORT void fp256_clear(fp256 *a);
+FP256_EXPORT void fp256_cleanse(fp256 *a);
 
 /* convert byte array to big integer */ 
 FP256_EXPORT int fp256_from_bytes(fp256 *r, const u8 *bytes, size_t blen);
