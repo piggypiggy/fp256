@@ -240,7 +240,7 @@ FP256_EXPORT int fp256_mod_sqr(fp256 *r, const fp256 *a, const fp256 *m);
 /* r = a^{-1} mod m */
 FP256_EXPORT int fp256_mod_inv(fp256 *r, const fp256 *a, const fp256 *m);
 
-FP256_EXPORT int fp256_mod_exp(fp256 *r, const fp256 *a, const fp256 *exp, const fp256 *m);
+FP256_EXPORT int fp256_mod_exp(fp256 *r, const fp256 *a, const fp256 *e, const fp256 *m);
 
 /* r = gcd(a, b) */
 FP256_EXPORT int fp256_gcd(fp256 *r, const fp256 *a, const fp256 *b);

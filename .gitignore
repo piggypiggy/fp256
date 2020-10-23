@@ -1,3 +1,4 @@
+*.a
 *.asm
 *.def
 *.dll

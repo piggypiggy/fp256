@@ -164,11 +164,11 @@ int fp256_mod_inv(fp256 *r, const fp256 *a, const fp256 *m)
 }
 
 /* TODO :  */
-int fp256_mod_exp(fp256 *r, const fp256 *a, const fp256 *exp, const fp256 *m)
+int fp256_mod_exp(fp256 *r, const fp256 *a, const fp256 *e, const fp256 *m)
 {
     (void) r;
     (void) a;
-    (void) exp;
+    (void) e;
     (void) m;
     return FP256_OK;
 }
