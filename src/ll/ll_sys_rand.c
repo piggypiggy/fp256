@@ -1,13 +1,15 @@
 #include <fp256/fp256_ll.h>
 
 #if defined(OS_LINUX)
-# include <sys/random.h>
+# if defined(HAVE_SYS_RANDOM_H)
+#  define HAVE_RANDOM
+#  include <sys/random.h>
 
-# ifdef USE_DEV_RANDOM
-#  define RANDOM_FLAG GRND_RANDOM
-# else
-#  define RANDOM_FLAG GRND_NONBLOCK
-# endif
+#  ifdef USE_DEV_RANDOM
+#   define RANDOM_FLAG GRND_RANDOM
+#  else
+#   define RANDOM_FLAG GRND_NONBLOCK
+#  endif
 
 int ll_rand_buf(unsigned char *buf, size_t buflen)
 {
@@ -29,9 +31,11 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 
     return FP256_OK;
 }
+# endif
 #endif
 
 #if defined(OS_WINDOWS)
+# define HAVE_RANDOM
 # include <windows.h>
 # define RtlGenRandom SystemFunction036
 # if !defined(__MINGW64__)
@@ -49,6 +53,7 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 #endif
 
 #if defined(OS_OPENBSD)
+# define HAVE_RANDOM
 int ll_rand_buf(unsigned char *buf, size_t buflen)
 {
     arc4random_buf(buf, buflen);
@@ -57,7 +62,9 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 #endif
 
 #if defined(OS_IOS) || defined(OS_MACOSX)
-# include <sys/random.h>
+# if defined(HAVE_SYS_RANDOM_H) && defined(HAVE_GETENTROPY)
+#  define HAVE_RANDOM
+#  include <sys/random.h>
 int ll_rand_buf(unsigned char *buf, size_t buflen)
 {
     int ret;
@@ -72,5 +79,53 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 
     ret = getentropy(buf, buflen);
     return (ret == 0 ? FP256_OK : FP256_ERR);
+}
+# endif
+#endif
+
+#if !defined HAVE_RANDOM
+# include <fcntl.h>
+# include <unistd.h>
+# include <sys/stat.h>
+
+static int fd;
+static int initialized = 0;
+
+/* use /dev/(u)random directly */
+int ll_rand_buf(unsigned char *buf, size_t buflen)
+{
+    ssize_t n;
+    ssize_t readn;
+
+    if (initialized == 0) {
+#  ifdef USE_DEV_RANDOM
+        fd = open("/dev/random", O_RDONLY);
+#  else
+        fd = open("/dev/urandom", O_RDONLY);
+#  endif
+        if (fd == -1) {
+            abort();
+        }
+        initialized = 1;
+    }
+
+    readn = 0;
+    do {
+        n = read(fd, buf, buflen);
+        if (n < 0) {
+            if (errno == EINTR || errno == EAGAIN)
+                continue;
+            else
+                return FP256_ERR;
+        }
+
+        if (n == 0)
+            break;
+
+        readn += n;
+        buf += n;
+    } while ((size_t)readn < buflen);
+
+    return FP256_OK;
 }
 #endif

@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include <fp256/fp256.h>
+#include "fp256_local.h"
 
 #ifdef _WIN32
 # include <windows.h>
@@ -140,6 +141,9 @@ int fp256_init(void)
             return FP256_ERR;
         return FP256_OK;
     }
+
+    if (fp256_rand_init() != FP256_OK)
+        abort();
 
     // TODO : cpuid
 

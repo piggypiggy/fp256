@@ -21,4 +21,12 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "iOS")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Android")
     set(OS_ANDROID 1)
 
+else()
+    message(FATAL_ERROR "Unknown OS")
+endif()
+
+if(NOT OS_WINDOWS)
+    check_include_files(sys/random.h HAVE_SYS_RANDOM_H)
+    check_function_exists(getrandom HAVE_GETRANDOM)
+    check_function_exists(getentropy HAVE_GETENTROPY)
 endif()

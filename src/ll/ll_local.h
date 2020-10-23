@@ -6,7 +6,7 @@
 extern "C" {
 #endif
 
-// # ifndef USE_ASM
+# ifndef USE_ASM
 /* very slow multiplication */
 # define LL_MUL64(rh, rl, a, b) do { \
     u64 t1, t2, ah, al, bh, bl; \
@@ -26,7 +26,7 @@ extern "C" {
     (rl) |= (t1 << 32); \
     (rh) += (t1 >> 32); \
 } while(0);
-// # endif
+# endif
 
 /* rd = ad + b,
  * return carry */

@@ -77,3 +77,11 @@ int fp256_rand_range(fp256 *r, const fp256 *range)
     fp256_set_limbs(r, td, 4, range->neg);
     return ret;
 }
+
+int fp256_rand_init(void)
+{
+    u8 buf[16];
+
+    /* just call ll_rand_buf() once */
+    return ll_rand_buf(buf, 16);
+}

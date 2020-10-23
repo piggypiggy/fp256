@@ -48,6 +48,8 @@ if(USE_ASM)
     endif()
 endif()
 
+include(CheckIncludeFiles)
+include(CheckFunctionExists)
 include(${CMAKE_MODULE_DIR}/arch.cmake)
 include(${CMAKE_MODULE_DIR}/platform.cmake)
 include(${CMAKE_MODULE_DIR}/compiler.cmake)
