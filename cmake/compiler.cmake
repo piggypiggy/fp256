@@ -6,9 +6,15 @@ endif()
 if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
     set(COMPILER_CLANG 1)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic")
+
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    endif()
+
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer")
     endif()
+
     if(ARCH_X86_64 AND USE_ASM)
         enable_language(ASM)
     endif()
@@ -16,9 +22,15 @@ if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
 elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
     set(COMPILER_GCC 1)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic")
+
+    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+    endif()
+
     if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer")
     endif()
+
     if(ARCH_X86_64 AND USE_ASM)
         enable_language(ASM)
         if(OS_LINUX)
