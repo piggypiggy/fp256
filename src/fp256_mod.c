@@ -146,7 +146,7 @@ int fp256_mod_sqr(fp256 *r, const fp256 *a, const fp256 *m)
 int fp256_mod_inv(fp256 *r, const fp256 *a, const fp256 *m)
 {
     ssize_t sl;
-    u64 sd[4];
+    u64 sd[5];
 
     if (fp256_is_zero(a) || fp256_is_zero(m))
         return FP256_ERR;
