@@ -31,6 +31,8 @@ high level api operates on 256 bit integer.
 `-DBUILD_SHARED` : build shared library, default is `ON`.   
 `-DUSE_DEV_RANDOM` : use /dev/random to get random number, default is `OFF`(use /dev/urandom).  
 `-DUSE_ASM` : use assembly code, default is `ON`. it can not be turned off since there is no C implementation to fall back yet.  
+`-DUSE_ASAN` : use AddressSanitizer, default is `OFF`.  
+`-DUSE_MSAN` : use MemorySanitizer default is `OFF`.  
 
 # TODO
 * Division can be much more faster by replacing division with multiplication.

@@ -9,25 +9,36 @@ matrix:
       arch: amd64
       compiler: gcc
       env: 
-        - option=-DCMAKE_BUILD_TYPE=Debug
+        - buildtype = -DCMAKE_BUILD_TYPE=Debug
+        - sanitizer = -DUSE_ASAN=ON
 
     - os: linux
       arch: amd64
       compiler: gcc
       env: 
-        - option=-DCMAKE_BUILD_TYPE=Release
+        - buildtype = -DCMAKE_BUILD_TYPE=Release
+        - sanitizer = -DUSE_ASAN=ON
 
     - os: linux
       arch: amd64
       compiler: clang
       env: 
-        - option=-DCMAKE_BUILD_TYPE=Debug
+        - buildtype = -DCMAKE_BUILD_TYPE=Debug
+        - sanitizer = -DUSE_ASAN=ON
 
     - os: linux
       arch: amd64
       compiler: clang
       env: 
-        - option=-DCMAKE_BUILD_TYPE=Release
+        - buildtype = -DCMAKE_BUILD_TYPE=Debug
+        - sanitizer = -DUSE_MSAN=ON
+
+    - os: linux
+      arch: amd64
+      compiler: clang
+      env: 
+        - buildtype = -DCMAKE_BUILD_TYPE=Release
+        - sanitizer = -DUSE_MSAN=ON
 
     - os: linux
       addons:
@@ -38,25 +49,27 @@ matrix:
       compiler: x86_64-w64-mingw32-gcc
       env: 
         - CROSS=1
-        - toolchain=-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/x86_64-windows-mingw64.cmake
-        - option=-DCMAKE_BUILD_TYPE=Release
+        - toolchain = -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/x86_64-windows-mingw64.cmake
+        - buildtype = -DCMAKE_BUILD_TYPE=Release
 
     - os: osx
       arch: amd64
       osx_image: xcode10.2
       compiler: clang
       env: 
-        - option=-DCMAKE_BUILD_TYPE=Debug
+        - buildtype = -DCMAKE_BUILD_TYPE=Debug
+        - sanitizer = -DUSE_ASAN=ON
 
     - os: osx
       arch: amd64
       osx_image: xcode11.1
       env: 
-        - option=-DCMAKE_BUILD_TYPE=Release
+        - buildtype=-DCMAKE_BUILD_TYPE=Release
+        - sanitizer = -DUSE_MSAN=ON
 
 script:
   - mkdir build
   - cd build
-  - cmake $toolchain $option ..
+  - cmake $toolchain $buildtype $sanitizer ..
   - make
   - if [ -z "$CROSS" ]; then make test; fi

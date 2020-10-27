@@ -17,6 +17,8 @@ option(BUILD_STATIC "build static library" ON)
 option(BUILD_SHARED "build shared library" ON)
 option(USE_DEV_RANDOM "use dev/random, default : use dev/urandom" OFF)
 option(USE_ASM "use assembly code" ON)
+option(USE_ASAN "use AddressSanitizer" OFF)
+option(USE_MSAN "use MemorySanitizer" OFF)
 
 if(NOT USE_ASM)
     set(USE_ASM ON)
