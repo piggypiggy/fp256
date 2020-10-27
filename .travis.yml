@@ -54,6 +54,13 @@ matrix:
 
     - os: osx
       arch: amd64
+      compiler: gcc
+      env: 
+        - buildtype=-DCMAKE_BUILD_TYPE=Release
+        - sanitizer=-DUSE_ASAN=ON
+
+    - os: osx
+      arch: amd64
       osx_image: xcode10.2
       compiler: clang
       env: 
@@ -63,6 +70,7 @@ matrix:
     - os: osx
       arch: amd64
       osx_image: xcode11.1
+      compiler: clang
       env: 
         - buildtype=-DCMAKE_BUILD_TYPE=Release
         - sanitizer=-DUSE_MSAN=ON
