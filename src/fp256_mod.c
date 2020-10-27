@@ -38,6 +38,7 @@ int fp256_mod_add(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     u64 rd[5], remd[4];
     size_t rl, reml;
 
+    rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
     if (a->neg == b->neg) {
         rem_neg = a->neg;
         rd[4] = ll_u256_add(rd, a->d, b->d);
@@ -72,6 +73,7 @@ int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     u64 rd[5], remd[4];
     size_t rl, reml;
 
+    rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
     if (a->neg == b->neg) {
         if (fp256_cmp_abs(a, b) >= 0) {
             /* |a| >= |b| */
