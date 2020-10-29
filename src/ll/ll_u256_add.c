@@ -22,11 +22,67 @@
 #ifndef USE_ASM
 u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4])
 {
-    return 0;
+    u64 t, r, carry;
+
+    t = ad[0];
+    r = t + bd[0];
+    carry = (r < t);
+    rd[0] = r;
+
+    t = ad[1];
+    t += carry;
+    carry = (t < carry);
+    r = t + bd[1];
+    carry |= (r < t);
+    rd[1] = r;
+
+    t = ad[2];
+    t += carry;
+    carry = (t < carry);
+    r = t + bd[2];
+    carry |= (r < t);
+    rd[2] = r;
+
+    t = ad[3];
+    t += carry;
+    carry = (t < carry);
+    r = t + bd[3];
+    carry |= (r < t);
+    rd[3] = r;
+
+    return carry;
 }
 
 u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4])
 {
-    return 0;
+    u64 t, r, borrow;
+
+    t = ad[0];
+    r = t - bd[0];
+    borrow = (r > t);
+    rd[0] = r;
+
+    t = ad[1];
+    t -= borrow;
+    borrow = (t > ad[1]);
+    r = t - bd[1];
+    borrow |= (r > t);
+    rd[1] = r;
+
+    t = ad[2];
+    t -= borrow;
+    borrow = (t > ad[2]);
+    r = t - bd[2];
+    borrow |= (r > t);
+    rd[2] = r;
+
+    t = ad[3];
+    t -= borrow;
+    borrow = (t > ad[3]);
+    r = t - bd[3];
+    borrow |= (r > t);
+    rd[3] = r;
+
+    return borrow;
 }
 #endif
