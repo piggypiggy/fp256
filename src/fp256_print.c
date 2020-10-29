@@ -24,7 +24,7 @@
 int fp256_print_hex(const fp256 *r)
 {
     u8 hex[65];
-    
+
     if (r == NULL)
         return FP256_ERR;
 
