@@ -81,3 +81,7 @@ script:
   - cmake $toolchain $buildtype $sanitizer ..
   - make
   - if [ -z "$CROSS" ]; then make test; fi
+
+after_failure:
+  - cat /Users/travis/build/piggypiggy/fp256/build/CMakeFiles/CMakeOutput.log
+  - cat /Users/travis/build/piggypiggy/fp256/build/CMakeFiles/CMakeError.log
