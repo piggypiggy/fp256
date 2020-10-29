@@ -18,7 +18,7 @@ if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
     # sanitizer
     if(USE_ASAN)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
-    elseif(USE_MSAN)
+    elseif(USE_MSAN AND NOT OS_MACOSX)
         set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=memory")
     endif()
 
