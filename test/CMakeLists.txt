@@ -42,6 +42,7 @@ macro(fp256_add_test test_name test_exe test_src)
     add_test(${test_name} ${test_exe})
 endmacro()
 
+fp256_add_test(ADD_TEST     add_test     u256add_test.c)
 fp256_add_test(MUL_TEST     mul_test     mul_test.c)
 fp256_add_test(DIV_TEST     div_test     div_test.c)
 fp256_add_test(GCD_TEST     gcd_test     gcd_test.c)

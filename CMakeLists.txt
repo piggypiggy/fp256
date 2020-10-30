@@ -21,8 +21,8 @@ option(USE_ASAN "use AddressSanitizer" OFF)
 option(USE_MSAN "use MemorySanitizer" OFF)
 
 if(NOT USE_ASM)
-    set(USE_ASM ON)
-    message(WARNING "USE_ASM can not be turned off, there is no C implementation to fall back yet :)")
+    # set(USE_ASM ON)
+    message(WARNING "USE_ASM should not be turned off, there is no C implementation to fall back yet :)")
     # unset(${USE_ASM})
 endif()
 

@@ -195,6 +195,12 @@ void set_test_args(TEST_ARGS *args, int64_t N, int64_t T)
         args->T = T;
 }
 
+void test_print_hex(const char *desp, const u64 *ad, size_t al)
+{
+    printf("%s", desp);
+    ll_print_hex(ad, al);
+}
+
 void test_fp256_print_hex(const char *desp, const fp256 *a)
 {
     printf("%s", desp);

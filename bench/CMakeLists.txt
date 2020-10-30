@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-project(bench)
+project(bench LANGUAGES C)
 
 include_directories(${FP256_DIR}/)
 include_directories(${FP256_INCLUDE_DIR}/)
