@@ -23,7 +23,7 @@ set(fp256_static_lib fp256_static)
 # prefer shared library
 if(BUILD_SHARED)
     set(fp256_test_dep_lib ${fp256_shared_lib})
-    set(fp256_test_compile_definitions BUILD_SHARED)
+    # set(fp256_test_compile_definitions BUILD_SHARED)
 elseif(BUILD_STATIC)
     set(fp256_test_dep_lib ${fp256_static_lib})
     set(fp256_test_compile_definitions BUILD_STATIC)
