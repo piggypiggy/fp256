@@ -35,7 +35,7 @@ void ll_u256_rshift(u64 rd[4], const u64 ad[4], const size_t n)
     rd[0] = (ad[0] >> n) | (ad[1] << (64 - n));
     rd[1] = (ad[1] >> n) | (ad[2] << (64 - n));
     rd[2] = (ad[2] >> n) | (ad[3] << (64 - n));
-    rd[3] = ad[3] >> n
+    rd[3] = ad[3] >> n;
     return;
 }
 

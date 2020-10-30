@@ -35,7 +35,7 @@ size_t ll_num_bits(const u64 a)
     return 0;
 }
 
-u32 inline ll_bswap4(const u32 in);
+u32 inline ll_bswap4(const u32 in)
 {
     u32 ret;
 
@@ -47,10 +47,10 @@ u64 inline ll_bswap8(const u64 in)
 {
     u64 ret;
 
-    ret = (ROTL64(x,  8) & 0x000000ff000000ff) | 
-          (ROTL64(x, 24) & 0x0000ff000000ff00) | 
-          (ROTR64(x, 24) & 0x00ff000000ff0000) | 
-          (ROTR64(x,  8) & 0xff000000ff000000);
+    ret = (ROTL64(in,  8) & 0x000000ff000000ff) | 
+          (ROTL64(in, 24) & 0x0000ff000000ff00) | 
+          (ROTR64(in, 24) & 0x00ff000000ff0000) | 
+          (ROTR64(in,  8) & 0xff000000ff000000);
     return ret;
 }
 #endif

@@ -22,16 +22,16 @@
 #ifndef USE_ASM
 void ll_u256_mul_limbs(u64 rd[4*2], const u64 ad[4], const u64 bd[4], size_t al, size_t bl)
 {
-    return 0;
+    return;
 }
 
 void ll_u256_mul(u64 rd[4*2], const u64 ad[4], const u64 bd[4])
 {
-    return 0;
+    return;
 }
 
-void void ll_u256_sqr(u64 rd[4*2], const u64 ad[4])
+void ll_u256_sqr(u64 rd[4*2], const u64 ad[4])
 {
-    return 0;
+    return;
 }
 #endif
