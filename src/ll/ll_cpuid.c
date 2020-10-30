@@ -71,7 +71,7 @@ int fp256_get_cpu_flags(void)
 
 #else
 
-#error "fp256 only supports x86_64 processor at this time."
+// #error "fp256 only supports x86_64 processor at this time."
 
 
 #endif

@@ -1,32 +1,44 @@
 cmake_minimum_required(VERSION 3.1.0)
 
-set(ENV_FOR_PERL
-    ${CMAKE_COMMAND} -E env "CC=${CMAKE_C_COMPILER}" 
-    ${CMAKE_COMMAND} -E env "ASM=${CMAKE_ASM_COMPILER}"
-)
-
 set(LL_DIR ${FP256_SRC_DIR}/ll)
 
-if(ARCH_X86_64 AND USE_ASM)
-    # x64 assembly directory
-    set(LL_ASM_DIR ${LL_DIR}/x64)
+if(USE_ASM)
+    if(ARCH_X86_64)
+        set(LL_ASM_DIR ${LL_DIR}/x64)
+        set(ENV_FOR_PERL
+            ${CMAKE_COMMAND} -E env "CC=${CMAKE_C_COMPILER}"
+            ${CMAKE_COMMAND} -E env "ASM=${CMAKE_ASM_COMPILER}"
+        )
+    elseif(ARCH_AARCH64)
+        set(LL_ASM_DIR ${LL_DIR}/aarch64)
+    endif()
 
     macro(ll_add_asm perl_src)
         # ll/x64/z.pl -> ll/z.s or ll/z.asm
         get_filename_component(perl_name ${perl_src} NAME)
         set(asm_src ${LL_DIR}/${perl_name})
-        if (COMPILER_MSVC)
-            string(REPLACE ".pl" ".asm" asm_src "${asm_src}")
-        else()
-            string(REPLACE ".pl" ".s" asm_src "${asm_src}")
-        endif()
 
-        # generate asm file
-        add_custom_command(
-            OUTPUT ${asm_src}
-            COMMAND ${ENV_FOR_PERL} ${PERL} ${perl_src} ${asm_flavour} ${asm_src}
-            DEPENDS ${perl_src}
-        )
+        if(ARCH_X86_64)
+            if (COMPILER_MSVC)
+                string(REPLACE ".pl" ".asm" asm_src "${asm_src}")
+            else()
+                string(REPLACE ".pl" ".s" asm_src "${asm_src}")
+            endif()
+            # generate asm file
+            add_custom_command(
+                OUTPUT ${asm_src}
+                COMMAND ${ENV_FOR_PERL} ${PERL} ${perl_src} ${asm_flavour} ${asm_src}
+                DEPENDS ${perl_src}
+            )
+        elseif(ARCH_AARCH64)
+            string(REPLACE ".pl" ".S" asm_src "${asm_src}")
+            # generate asm file
+            add_custom_command(
+                OUTPUT ${asm_src}
+                COMMAND ${PERL} ${perl_src} ${asm_flavour} ${asm_src}
+                DEPENDS ${perl_src}
+            )
+        endif()
 
         # add each asm file to LL_ASM_SRC
         list(APPEND LL_ASM_SRC ${asm_src})
@@ -69,6 +81,7 @@ set(FP256_SRC
     ${LL_DIR}/ll_sys_rand.c
     ${LL_DIR}/ll_u256_add.c
     ${LL_DIR}/ll_u256_fmod.c
+    ${LL_DIR}/ll_u256_mont.c
     ${LL_DIR}/ll_u256_mul.c
     ${LL_DIR}/ll_u256_shift.c
     ${LL_DIR}/ll_utils.c
