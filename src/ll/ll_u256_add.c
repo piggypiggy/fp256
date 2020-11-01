@@ -19,7 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
-#ifndef USE_ASM
+#ifndef USE_ASM_U256_ADD
 u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4])
 {
     u64 t, r, carry;

@@ -88,11 +88,6 @@ else()
 endif()
 set(ENDIANESS "O.O") # config
 
-# generate config.h
-configure_file(${FP256_DIR}/config.h.in ${FP256_DIR}/config.h @ONLY)
-# it doesn't work...
-# list(APPEND ADDITIONAL_CLEAN_FILES ${FP256_DIR}/config.h)
-
 enable_testing()
 add_subdirectory(src)
 add_subdirectory(test)

@@ -19,7 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
-#ifndef USE_ASM
+#ifndef USE_ASM_U256_SHIFT
 void ll_u256_lshift(u64 rd[5], const u64 ad[4], const size_t n)
 {
     rd[4] = ad[3] >> (64 - n);

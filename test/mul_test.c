@@ -68,7 +68,7 @@ void* fp256_sqr_test(void *p)
     N = td->N;
 
     for (i = 0; i < N; i++) {
-        fp256_rand_limbs(&a, 0, 0);
+        fp256_rand_limbs(&a, 4, 0);
         fp256_mul(&r1, &a, &a);
         fp256_sqr(&r2, &a);
         if (fp256_cmp(&r1, &r2) != 0) {

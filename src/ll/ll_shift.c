@@ -18,7 +18,7 @@
 
 #include <fp256/fp256_ll.h>
 
-#ifndef USE_ASM
+#ifndef USE_ASM_SHIFT
 size_t ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
 {
     u64 tmp;

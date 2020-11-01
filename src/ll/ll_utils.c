@@ -18,7 +18,7 @@
 
 #include <fp256/fp256_ll.h>
 
-#ifndef USE_ASM
+#ifndef USE_ASM_UTILS
 
 # define ROTL32(a, n) (((a) << n) | ((a) >> (32-n)))
 # define ROTR32(a, n) (((a) >> n) | ((a) << (32-n)))

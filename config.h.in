@@ -29,7 +29,21 @@
 #cmakedefine ARCH_PPC64
 
 #cmakedefine USE_DEV_RANDOM
+
 #cmakedefine USE_ASM
+/* control which asm to generate, make it easier to test new asm code */
+#cmakedefine USE_ASM_ADD
+#cmakedefine USE_ASM_CPUID
+#cmakedefine USE_ASM_LEHMER
+#cmakedefine USE_ASM_MUL
+#cmakedefine USE_ASM_SHIFT
+#cmakedefine USE_ASM_U256_ADD
+#cmakedefine USE_ASM_U256_DIV
+#cmakedefine USE_ASM_U256_FMOD
+#cmakedefine USE_ASM_U256_MONT
+#cmakedefine USE_ASM_U256_MUL
+#cmakedefine USE_ASM_U256_SHIFT
+#cmakedefine USE_ASM_UTILS
 
 /* endianess 
  * 0 : big endian

@@ -19,7 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
-#ifndef USE_ASM
+#ifndef USE_ASM_U256_FMOD
 void ll_u256_fmod_neg(u64 r[4], const u64 a[4], const u64 m[4])
 {
     return;

@@ -77,7 +77,7 @@ size_t ll_euclid_update(u64 *t1d, u64 *t2d, const u64 *ad, const u64 *bd, u64 *v
     return vl;
 }
 
-#ifndef USE_ASM
+#ifndef USE_ASM_LEHMER
 u64 ll_lehmer_exgcd11(u64 mat[4], u64 a0, u64 b0)
 {
     return 0;

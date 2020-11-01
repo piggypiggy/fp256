@@ -19,7 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
-#ifndef USE_ASM
+#ifndef USE_ASM_MUL
 size_t ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
 {
     u64 hi, lo, t;

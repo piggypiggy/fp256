@@ -19,7 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
-#ifndef USE_ASM
+#ifndef USE_ASM_ADD
 u64 ll_add_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
 {
     u64 carry, t1, t2;
@@ -86,7 +86,7 @@ size_t ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
     return l;
 }
 
-#ifndef USE_ASM
+#ifndef USE_ASM_ADD
 u64 ll_sub_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
 {
     u64 borrow, t1;
