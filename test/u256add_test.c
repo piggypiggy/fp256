@@ -89,7 +89,7 @@ int ll_u256_add_test_vector(void)
     u64 tr[5], r[5], a[4], b[4];
     size_t trl, rl, al, bl;
 
-    for (i = 0; i < sizeof(u256_add_test_vector) / sizeof(u256_add_test_vector); i++) {
+    for (i = 0; i < sizeof(u256_add_test_vector) / sizeof(U256_ADD_TEST_VECTOR); i++) {
         /* clear trl, rl, a, b first */
         ll_set_zero(tr, 5);
         ll_set_zero(r, 5);
