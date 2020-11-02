@@ -115,7 +115,7 @@ int ll_u256_sqr_test_vector(void)
     size_t rl, al;
 
     for (i = 0; i < sizeof(u256_sqr_test_vector) / sizeof(U256_SQR_TEST_VECTOR); i++) {
-        /* clear trl, rl, a first */
+        /* clear tr, r, a first */
         ll_set_zero(tr, 8);
         ll_set_zero(r, 8);
         ll_set_zero(a, 4);
@@ -123,7 +123,7 @@ int ll_u256_sqr_test_vector(void)
         ll_from_hex(r, &rl, (u8*)u256_sqr_test_vector[i].r, strlen(u256_sqr_test_vector[i].r));
         ll_from_hex(a, &al, (u8*)u256_sqr_test_vector[i].a, strlen(u256_sqr_test_vector[i].a));
 
-        /* r = a * b */
+        /* r = a * a */
         ll_u256_sqr(tr, a);
         if (ll_cmp_limbs(tr, r, 8, 8) != 0) {
             printf("ll_u256_sqr_test_vector %d failed\n", i + 1);

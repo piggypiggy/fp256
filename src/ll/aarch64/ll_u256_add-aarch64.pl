@@ -29,11 +29,11 @@ ll_u256_add:
     ldp $b0,$b1,[$bd]
     adds $r0,$a0,$b0      // r0 = a0 + b0
     ldp $a2,$a3,[$ad,#16]
-    adcs $r1,$a1,$b1      // r1 = a1 + b1
+    adcs $r1,$a1,$b1      // r1 = a1 + b1 + carry
     ldp $b2,$b3,[$bd,#16]
-    adcs $r2,$a2,$b2      // r2 = a2 + b2
+    adcs $r2,$a2,$b2      // r2 = a2 + b2 + carry
     stp $r0,$r1,[$rd]
-    adcs $r3,$a3,$b3      // r3 = a3 + b3
+    adcs $r3,$a3,$b3      // r3 = a3 + b3 + carry
     stp $r2,$r3,[$rd,#16]
     adc x0,xzr,xzr        // carry
     ret
@@ -50,11 +50,11 @@ ll_u256_sub:
     ldp $b0,$b1,[$bd]
     subs $r0,$a0,$b0      // r0 = a0 - b0
     ldp $a2,$a3,[$ad,#16]
-    sbcs $r1,$a1,$b1      // r1 = a1 - b1
+    sbcs $r1,$a1,$b1      // r1 = a1 - b1 - borrow
     ldp $b2,$b3,[$bd,#16]
-    sbcs $r2,$a2,$b2      // r2 = a2 - b2
+    sbcs $r2,$a2,$b2      // r2 = a2 - b2 - borrow
     stp $r0,$r1,[$rd]
-    sbcs $r3,$a3,$b3      // r3 = a3 - b3
+    sbcs $r3,$a3,$b3      // r3 = a3 - b3 - borrow
     stp $r2,$r3,[$rd,#16]
     adc x0,xzr,xzr        // borrow
     ret

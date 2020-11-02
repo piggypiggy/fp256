@@ -90,7 +90,7 @@ int ll_u256_add_test_vector(void)
     size_t trl, rl, al, bl;
 
     for (i = 0; i < sizeof(u256_add_test_vector) / sizeof(U256_ADD_TEST_VECTOR); i++) {
-        /* clear trl, rl, a, b first */
+        /* clear tr, r, a, b first */
         ll_set_zero(tr, 5);
         ll_set_zero(r, 5);
         ll_set_zero(a, 4);
