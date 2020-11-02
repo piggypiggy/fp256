@@ -40,20 +40,20 @@ typedef SSIZE_T ssize_t;
 #define FP256_OK      0
 #define FP256_ERR    -1
 
-#ifndef BUILD_STATIC
-# ifdef _WIN32
-#  ifdef BUILD_SHARED
+#if defined(BUILD_STATIC)
+# define FP256_EXPORT
+#else
+# if defined(_MSC_VER)
+#  if defined(BUILD_SHARED)
 #   define FP256_EXPORT __declspec(dllexport)
 #  else
 #   define FP256_EXPORT __declspec(dllimport)
 #  endif
+# elif (defined(__GNUC__) && __GNUC__>= 4)
+#  define FP256_EXPORT __attribute__ ((visibility ("default")))
 # else
-#  if (defined(__GNUC__) && __GNUC__>= 4)
-#   define FP256_EXPORT __attribute__ ((visibility ("default")))
-#  endif
+#  define FP256_EXPORT
 # endif
-#else
-# define FP256_EXPORT
 #endif
 
 #define ORDER_BIG_ENDIAN     0
