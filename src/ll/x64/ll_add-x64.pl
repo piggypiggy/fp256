@@ -31,9 +31,6 @@ die "can't locate x86_64-xlate.pl";
 open OUT,"| \"$^X\" \"$xlate\" $flavour \"$output\"";
 *STDOUT=*OUT;
 
-$avx = 2;
-$addx = 1;
-
 $code.=<<___;
 .text
 ___
@@ -48,26 +45,20 @@ $code.=<<___;
 .type	ll_add_limb,\@function,4
 .align	32
 ll_add_limb:
-    xor $carry, $carry
 .ll_add_limb_loop:
-    test $l, $l             # CF = 0
+    test $l, $l
     jz .ll_add_limb_done
     mov 0($a_ptr), $t1
-    # CF = carry
-    test $carry, $carry
-    jz .ll_add_limb_nocarry
-    stc                     # CF = 1
-.ll_add_limb_nocarry:
     lea 8($a_ptr), $a_ptr
-    adc $b, $t1             # a + b
-    setc %al                # carry = CF
+    add $b, $t1             # a + b
+    setc %dl                # b = carry
     mov $t1, 0($r_ptr)
-    xor $b, $b
     dec $l
     lea 8($r_ptr), $r_ptr
     jmp .ll_add_limb_loop
 
 .ll_add_limb_done:
+    mov $b, %rax
     ret
 .size	ll_add_limb,.-ll_add_limb
 
@@ -78,19 +69,16 @@ ll_add_limb:
 ll_add_limbs:
     xor $carry, $carry
 .ll_add_limbs_loop:
-    test $l, $l             # CF = 0
+    test $l, $l
     jz .ll_add_limbs_done
     mov 0($a_ptr), $t1
     mov 0($b_ptr), $t2
-    # CF = carry
-    test $carry, $carry
-    jz .ll_add_limbs_nocarry
-    stc                     # CF = 1
-.ll_add_limbs_nocarry:
+    add $carry, $t1
     lea 8($a_ptr), $a_ptr
-    adc $t2, $t1            # a + b
+    setc %al               # set carry
+    add $t2, $t1
     lea 8($b_ptr), $b_ptr
-    setc %al                # carry = CF
+    adc \$0, $carry
     mov $t1, 0($r_ptr)
     dec $l
     lea 8($r_ptr), $r_ptr
