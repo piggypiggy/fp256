@@ -246,9 +246,9 @@ void* fp256_gcd_test(void *p)
             fp256_is_zero(&amr) != 1 || 
             fp256_is_zero(&bmr) != 1) {
             printf("fp256_gcd test failed, %" PRId64 "\n", i+1);
-            test_fp256_print_hex("a = ", &a);
-            test_fp256_print_hex("b = ", &b);
-            test_fp256_print_hex("gcd = ", &r);
+            test_fp256_print_hex("a     = ", &a);
+            test_fp256_print_hex("b     = ", &b);
+            test_fp256_print_hex("gcd   = ", &r);
             test_fp256_print_hex("a%gcd = ", &amr);
             test_fp256_print_hex("b%gcd = ", &bmr);
             test_fp256_print_hex("a/gcd = ", &adr);
