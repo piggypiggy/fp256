@@ -31,6 +31,7 @@ extern "C" {
 typedef struct do_which_st {
     /* do which test */
     int do_u256add;
+    int do_lladd;
     int do_add;
     int do_u256mul;
     int do_mul;

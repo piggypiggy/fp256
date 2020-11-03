@@ -81,6 +81,12 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
             continue;
         }
 
+        if (memcmp(argv[i], "lladd", 5) == 0) {
+            do_which->do_lladd = 1;
+            do_all = 0;
+            continue;
+        }
+
         if (memcmp(argv[i], "u256add", 7) == 0) {
             do_which->do_u256add = 1;
             do_all = 0;
