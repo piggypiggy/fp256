@@ -110,18 +110,20 @@ u64 ll_sub_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
 
 u64 ll_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l)
 {
-    u64 borrow, t1, t2;
+    u64 borrow, t, t1, t2;
     size_t i;
 
     borrow = 0;
     for (i = 0; i < l; i++) {
         t1 = ad[0];
         t2 = bd[0];
+        t = (t1 < borrow);
+        t1 -= borrow;
         ad++;
         bd++;
-        rd[0] = t1 - t2 - borrow;
-        if (t1 != t2)
-            borrow = (t1 < t2);
+        t += (t1 < t2);
+        rd[0] = t1 - t2;
+        borrow = t;
         rd++;
     }
 
@@ -134,13 +136,15 @@ size_t ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
     size_t l, dif;
     u64 borrow, *trd;
 
+    assert(al >= bl);
     trd = rd;
     /* assume ad >= bd, so al >= bl */
     dif = al - bl;
 
     borrow = ll_sub_limbs(rd, ad, bd, bl);
     rd += bl;
-    ll_sub_limb(rd, rd, borrow, dif);
+    ad += bl;
+    ll_sub_limb(rd, ad, borrow, dif);
 
     l = ll_num_limbs(trd, al);
     return l;

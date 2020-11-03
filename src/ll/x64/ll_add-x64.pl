@@ -95,24 +95,19 @@ ll_add_limbs:
 ll_sub_limb:
     xor $borrow, $borrow
 .ll_sub_limb_loop:
-    test $l, $l             # CF = 0
+    test $l, $l
     jz .ll_sub_limb_done
     mov 0($a_ptr), $t1
-    # CF = borrow
-    test $borrow, $borrow
-    jz .ll_sub_limb_noborrow
-    stc                     # CF = 1
-.ll_sub_limb_noborrow:
     lea 8($a_ptr), $a_ptr
-    sbb $b, $t1             # a - b
-    setc %al                # borrow = CF
+    sub $b, $t1             # a - b
+    setc %dl                # borrow = CF
     mov $t1, 0($r_ptr)
-    xor $b, $b
     dec $l
     lea 8($r_ptr), $r_ptr
     jmp .ll_sub_limb_loop
 
 .ll_sub_limb_done:
+    mov $b, %rax
     ret
 .size	ll_sub_limb,.-ll_sub_limb
 
@@ -123,19 +118,16 @@ ll_sub_limb:
 ll_sub_limbs:
     xor $borrow, $borrow
 .ll_sub_limbs_loop:
-    test $l, $l             # CF = 0
+    test $l, $l
     jz .ll_sub_limbs_done
     mov 0($a_ptr), $t1
     mov 0($b_ptr), $t2
-    # CF = borrow
-    test $borrow, $borrow
-    jz .ll_sub_limbs_noborrow
-    stc                     # CF = 1
-.ll_sub_limbs_noborrow:
+    sub $borrow, $t1
     lea 8($a_ptr), $a_ptr
-    sbb $t2, $t1            # a - b
+    setc %al                # set borrow
+    sub $t2, $t1            # a - b
     lea 8($b_ptr), $b_ptr
-    setc %al                # borrow = CF
+    adc \$0, $borrow
     mov $t1, 0($r_ptr)
     dec $l
     lea 8($r_ptr), $r_ptr
