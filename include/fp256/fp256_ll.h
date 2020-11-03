@@ -48,12 +48,12 @@ FP256_EXPORT size_t ll_num_bits(const u64 a);
 FP256_EXPORT int ll_test_bit(u64 *ad, size_t idx);
 
 /* set idx's bit of ad to 1 */
-void ll_set_bit(u64 *ad, size_t idx);
+FP256_EXPORT void ll_set_bit(u64 *ad, size_t idx);
 
 /* set ad[0~max) = 0 first, then set idx's bit of ad to 1, 
  * or equivalently, set ad = 2^{idx}
  */
-void ll_clear_set_bit(u64 *ad, size_t idx, size_t max);
+FP256_EXPORT void ll_clear_set_bit(u64 *ad, size_t idx, size_t max);
 
 /* 1 : ad[0:al-1] = 0
  * 0 : ad[0:al-1] != 0
@@ -121,8 +121,8 @@ FP256_EXPORT u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 FP256_EXPORT u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 
 /* rd = ad + bd, 
-  * return nlimbs of rd
-  */
+ * return nlimbs of rd
+ */
 FP256_EXPORT size_t ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
 /* rd = ad - bd, assume ad >= bd
