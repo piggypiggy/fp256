@@ -104,20 +104,22 @@ static ADD_TEST_VECTOR add_test_vector[] = {
 int ll_add_test_vector(void)
 {
     unsigned int i;
-    u64 tr[9], r[9], a[8], b[8];
-    size_t trl, rl, al, bl, max;
+    u64 tr[9], r[9], a[8], b[8], ta[8];
+    size_t trl, rl, al, bl, tal, max;
 
     for (i = 0; i < sizeof(add_test_vector) / sizeof(ADD_TEST_VECTOR); i++) {
-        /* clear r, a, b first, don't clear tr */
+        /* clear */
+        ll_set_zero(tr, 9);
         ll_set_zero(r, 9);
         ll_set_zero(a, 8);
         ll_set_zero(b, 8);
+        ll_set_zero(ta, 8);
 
         ll_from_hex(r, &rl, (u8*)add_test_vector[i].r, strlen(add_test_vector[i].r));
         ll_from_hex(a, &al, (u8*)add_test_vector[i].a, strlen(add_test_vector[i].a));
         ll_from_hex(b, &bl, (u8*)add_test_vector[i].b, strlen(add_test_vector[i].b));
 
-        /* r = a + b */
+        /* tr = a + b */
         trl = ll_add(tr, a, b, al, bl);
         if (ll_cmp_limbs(tr, r, trl, rl) != 0) {
             max = (trl > rl ? trl : rl);
@@ -127,6 +129,19 @@ int ll_add_test_vector(void)
             test_print_hex("b = ", b, max);
             printf("a + b should be :\n");
             test_print_hex("r = ", r, max);
+            return FP256_ERR;
+        }
+
+        /* ta = r - b */
+        tal = ll_sub(ta, r, b, rl, bl);
+        if (ll_cmp_limbs(ta, a, tal, al) != 0) {
+            max = (trl > rl ? trl : rl);
+            printf("ll_sub_test_vector %d failed\n", i + 1);
+            test_print_hex("a = ", ta, max);
+            test_print_hex("r = ", r, max);
+            test_print_hex("b = ", b, max);
+            printf("r - b should be :\n");
+            test_print_hex("a = ", a, max);
             return FP256_ERR;
         }
     }
