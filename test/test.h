@@ -34,6 +34,7 @@ typedef struct do_which_st {
     int do_lladd;
     int do_add;
     int do_u256mul;
+    int do_llmul;
     int do_mul;
     int do_sqr;
     int do_u256sqr;

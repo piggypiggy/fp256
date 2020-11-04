@@ -105,6 +105,12 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
             continue;
         }
 
+        if (memcmp(argv[i], "llmul", 5) == 0) {
+            do_which->do_llmul = 1;
+            do_all = 0;
+            continue;
+        }
+
         if (memcmp(argv[i], "u256mul", 7) == 0) {
             do_which->do_u256mul = 1;
             do_all = 0;
