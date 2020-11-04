@@ -13,7 +13,7 @@ More platform and processor support will be added soon.
 low level api operates directly on integer array, most low level api are specific for 256 bit integer, there are also a few api for arbitrary length array.  
 high level api operates on 256 bit integer.
 
-* Most low level arithmetic are implemented in x64 assembly, including  `add`, `mul`, `u256 mul`, `div`, `shift`, `fmod`, `exgcd`, etc, they are very efficient and (maybe)well commented, see src/ll/x64.
+* Most low level arithmetic are implemented in x64 assembly, including  `add`, `mul`, `u256 mul`, `div`, `shift`, `fmod`, `exgcd`, etc, they are very efficient and (maybe)well commented, see [ll/x64](https://github.com/piggypiggy/fp256/tree/master/src/ll/x64) and [ll/aarch64](https://github.com/piggypiggy/fp256/tree/master/src/ll/aarch64).
 
 * 
 
@@ -23,6 +23,13 @@ high level api operates on 256 bit integer.
     $ cmake ..
     $ make
     $ make test
+
+Or cross compilation (cmake toolchain files are [here](https://github.com/piggypiggy/fp256/tree/master/cmake/toolchain)):
+
+    $ mkdir build
+    $ cd build
+    $ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gcc.cmake ..
+    $ make
 
 ### configuration
 `-DCMAKE_BUILD_TYPE` : possible values are empty, Debug, Release, RelWithDebInfo and MinSizeRel, default is `Release`.  
