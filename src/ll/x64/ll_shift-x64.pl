@@ -126,6 +126,7 @@ ll_rshift:
     cmp $al, $l
     jae .ll_rshift_r_is_zero    # if (shift / 64) >= al, then r = 0
     sub $l, %rax
+    sub $l, $al
     dec $al
     lea 0($a_ptr,$l,8), $a_ptr  # discard lower l limbs of a
     mov 0($a_ptr), $t0
