@@ -126,7 +126,7 @@ FP256_EXPORT u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 FP256_EXPORT u64 ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
 /* rd = ad - bd, assume ad >= bd
- * return 0
+ * return borrow, which is always 0
  */
 FP256_EXPORT u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 

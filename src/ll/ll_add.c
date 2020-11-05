@@ -143,5 +143,6 @@ u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
     ad += bl;
     borrow = ll_sub_limb(rd, ad, borrow, dif);
 
+    assert(borrow == 0);
     return borrow;
 }
