@@ -77,7 +77,7 @@ if(USE_ASM)
         ll_add_asm(${LL_ASM_DIR}/ll_u256_add-aarch64.pl    USE_ASM_U256_ADD)
         ll_add_asm(${LL_ASM_DIR}/ll_u256_mul-aarch64.pl    USE_ASM_U256_MUL)
         ll_add_asm(${LL_ASM_DIR}/ll_u256_shift-aarch64.pl  USE_ASM_U256_SHIFT)
-        # ll_add_asm(${LL_ASM_DIR}/ll_utils-aarch64.pl       USE_ASM_UTILS)
+        ll_add_asm(${LL_ASM_DIR}/ll_utils-aarch64.pl       USE_ASM_UTILS)
     endif()
 endif()
 
