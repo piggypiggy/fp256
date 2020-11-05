@@ -39,38 +39,31 @@ ___
 my ($r_ptr,$a_ptr,$b_org,$al,$b)=("%rdi","%rsi","%rdx","%rcx","%r8");
 my ($t0,$t1,$t2)=("%r9","%r10","%r11");
 $code.=<<___;
-# size_t ll_mul_limb(u64 *rd, u64 *ad, u64 b, size_t al);
+# u64 ll_mul_limb(u64 *rd, u64 *ad, u64 b, size_t al);
 .globl	ll_mul_limb
 .type	ll_mul_limb,\@function,4
 .align	32
 ll_mul_limb:
     mov $b_org, $b
     xor $t1, $t1
-    mov $al, $t0
 
 .ll_mul_limb_loop:
     test $al, $al
-    jz .ll_mul_limb_loop_end
+    jz .ll_mul_limb_done
     mov 0($a_ptr), %rax
-    xor $t2, $t2
-    mulq $b
+    mulq $b                   # ad[i] * b
     lea 8($a_ptr), $a_ptr
     add %rax, $t1
-    adc %rdx, $t2
+    adc \$0, %rdx
     mov $t1, 0($r_ptr)
-    mov $t2, $t1
+    mov %rdx, $t1
     lea 8($r_ptr), $r_ptr
     dec $al
     jmp .ll_mul_limb_loop
 
-.ll_mul_limb_loop_end:
-    mov $t1, 0($r_ptr)
-    mov $t0, %rax
-    test $t1, $t1
-    jz .ll_mul_limb_done
-    inc %rax
-
 .ll_mul_limb_done:
+    mov $t1, 0($r_ptr)
+    mov $t1, %rax
     ret
 .size	ll_mul_limb,.-ll_mul_limb
 ___
@@ -78,7 +71,7 @@ ___
 
 {
 my ($r_ptr,$a_ptr,$b_org,$rl,$al,$b)=("%rdi","%rsi","%rdx","%rcx","%r8","%r9");
-my ($t0,$t1,$t2,$t3)=("%rbx","%r10","%r11","%rbp",);
+my ($t1,$t2,$i)=("%r10","%r11","%rbp");
 $code.=<<___;
 # size_t ll_muladd_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
 .globl	ll_muladd_limb
@@ -86,135 +79,84 @@ $code.=<<___;
 .align	32
 ll_muladd_limb:
     push %rbp
-    push %rbx
-
-    mov $rl, $t3
+    xor $i, $i
     mov $b_org, $b
     xor $t1, $t1
-    xor %rax, %rax
-    sub $al, $t3                # rl - al
-    jnc .ll_muladd_limb_loop    # if rl >= al
-    mov $al, $rl                # rl = max{rl, al}
-    test $rl, $rl
-    jz .ll_muladd_limb_done     # if max{rl, al} = 0, do nothing.
 
-.ll_muladd_limb_loop:           # rd[0, al-1] += ad * b
-    test $al, $al
-    jz .ll_muladd_limb_loop_end
+.ll_muladd_limb_mul_loop:           # rd[0, al-1] += ad * b
+    cmp $al, $i
+    je .ll_muladd_limb_add_loop
     mov 0($a_ptr), %rax
-    xor $t2, $t2
-    add 0($r_ptr), $t1
-    adc \$0, $t2
-    mulq $b
     lea 8($a_ptr), $a_ptr
+    mulq $b
+    add 0($r_ptr), $t1
+    adc \$0, %rdx
     add %rax, $t1
-    adc %rdx, $t2
+    adc \$0, %rdx
     mov $t1, 0($r_ptr)
-    mov $t2, $t1
     lea 8($r_ptr), $r_ptr
-    dec $al
-    jmp .ll_muladd_limb_loop
+    mov %rdx, $t1
+    inc $i
+    jmp .ll_muladd_limb_mul_loop
 
-.ll_muladd_limb_loop_end:
-    cmp \$0, $t3
-    jge .ll_muladd_limb_loop_r
-    jmp .ll_muladd_limb_loop_r_done
-
-.ll_muladd_limb_loop_r:         # rl >= al, rd[al, rl-1] += t1
-    test $t3, $t3
-    jz .ll_muladd_limb_loop_r_done
+.ll_muladd_limb_add_loop:           # rl > al, rd[al, rl-1] += t1
+    cmp $rl, $i
+    jge .ll_muladd_limb_done
     mov 0($r_ptr), $t2
-    xor $t0, $t0
+    inc $i
     add $t1, $t2
-    adc \$0, $t0
     mov $t2, 0($r_ptr)
-    mov $t0, $t1
+    setc %r10b
     lea 8($r_ptr), $r_ptr
-    dec $t3
-    jmp .ll_muladd_limb_loop_r
-
-.ll_muladd_limb_loop_r_done:
-    mov $t1, 0($r_ptr)
-    mov $rl, %rax
-    test $t1, $t1
-    jz .ll_muladd_limb_done
-    inc %rax
+    jmp .ll_muladd_limb_add_loop
 
 .ll_muladd_limb_done:
-    pop %rbx
+    mov $t1, 0($r_ptr)
     pop %rbp
     ret
 .size	ll_muladd_limb,.-ll_muladd_limb
 
 
-# size_t ll_mulsub_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
+# u64 ll_mulsub_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
 .globl	ll_mulsub_limb
 .type	ll_mulsub_limb,\@function,5
 .align	32
 ll_mulsub_limb:
     push %rbp
-    push %rbx
-
-    mov $rl, $t3
+    xor $i, $i
     mov $b_org, $b
     xor $t1, $t1
-    xor %rax, %rax
-    sub $al, $t3                 # rl - al
-    test $rl, $rl
-    jz .ll_mulsub_limb_done      # if rl = 0, do nothing.
 
-.ll_mulsub_limb_loop:            # rd[0, al-1] -= ad * b
-    test $al, $al
-    jz .ll_mulsub_limb_loop_end
-    mov 0($r_ptr), $t0
+.ll_mulsub_limb_mul_loop:          # rd[0, al-1] -= ad * b
+    cmp $al, $i
+    jz .ll_mulsub_limb_sub_loop
     mov 0($a_ptr), %rax
-    xor $t2, $t2
-    sub $t1, $t0
-    adc \$0, $t2
-    mulq $b
     lea 8($a_ptr), $a_ptr
-    sub %rax, $t0
-    adc %rdx, $t2
-    mov $t0, 0($r_ptr)
-    mov $t2, $t1
-    lea 8($r_ptr), $r_ptr
-    dec $al
-    jmp .ll_mulsub_limb_loop
-
-.ll_mulsub_limb_loop_end:
-    test $t3, $t3
-    jnz .ll_mulsub_limb_loop_r
-    jmp .ll_mulsub_limb_loop_r_done
-
-.ll_mulsub_limb_loop_r:          # rl >= al, rd[al, rl-1] -= t1
-    test $t3, $t3
-    jz .ll_mulsub_limb_loop_r_done
+    mulq $b
     mov 0($r_ptr), $t2
-    xor $t0, $t0
+    add %rax, $t1
+    adc \$0, %rdx
     sub $t1, $t2
-    adc \$0, $t0
+    adc \$0, %rdx
     mov $t2, 0($r_ptr)
-    mov $t0, $t1
+    mov %rdx, $t1
     lea 8($r_ptr), $r_ptr
-    dec $t3
-    jmp .ll_mulsub_limb_loop_r
+    inc $i
+    jmp .ll_mulsub_limb_mul_loop
 
-.ll_mulsub_limb_loop_r_done:
-    lea -8($r_ptr), $r_ptr
-    mov $rl, %rax
-    jz .ll_mulsub_limb_count_nlimbs
-
-.ll_mulsub_limb_count_nlimbs:
-    mov 0($r_ptr), $t0
-    test $t0, $t0
-    jnz .ll_mulsub_limb_done
-    lea -8($r_ptr), $r_ptr
-    dec %rax
-    test %rax, %rax
-    jnz .ll_mulsub_limb_count_nlimbs
+.ll_mulsub_limb_sub_loop:          # rl > al, rd[al, rl-1] -= t1
+    cmp $rl, $i
+    jge .ll_mulsub_limb_done
+    mov 0($r_ptr), $t2
+    inc $i
+    sub $t1, $t2
+    mov $t2, 0($r_ptr)
+    setc %r10b
+    lea 8($r_ptr), $r_ptr
+    jmp .ll_mulsub_limb_sub_loop
 
 .ll_mulsub_limb_done:
-    pop %rbx
+    mov $t1, %rax
     pop %rbp
     ret
 .size	ll_mulsub_limb,.-ll_mulsub_limb

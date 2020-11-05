@@ -120,7 +120,8 @@ int ll_add_test_vector(void)
         ll_from_hex(b, &bl, (u8*)add_test_vector[i].b, strlen(add_test_vector[i].b));
 
         /* tr = a + b */
-        trl = ll_add(tr, a, b, al, bl);
+        ll_add(tr, a, b, al, bl);
+        trl = ll_num_limbs(tr, (al > bl ? al : bl) + 1);
         if (ll_cmp_limbs(tr, r, trl, rl) != 0) {
             max = (trl > rl ? trl : rl);
             printf("ll_add_test_vector %d failed\n", i + 1);
@@ -133,9 +134,10 @@ int ll_add_test_vector(void)
         }
 
         /* ta = r - b */
-        tal = ll_sub(ta, r, b, rl, bl);
+        ll_sub(ta, r, b, rl, bl);
+        tal = ll_num_limbs(ta, rl);
         if (ll_cmp_limbs(ta, a, tal, al) != 0) {
-            max = (trl > rl ? trl : rl);
+            max = rl;
             printf("ll_sub_test_vector %d failed\n", i + 1);
             test_print_hex("a = ", ta, max);
             test_print_hex("r = ", r, max);

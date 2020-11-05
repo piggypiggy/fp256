@@ -228,7 +228,8 @@ int ll_mul_test_vector(void)
         ll_from_hex(b, &bl, (u8*)mul_test_vector[i].b, strlen(mul_test_vector[i].b));
 
         /* tr = a * b */
-        trl = ll_mul(tr, a, b, al, bl);
+        ll_mul(tr, a, b, al, bl);
+        trl = ll_num_limbs(tr, al + bl);
         if (ll_cmp_limbs(tr, r, trl, rl) != 0) {
             max = (trl > rl ? trl : rl);
             printf("ll_mul_test_vector %d failed\n", i + 1);

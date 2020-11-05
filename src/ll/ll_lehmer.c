@@ -21,40 +21,39 @@
 
 size_t ll_lehmer_update_ab(u64 *t1d, u64 *t2d, const u64 *ad, const u64 *bd, size_t l, const u64 mat[4], u64 nc)
 {
-    size_t al, bl, tl;
+    size_t t1l, t2l;
 
     if (nc & 0x1ULL) {
-        tl = ll_mul_limb(t1d, bd, mat[1], l);
-        al = ll_mulsub_limb(t1d, ad, mat[0], tl, l);
-        tl = ll_mul_limb(t2d, ad, mat[2], l);
-        bl = ll_mulsub_limb(t2d, bd, mat[3], tl, l);
+        ll_mul_limb(t1d, bd, mat[1], l);
+        ll_mulsub_limb(t1d, ad, mat[0], l + 1, l);
+        ll_mul_limb(t2d, ad, mat[2], l);
+        ll_mulsub_limb(t2d, bd, mat[3], l + 1, l);
     }
     else {
-        tl = ll_mul_limb(t1d, ad, mat[0], l);
-        al = ll_mulsub_limb(t1d, bd, mat[1], tl, l);
-        tl = ll_mul_limb(t2d, bd, mat[3], l);
-        bl = ll_mulsub_limb(t2d, ad, mat[2], tl, l);
+        ll_mul_limb(t1d, ad, mat[0], l);
+        ll_mulsub_limb(t1d, bd, mat[1], l + 1, l);
+        ll_mul_limb(t2d, bd, mat[3], l);
+        ll_mulsub_limb(t2d, ad, mat[2], l + 1, l);
     }
 
-    if (al > bl)
-        return al;
+    t1l = ll_num_limbs(t1d, l + 1);
+    t2l = ll_num_limbs(t2d, l + 1);
+    if (t1l > t2l)
+        return t1l;
     else
-        return bl;
+        return t2l;
 }
 
 size_t ll_lehmer_update_v(u64 *t1d, u64 *t2d, const u64 *v0, const u64 *v1, size_t vl, const u64 mat[4])
 {
-    size_t v0l, v1l, tl;
+    ll_mul_limb(t1d, v0, mat[0], vl);
+    ll_muladd_limb(t1d, v1, mat[1], vl + 1, vl);
+    ll_mul_limb(t2d, v0, mat[2], vl);
+    ll_muladd_limb(t2d, v1, mat[3], vl + 1, vl);
 
-    tl = ll_mul_limb(t1d, v0, mat[0], vl);
-    v0l = ll_muladd_limb(t1d, v1, mat[1], tl, vl);
-    tl = ll_mul_limb(t2d, v0, mat[2], vl);
-    v1l = ll_muladd_limb(t2d, v1, mat[3], tl, vl);
-
-    if (v0l > v1l)
-        return v0l;
-    else
-        return v1l;
+    vl += ((t1d[vl] | t2d[vl]) > 0);
+    // vl += ((t1d[vl] | t2d[vl]) > 0);
+    return vl;
 }
 
 /* t2d = ad / bd
@@ -236,9 +235,9 @@ size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl,
 
             if (sd != NULL) {
                 /* sd = (bd * v0 - gcd) / ad */
-                tsl = ll_mul(tsd, bd, v0, bl, vl);
-                tsl = ll_sub(tsd, tsd, tmp1, tsl, gl);
-                ll_div(NULL, sd, NULL, &tsl, tsd, ad, tsl, al);
+                ll_mul(tsd, bd, v0, bl, vl);
+                ll_sub(tsd, tsd, tmp1, bl + vl, gl);
+                ll_div(NULL, sd, NULL, &tsl, tsd, ad, bl + vl, al);
             }
             if (sl != NULL)
                 *sl = (ssize_t)-tsl;
@@ -252,9 +251,9 @@ size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl,
 
             if (sd != NULL) {
                 /* sd = (bd * v0 + gcd) / ad */
-                tsl = ll_mul(tsd, bd, v0, bl, vl);
-                tsl = ll_add(tsd, tsd, tmp1, tsl, gl);
-                ll_div(NULL, sd, NULL, &tsl, tsd, ad, tsl, al);
+                ll_mul(tsd, bd, v0, bl, vl);
+                ll_add(tsd, tsd, tmp1, bl + vl, gl);
+                ll_div(NULL, sd, NULL, &tsl, tsd, ad, bl + vl, al);
             }
             if (sl != NULL)
                 *sl = (ssize_t)tsl;

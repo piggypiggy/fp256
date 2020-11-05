@@ -2,7 +2,7 @@
 #include "bench.h"
 
 /* number of data used in each bench */
-#define NUM 16
+#define NUM 8
 
 /*************************** fp256_add ***************************/
 typedef struct {

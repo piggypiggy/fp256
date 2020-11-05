@@ -121,34 +121,34 @@ FP256_EXPORT u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 FP256_EXPORT u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 
 /* rd = ad + bd, 
- * return nlimbs of rd
+ * return carry
  */
-FP256_EXPORT size_t ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
+FP256_EXPORT u64 ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
 /* rd = ad - bd, assume ad >= bd
- * return nlimbs of rd
+ * return 0
  */
-FP256_EXPORT size_t ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
+FP256_EXPORT u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
 /* rd = ad * b
- * return nlimbs of rd
+ * return rd[al]
  */
-FP256_EXPORT size_t ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
+FP256_EXPORT u64 ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
 
 /* rd = rd + ad * b
- * return nlimbs of rd
+ * return rd[max{rl,al}]
  */
-FP256_EXPORT size_t ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al);
+FP256_EXPORT u64 ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al);
 
 /* rd = rd - ad * b, assume rd > ad * b
- * return nlimbs of rd
+ * return rd[rl-1]
  */
-FP256_EXPORT size_t ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al);
+FP256_EXPORT u64 ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al);
 
 /* rd = ad * bd 
- * return nlimbs of rd
+ * return rd[al+bl-1]
  */
-FP256_EXPORT size_t ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
+FP256_EXPORT u64 ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
 /* rd = ad * bd
  * ad, bd are less than 2^256

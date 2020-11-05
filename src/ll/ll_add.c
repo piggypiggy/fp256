@@ -57,13 +57,12 @@ u64 ll_add_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l)
 }
 #endif
 
-size_t ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
+u64 ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
 {
     size_t l, dif;
-    u64 carry, *trd;
+    u64 carry;
     const u64 *tad, *tbd;
 
-    trd = rd;
     /* let tad >= tbd */
     if (al >= bl) {
         l = bl;
@@ -85,8 +84,7 @@ size_t ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
     rd += dif;
     rd[0] = carry;
 
-    l = ll_num_limbs(trd, l + dif + 1);
-    return l;
+    return carry;
 }
 
 #ifndef USE_ASM_ADD
@@ -131,21 +129,19 @@ u64 ll_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l)
 }
 #endif
 
-size_t ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
+u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
 {
-    size_t l, dif;
-    u64 borrow, *trd;
+    size_t dif;
+    u64 borrow;
 
-    assert(al >= bl);
-    trd = rd;
     /* assume ad >= bd, so al >= bl */
+    assert(al >= bl);
     dif = al - bl;
 
     borrow = ll_sub_limbs(rd, ad, bd, bl);
     rd += bl;
     ad += bl;
-    ll_sub_limb(rd, ad, borrow, dif);
+    borrow = ll_sub_limb(rd, ad, borrow, dif);
 
-    l = ll_num_limbs(trd, al);
-    return l;
+    return borrow;
 }

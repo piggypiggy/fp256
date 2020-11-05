@@ -20,7 +20,7 @@
 #include "ll_local.h"
 
 #ifndef USE_ASM_MUL
-size_t ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
+u64 ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
 {
     u64 hi, lo, t;
     size_t i;
@@ -37,12 +37,12 @@ size_t ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al)
     }
     rd[0] = t;
 
-    return al + (t != 0);
+    return t;
 }
 
-size_t ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
+u64 ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
 {
-    u64 hi, lo, t1, t2, carry;
+    u64 hi, lo, t1, t2;
     size_t i;
 
     /* rd[0, (al-1)] += ad * b */
@@ -62,27 +62,19 @@ size_t ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
 
     /* rd[al, (rl-1)] += t1 */
     if (al < rl) {
-        carry = 0;
         for (i = al; i < rl; i++) {
-            t2 = rd[0] + carry;
-            carry = (t2 < carry);
-            t2 += t1;
-            carry += (t2 < t1);
+            t2 = rd[0] + t1;
+            t1 = (t2 < t1);
             rd[0] = t2;
-            t1 = 0;
             rd++;
         }
-        rd[0] = carry;
-    }
-    else {
-        carry = 1;
-        rd[0] = t1;
     }
 
-    return (i + carry);
+    rd[0] = t1;
+    return t1;
 }
 
-size_t ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
+u64 ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
 {
     u64 hi, lo, t1, t2, borrow;
     size_t i;
@@ -105,41 +97,30 @@ size_t ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
     /* rd[al, (rl-1)] -= t1 */
     borrow = 0;
     for (i = al; i < rl; i++) {
-        t1 += borrow;
         t2 = rd[0];
-        borrow = (t1 < borrow);
-        borrow += (t2 < t1);
+        borrow = (t2 < t1);
         t2 -= t1;
-        t1 = 0;
+        t1 = borrow;
         rd[0] = t2;
         rd++;
     }
 
-    while (rl > 0) {
-        rd--;
-        if (rd[0] > 0)
-            break;
-        rl--;
-    }
-
-    return rl;
+    assert(borrow == 0);
+    return t1;
 }
 #endif
 
-size_t ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
+u64 ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
 {
-    size_t i, rl;
-    u64 *trd;
+    size_t i;
 
-    rl = 0;
-    trd = rd;
-    ll_set_zero(rd, al + bl);
+    // ll_set_zero(rd, al + bl);
     for (i = 0; i < bl; i++) {
-        rl = ll_muladd_limb(rd, ad, bd[i], rl, al);
+        ll_muladd_limb(rd, ad, bd[i], al, al);
         rd++;
-        rl--;
     }
 
-    rl = ll_num_limbs(trd, al + bl);
-    return rl;
+    i += al;
+    /* in case (al = bl = 0) */
+    return (i > 0 ? rd[al - 1] : 0);
 }
