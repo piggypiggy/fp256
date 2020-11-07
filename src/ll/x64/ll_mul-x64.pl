@@ -73,7 +73,7 @@ ___
 my ($r_ptr,$a_ptr,$b_org,$rl,$al,$b)=("%rdi","%rsi","%rdx","%rcx","%r8","%r9");
 my ($t1,$t2,$i)=("%r10","%r11","%rbp");
 $code.=<<___;
-# size_t ll_muladd_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
+# u64 ll_muladd_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
 .globl	ll_muladd_limb
 .type	ll_muladd_limb,\@function,5
 .align	32
@@ -105,6 +105,7 @@ ll_muladd_limb:
     mov 0($r_ptr), $t2
     inc $i
     add $t1, $t2
+    mov \$0, $t1
     mov $t2, 0($r_ptr)
     setc %r10b
     lea 8($r_ptr), $r_ptr
@@ -112,6 +113,7 @@ ll_muladd_limb:
 
 .ll_muladd_limb_done:
     mov $t1, 0($r_ptr)
+    mov $t1, %rax
     pop %rbp
     ret
 .size	ll_muladd_limb,.-ll_muladd_limb
@@ -150,6 +152,7 @@ ll_mulsub_limb:
     mov 0($r_ptr), $t2
     inc $i
     sub $t1, $t2
+    mov \$0, $t1
     mov $t2, 0($r_ptr)
     setc %r10b
     lea 8($r_ptr), $r_ptr

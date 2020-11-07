@@ -51,9 +51,10 @@ ll_add_limb:
     mov 0($a_ptr), $t1
     lea 8($a_ptr), $a_ptr
     add $b, $t1             # a + b
-    setc %dl                # b = carry
+    mov \$0, $b
     mov $t1, 0($r_ptr)
     dec $l
+    setc %dl                # b = carry
     lea 8($r_ptr), $r_ptr
     jmp .ll_add_limb_loop
 
@@ -100,9 +101,10 @@ ll_sub_limb:
     mov 0($a_ptr), $t1
     lea 8($a_ptr), $a_ptr
     sub $b, $t1             # a - b
-    setc %dl                # borrow = CF
+    mov \$0, $b
     mov $t1, 0($r_ptr)
     dec $l
+    setc %dl                # b = borrow
     lea 8($r_ptr), $r_ptr
     jmp .ll_sub_limb_loop
 
