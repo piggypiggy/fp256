@@ -61,13 +61,11 @@ u64 ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
     }
 
     /* rd[al, (rl-1)] += t1 */
-    if (al < rl) {
-        for (i = al; i < rl; i++) {
-            t2 = rd[0] + t1;
-            t1 = (t2 < t1);
-            rd[0] = t2;
-            rd++;
-        }
+    for (i = al; i < rl; i++) {
+        t2 = rd[0] + t1;
+        t1 = (t2 < t1);
+        rd[0] = t2;
+        rd++;
     }
 
     rd[0] = t1;
