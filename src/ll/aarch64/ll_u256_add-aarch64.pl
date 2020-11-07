@@ -74,7 +74,7 @@ ll_u256_sub:
     stp $r0,$r1,[$rd]
     sbcs $r3,$a3,$b3      // r3 = a3 - b3 - borrow
     stp $r2,$r3,[$rd,#16]
-    adc x0,xzr,xzr        // borrow
+    csinc x0,xzr,xzr,cs   // borrow
     ret
 .size	ll_u256_sub,.-ll_u256_sub
 ___
