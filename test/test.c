@@ -52,9 +52,41 @@ int test_random_number(void)
     return rand();
 }
 
+/* compare two strings(not case-sensitive),
+ * return length of string if they are equal,
+ * return 0 if not equal.
+ */
+static size_t arg_cmp(const char *arg1, const char *arg2)
+{
+    size_t i, len1, len2;
+    char c1, c2;
+
+    len1 = strlen(arg1);
+    len2 = strlen(arg2);
+    if (len1 != len2)
+        return 0;
+
+    for (i = 0; i < len1; i++) {
+        /* to upper case */
+        c1 = arg1[i];
+        if (0x61 <= c1 && c1 <= 0x7a)
+            c1 -= 0x20;
+
+        c2 = arg2[i];
+        if (0x61 <= c2 && c2 <= 0x7a)
+            c2 -= 0x20;
+
+        if (c1 != c2)
+            return 0;
+    }
+
+    return len1;
+}
+
 void get_test_args(int argc, char **argv, TEST_ARGS *args)
 {
     int do_all = 1;
+    size_t len;
     DO_WHICH *do_which;
     memset(args, 0, sizeof(TEST_ARGS));
     do_which = &args->do_which;
@@ -65,132 +97,132 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
     }
 
     for (int i = 1; i < argc; i++) {
-        if (memcmp(argv[i], "t=", 2) == 0 || memcmp(argv[i], "T=", 2) == 0) {
-            args->T = atoi(argv[i] + 2);
+        if ((len = arg_cmp(argv[i], "t=")) > 0) {
+            args->T = atoi(argv[i] + len);
             continue;
         }
 
-        if (memcmp(argv[i], "n=", 2) == 0 || memcmp(argv[i], "N=", 2) == 0) {
-            args->N = atoi(argv[i] + 2);
+        if ((len = arg_cmp(argv[i], "n=")) > 0) {
+            args->N = atoi(argv[i] + len);
             continue;
         }
 
-        if (memcmp(argv[i], "add", 3) == 0) {
+        if (arg_cmp(argv[i], "add") > 0) {
             do_which->do_add = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "lladd", 5) == 0) {
+        if (arg_cmp(argv[i], "lladd") > 0 || arg_cmp(argv[i], "ll_add") > 0) {
             do_which->do_lladd = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "u256add", 7) == 0) {
+        if (arg_cmp(argv[i], "u256add") > 0 || arg_cmp(argv[i], "u256_add") > 0) {
             do_which->do_u256add = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "convert", 7) == 0) {
+        if (arg_cmp(argv[i], "convert") > 0) {
             do_which->do_convert = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "mul", 3) == 0) {
+        if (arg_cmp(argv[i], "mul") > 0) {
             do_which->do_mul = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "llmul", 5) == 0) {
+        if (arg_cmp(argv[i], "llmul") > 0 || arg_cmp(argv[i], "ll_mul") > 0) {
             do_which->do_llmul = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "u256mul", 7) == 0) {
+        if (arg_cmp(argv[i], "u256mul") > 0 || arg_cmp(argv[i], "u256_mul") > 0) {
             do_which->do_u256mul = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "sqr", 3) == 0) {
+        if (arg_cmp(argv[i], "sqr") > 0) {
             do_which->do_sqr = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "div", 3) == 0) {
+        if (arg_cmp(argv[i], "mul") > 0) {
             printf("please do naivediv test\n");
             do_which->do_div = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "naivediv", 8) == 0 || memcmp(argv[i], "naive_div", 9) == 0) {
+        if (arg_cmp(argv[i], "naivediv") > 0 || arg_cmp(argv[i], "naive_div") > 0) {
             do_which->do_naive_div = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "gcd", 3) == 0) {
+        if (arg_cmp(argv[i], "gcd") > 0) {
             do_which->do_gcd = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "rand", 4) == 0) {
+        if (arg_cmp(argv[i], "rand") > 0) {
             do_which->do_rand = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "shift", 5) == 0) {
+        if (arg_cmp(argv[i], "shift") > 0) {
             do_which->do_shift = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "modadd", 6) == 0 || memcmp(argv[i], "mod_add", 7) == 0) {
+        if (arg_cmp(argv[i], "modadd") > 0 || arg_cmp(argv[i], "mod_add") > 0) {
             do_which->do_mod_add = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "modmul", 6) == 0 || memcmp(argv[i], "mod_mul", 7) == 0) {
+        if (arg_cmp(argv[i], "modmul") > 0 || arg_cmp(argv[i], "mod_mul") > 0) {
             do_which->do_mod_mul = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "modsqr", 6) == 0 || memcmp(argv[i], "mod_sqr", 7) == 0) {
+        if (arg_cmp(argv[i], "modsqr") > 0 || arg_cmp(argv[i], "mod_sqr") > 0) {
             do_which->do_mod_sqr = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "modinv", 6) == 0 || memcmp(argv[i], "mod_inv", 7) == 0) {
+        if (arg_cmp(argv[i], "modinv") > 0 || arg_cmp(argv[i], "mod_inv") > 0) {
             do_which->do_mod_inv = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "fmodadd", 7) == 0 || memcmp(argv[i], "fmod_add", 8) == 0) {
+        if (arg_cmp(argv[i], "fmodadd") > 0 || arg_cmp(argv[i], "fmod_add") > 0) {
             do_which->do_fmod_add = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "montmul", 7) == 0 || memcmp(argv[i], "mont_mul", 8) == 0) {
+        if (arg_cmp(argv[i], "montmul") > 0 || arg_cmp(argv[i], "mont_mul") > 0) {
             do_which->do_mont_mul = 1;
             do_all = 0;
             continue;
         }
 
-        if (memcmp(argv[i], "montsqr", 7) == 0 || memcmp(argv[i], "mont_sqr", 8) == 0) {
+        if (arg_cmp(argv[i], "montsqr") > 0 || arg_cmp(argv[i], "mont_sqr") > 0) {
             do_which->do_mont_sqr = 1;
             do_all = 0;
             continue;
