@@ -48,12 +48,13 @@ ll_add_limb:
     cbz $l,.ll_add_limb_done
     ldr $t1,[$ad],#8
     sub $l,$l,#1
-    adcs $t1,$t1,$b
+    adcs $t1,$t1,x0
+    eor x0,xzr,xzr
     str $t1,[$rd],#8
-    eor $b,xzr,xzr
     b .ll_add_limb_loop
 
 .ll_add_limb_done:
+    adc x0,x0,xzr
     ret
 .size	ll_add_limb,.-ll_add_limb
 
@@ -93,12 +94,13 @@ ll_sub_limb:
     cbz $l,.ll_sub_limb_done
     ldr $t1,[$ad],#8
     sub $l,$l,#1
-    sbcs $t1,$t1,$b
+    sbcs $t1,$t1,x0
+    eor x0,xzr,xzr
     str $t1,[$rd],#8
-    eor $b,xzr,xzr
     b .ll_sub_limb_loop
 
 .ll_sub_limb_done:
+    csinc x0,x0,x0,cs
     ret
 .size	ll_sub_limb,.-ll_sub_limb
 
@@ -108,9 +110,8 @@ ll_sub_limb:
 .type	ll_sub_limbs,%function
 .align	5
 ll_sub_limbs:
-    mov x7,#1
     mov $rd,x0
-    subs x6,xzr,xzr  // C=1
+    subs x0,xzr,xzr  // C=1
 
 .ll_sub_limbs_loop:
     cbz $l,.ll_sub_limbs_done
@@ -122,8 +123,7 @@ ll_sub_limbs:
     b .ll_sub_limbs_loop
 
 .ll_sub_limbs_done:
-    sbc x0,x7,xzr
-    sub x0,x7,x0
+    csinc x0,xzr,xzr,cs
     ret
 .size	ll_sub_limbs,.-ll_sub_limbs
 ___
