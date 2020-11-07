@@ -149,7 +149,7 @@ static FP256_MONTSQR_TEST_VECTOR montsqr_test_vector[] = {
     },
 };
 
-int fp256_montsqr_test_vector(void)
+int fp256_mont_sqr_test_vector(void)
 {
     unsigned int i;
     fp256 tr, r, a, N;
@@ -262,7 +262,7 @@ int main(int argc, char **argv)
     get_test_args(argc, argv, &args);
     test_rand_init();
 
-    RETURN_IF_ERROR(run_test("fp256_mont_sqr", fp256_montsqr_test_vector, fp256_mont_sqr_test, args.N, args.T));
+    RETURN_IF_ERROR(run_test("fp256_mont_sqr", fp256_mont_sqr_test_vector, fp256_mont_sqr_test, args.N, args.T));
 
     fp256_deinit();
     return 0;

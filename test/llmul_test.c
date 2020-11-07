@@ -19,7 +19,7 @@
 #include "test.h"
 #include "test_local.h"
 
-/* r = a + b */
+/* r = a * b */
 typedef struct {
     char *r;
     char *a;

@@ -271,7 +271,7 @@ static FP256_MODINV_TEST_VECTOR modinv_test_vector[] = {
     },
 };
 
-int fp256_modinv_test_vector(void)
+int fp256_mod_inv_test_vector(void)
 {
     unsigned int i;
     fp256 tinv, inv, a, m;
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
     get_test_args(argc, argv, &args);
     test_rand_init();
 
-    RETURN_IF_ERROR(run_test("fp256_mod_inv", fp256_modinv_test_vector, fp256_mod_inv_test, args.N, args.T));
+    RETURN_IF_ERROR(run_test("fp256_mod_inv", fp256_mod_inv_test_vector, fp256_mod_inv_test, args.N, args.T));
 
     fp256_deinit();
     return 0;
