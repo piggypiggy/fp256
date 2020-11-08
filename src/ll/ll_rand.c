@@ -64,7 +64,7 @@ int ll_rand_range(u64 *ad, const u64 *range, size_t rl)
 
     while (count > 0) {
         count--;
-        if (count < 0) {
+        if (count <= 0) {
             ll_set_zero(ad, rl);
             return FP256_ERR;
         }
