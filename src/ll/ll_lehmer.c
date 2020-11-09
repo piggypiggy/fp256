@@ -63,7 +63,7 @@ size_t ll_euclid_update(u64 *t1d, u64 *t2d, const u64 *ad, const u64 *bd, u64 *v
 {
     size_t i, ql;
 
-    ll_div(t1d, t2d, NULL, &ql, ad, bd, l, l);
+    ll_naive_div(t1d, t2d, NULL, &ql, ad, bd, l, l);
 
     if (extended) {
         // v0 += v1 * qd
@@ -237,7 +237,7 @@ size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl,
                 /* sd = (bd * v0 - gcd) / ad */
                 ll_mul(tsd, bd, v0, bl, vl);
                 ll_sub(tsd, tsd, tmp1, bl + vl, gl);
-                ll_div(NULL, sd, NULL, &tsl, tsd, ad, bl + vl, al);
+                ll_naive_div(NULL, sd, NULL, &tsl, tsd, ad, bl + vl, al);
             }
             if (sl != NULL)
                 *sl = (ssize_t)-tsl;
@@ -253,7 +253,7 @@ size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl,
                 /* sd = (bd * v0 + gcd) / ad */
                 ll_mul(tsd, bd, v0, bl, vl);
                 ll_add(tsd, tsd, tmp1, bl + vl, gl);
-                ll_div(NULL, sd, NULL, &tsl, tsd, ad, bl + vl, al);
+                ll_naive_div(NULL, sd, NULL, &tsl, tsd, ad, bl + vl, al);
             }
             if (sl != NULL)
                 *sl = (ssize_t)tsl;

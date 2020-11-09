@@ -102,6 +102,7 @@ set(FP256_SRC
     ${LL_DIR}/ll_convert.c
     ${LL_DIR}/ll_cpuid.c
     ${LL_DIR}/ll_div.c
+    ${LL_DIR}/ll_naive_div.c
     ${LL_DIR}/ll_lehmer.c
     ${LL_DIR}/ll_mul.c
     ${LL_DIR}/ll_print.c

@@ -30,7 +30,7 @@ int fp256_naive_div(fp256 *rem, fp256 *quo, const fp256 *num, const fp256 *div)
     if (rem == NULL && quo == NULL)
         return FP256_ERR;
 
-    if (ll_div(rd, qd, &rl, &ql, num->d, div->d, num->nlimbs, div->nlimbs) != FP256_OK)
+    if (ll_naive_div(rd, qd, &rl, &ql, num->d, div->d, num->nlimbs, div->nlimbs) != FP256_OK)
         return FP256_ERR;
 
     if (rem != NULL)
