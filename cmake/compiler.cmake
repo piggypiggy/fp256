@@ -24,6 +24,9 @@ if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
 
     if(USE_ASM)
         enable_language(ASM)
+        if(OS_LINUX)
+            set(asm_flavour linux64)
+        endif()
     endif()
 
 elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
