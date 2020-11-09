@@ -75,6 +75,20 @@ matrix:
         - buildtype=-DCMAKE_BUILD_TYPE=Release
         - sanitizer=-DUSE_ASAN=ON
 
+    - os: linux
+      arch: arm64
+      compiler: gcc
+      env: 
+        - buildtype=-DCMAKE_BUILD_TYPE=Release
+        - sanitizer=-DUSE_ASAN=ON
+
+    - os: linux
+      arch: arm64
+      compiler: clang
+      env: 
+        - buildtype=-DCMAKE_BUILD_TYPE=Release
+        - sanitizer=-DUSE_ASAN=ON
+
 script:
   - mkdir build
   - cd build
