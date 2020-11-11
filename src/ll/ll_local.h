@@ -24,24 +24,58 @@
 extern "C" {
 #endif
 
+/* r1,r0 = a1,a0 + b1,b0 */
+# define LL_ADD2(r1, r0, a1, a0, b1, b0) do { \
+    u64 __c; \
+    __c = (a0) + (b0); \
+    (r1) = (a1) + (b1) + (__c < (a0)); \
+    (r0) = __c; \
+} while(0);
+
+/* r1,r0 = a1,a0 - b1,b0 */
+# define LL_SUB2(r1, r0, a1, a0, b1, b0) do { \
+    u64 __c; \
+    __c = (a0) - (b0); \
+    (r1) = (a0) - (b0) - ((a0) < (b0)); \
+    (r0) = __c; \
+} while(0);
+
+/* r1,r0 = a1,a0 - b1,b0 and cond = 1 if a1,a0 >= b1,b0
+ * r1,r0 = a1,a0         and cond = 0 if a1,a0 <  b1,b0
+ */
+# define LL_COND_SUB2(cond, r1, r0, a1, a0, b1, b0) do { \
+    u64 __c, __c1, __c0, __mask1, __mask2; \
+    __c = (a0) - (b0); \
+    __mask1 = ((a0) < (b0)); \
+    __c1 = (a1) - (b1) - __mask1; \
+    __c0 = __c; \
+    __mask1 &= ((a0) == (b0)); \
+    __mask1 |= ((a1) < (b1)); \
+    (cond) = __mask1 ^ 1; \
+    __mask1 = ~__mask1 + 1; \
+    __mask2 = ~__mask1; \
+    (r1) = ((a1) & __mask1) | (__c1 & __mask2); \
+    (r0) = ((a0) & __mask1) | (__c0 & __mask2); \
+} while(0);
+
 /* very slow multiplication */
 # define LL_MUL64(rh, rl, a, b) do { \
-    u64 t1, t2, ah, al, bh, bl; \
-    ah = (a) >> 32; \
-    al = (a) & 0xffffffffULL; \
-    bh = (b) >> 32; \
-    bl = (b) & 0xffffffffULL; \
-    t1 = al * bh; \
-    t2 = ah * bl; \
-    (rl) = al * bl; \
-    (rh) = ah * bh; \
-    t1 += ((rl) >> 32); \
+    u64 __t1, __t2, __ah, __al, __bh, __bl; \
+    __ah = (a) >> 32; \
+    __al = (a) & 0xffffffffULL; \
+    __bh = (b) >> 32; \
+    __bl = (b) & 0xffffffffULL; \
+    __t1 = __al * __bh; \
+    __t2 = __ah * __bl; \
+    (rl) = __al * __bl; \
+    (rh) = __ah * __bh; \
+    __t1 += ((rl) >> 32); \
     (rl) &= 0xffffffffULL; \
-    t1 += t2; \
-    if (t1 < t2) \
+    __t1 += __t2; \
+    if (__t1 < __t2) \
         (rh) += 0x100000000ULL; \
-    (rl) |= (t1 << 32); \
-    (rh) += (t1 >> 32); \
+    (rl) |= (__t1 << 32); \
+    (rh) += (__t1 >> 32); \
 } while(0);
 
 /* rd = ad + b,
