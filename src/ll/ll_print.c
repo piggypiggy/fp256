@@ -19,7 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include <stdio.h>
 
-int ll_print_hex(const u64 *rd, size_t rl)
+int ll_print_hex(const u64 *ad, size_t rl)
 {
     u8 *hex;
     size_t len;
@@ -27,7 +27,7 @@ int ll_print_hex(const u64 *rd, size_t rl)
     len = 1 + rl * sizeof(u64) * 2;
     hex = malloc(len);
     hex[len - 1] = '\0';
-    ll_to_hex(hex, NULL, rd, rl);
+    ll_to_hex(hex, NULL, ad, rl);
     printf("%s\n", hex);
 
     free(hex);

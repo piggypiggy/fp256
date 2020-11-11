@@ -118,7 +118,7 @@ void ll_normalize(u64 *ad, size_t al, size_t max)
     ll_set_zero(ad + al, max - al);
 }
 
-int ll_test_bit(u64 *ad, size_t idx)
+int ll_test_bit(const u64 *ad, size_t idx)
 {
     size_t l, b;
 

@@ -43,7 +43,7 @@ static const unsigned char inv_ascii_table[128] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 };
 
-unsigned int to_be32(const unsigned int in)
+u32 to_be32(const u32 in)
 {
     int ret;
 
@@ -56,7 +56,7 @@ unsigned int to_be32(const unsigned int in)
     return ret;
 }
 
-unsigned int to_le32(const unsigned int in)
+u32 to_le32(const u32 in)
 {
     int ret;
 
@@ -201,14 +201,14 @@ int u64_to_hex(unsigned char out[16], const u64 in, int order)
 }
 
 
-int u8_to_hex(unsigned char *out, const unsigned char *in, size_t in_len)
+int u8_to_hex(unsigned char *out, const unsigned char *in, size_t inlen)
 {
     size_t i;
 
     if (out == NULL)
         return FP256_ERR;
 
-    for (i = 0; i < in_len; i++) {
+    for (i = 0; i < inlen; i++) {
         out[0] = ascii_table[in[i] >> 4];
         out[1] = ascii_table[in[i] & 0xf];
         out += 2;
@@ -217,7 +217,7 @@ int u8_to_hex(unsigned char *out, const unsigned char *in, size_t in_len)
     return FP256_OK;
 }
 
-int hex_to_u8(unsigned char *out, const unsigned char *in, size_t in_len)
+int hex_to_u8(unsigned char *out, const unsigned char *in, size_t inlen)
 {
     size_t i;
 
@@ -225,7 +225,7 @@ int hex_to_u8(unsigned char *out, const unsigned char *in, size_t in_len)
         return FP256_ERR;
 
     i = 0;
-    if (in_len % 2 == 1) {
+    if (inlen % 2 == 1) {
         out[0] = inv_ascii_table[in[i]];
         if (out[0] == 0xff)
             return FP256_ERR;
@@ -233,7 +233,7 @@ int hex_to_u8(unsigned char *out, const unsigned char *in, size_t in_len)
         i++;
     }
 
-    for (; i < in_len; i += 2) {
+    for (; i < inlen; i += 2) {
         out[0] = (inv_ascii_table[in[i]] << 4) | inv_ascii_table[in[i+1]];
         // if (out[0] == 0xff)
         //     return FP256_ERR;
