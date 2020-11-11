@@ -12,6 +12,7 @@
 *~
 /bin/
 /build/
+/doc/Doxyfile
 /.vscode/
 
 # generated header

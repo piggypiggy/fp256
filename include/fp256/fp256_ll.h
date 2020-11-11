@@ -16,6 +16,10 @@
  *                                                                            *
  *****************************************************************************/
 
+/**
+ * @file fp256_ll.h
+ */
+
 #pragma once
 
 #include <fp256/fp256.h>
@@ -24,189 +28,508 @@
 extern "C" {
 #endif
 
+/**
+ * set integer represented by an u64 array to 0.
+ * 
+ * @param[out] ad         - result.
+ * @param[in] al          - length of ad array.
+ */
 FP256_EXPORT void ll_set_zero(u64 *ad, size_t al);
+
+/**
+ * set integer represented by an u64 array to a 64 bit integer limb.
+ * 
+ * @param[out] ad         - result.
+ * @param[in] al          - length of ad array.
+ * @param[in] limb        - 64 bit integer.
+ */
 FP256_EXPORT void ll_set_limb(u64 *ad, size_t al, u64 limb);
+
+/**
+ * copy u64 array from source(ad) to destination(rd).
+ * 
+ * @param[out] rd         - destination u64 array.
+ * @param[in] ad          - source u64 array.
+ * @param[in] al          - number of limbs to copy.
+ */
 FP256_EXPORT void ll_copy_limbs(u64 *rd, const u64 *ad, size_t al);
 
-/* return nlimbs of a */
+/**
+ * count number of limbs of ad.
+ * 
+ * @param[in] ad          - u64 array.
+ * @param[in] al          - length of ad array.
+ * @return number of limbs.
+ */
 FP256_EXPORT size_t ll_num_limbs(const u64 *ad, size_t max);
 
-/* set ad[al:max-1] to 0 */
+/**
+ * set the most significant max-al limbs to 0.
+ * 
+ * @param[out] ad         - result.
+ * @param[in] al          - number of limbs to reserve.
+ * @param[in] max         - number of limbs ad has.
+ */
 FP256_EXPORT void ll_normalize(u64 *ad, size_t al, size_t max);
 
-/* return number of leading zero bits of a */
+/**
+ * count leading zero bits of a.
+ * 
+ * @param[in] a           - 64 bit integer.
+ * @return number of leading zero bits.
+ */
 FP256_EXPORT size_t ll_leading_zeros(const u64 a);
 
-/* return index of the most significant bit 1 of a,
- * it's euqal to 64 - ll_leading_zeros(a).
+/**
+ * index of the most significant bit of a.
+ * 
+ * @param[in] a           - 64 bit integer.
+ * @return index of the most significant bit.
  */
 FP256_EXPORT size_t ll_num_bits(const u64 a);
 
-/* 1 : idx's bit of ad is 1
- * 0 : idx's bit of ad is 0
+/**
+ * test if idx's bit of an integer represented by an u64 array is 1.
+ * 
+ * @param[in] ad          - the u64 array to test.
+ * @param[in] ad          - which bit to test.
+ * @return 
+ * - 1  if idx's bit of ad is 1.
+ * - 0  if idx's bit of ad is 0.
  */
-FP256_EXPORT int ll_test_bit(u64 *ad, size_t idx);
+FP256_EXPORT int ll_test_bit(const u64 *ad, size_t idx);
 
-/* set idx's bit of ad to 1 */
+/**
+ * set idx's bit of an integer represented by an u64 array to 1.
+ * 
+ * @param[out] ad         - result.
+ * @param[in] idx         - which bit to set 1.
+ */
 FP256_EXPORT void ll_set_bit(u64 *ad, size_t idx);
 
-/* set ad[0~max) = 0 first, then set idx's bit of ad to 1, 
- * or equivalently, set ad = 2^{idx}
+/**
+ * set ad = 0 first, then set idx's bit of an integer represented by an u64 array to 1.\n
+ * or equivalently, set ad = 2^{idx}.
+ * 
+ * @param[out] ad         - result.
+ * @param[in] idx         - which bit to set 1.
+ * @param[in] max         - number of limbs ad has.
  */
 FP256_EXPORT void ll_clear_set_bit(u64 *ad, size_t idx, size_t max);
 
-/* 1 : ad[0:al-1] = 0
- * 0 : ad[0:al-1] != 0
+/**
+ * compare integer represented by an u64 array with 0.
+ * 
+ * @param[in] ad          - u64 array.
+ * @param[in] al          - length of ad array.
+ * @return
+ * - 1 if ad is 0.
+ * - 0 otherwise.
  */
 FP256_EXPORT int ll_is_zero(const u64 *ad, size_t al);
 
-/* compare ad and bd
- * +1 : ad > bd
- *  0 : ad = bd
- * -1 : ad < bd
+/**
+ * compare two integers represented by u64 array.
+ * 
+ * @param[in] ad          - the first u64 array to compare.
+ * @param[in] bd          - the second u64 array to compare.
+ * @param[in] al          - length of ad array.
+ * @param[in] bl          - length of bd array.
+ * @return
+ * - 1  if ad > bd.
+ * - 0  if ad = bd.
+ * - -1 if ad < bd.
  */
 FP256_EXPORT int ll_cmp_limbs(const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
-/* change byte order */
+/**
+ * reverse byte order of a 32 bit integer 
+ * 
+ * @param[in] in          - 32 bit integer.
+ * @return result.
+ */
 FP256_EXPORT u32 ll_bswap4(const u32 in);
+
+/**
+ * reverse byte order of a 64 bit integer 
+ * 
+ * @param[in] in          - 64 bit integer.
+ * @return result.
+ */
 FP256_EXPORT u64 ll_bswap8(const u64 in);
 
-/* */
+/**
+ * change byte order of a 32 bit integer from native order to big endian order.
+ * 
+ * @param[in] in          - 32 bit integer.
+ * @return result.
+ */
 FP256_EXPORT u32 to_be32(const u32 in);
+
+/**
+ * change byte order of a 32 bit integer from native order to little endian order.
+ * 
+ * @param[in] in          - 32 bit integer.
+ * @return result.
+ */
 FP256_EXPORT u32 to_le32(const u32 in);
 
-/* convert u8 array to one u32 integer, inlen <= 4 */
+/**
+ * convert u8 array to one 32 bit integer.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the u8 array to convert.
+ * @param[in] inlen       - length of u8 array.
+ * @param[in] order       - byte order of u8 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int u8_to_u32(u32 *out, const u8 *in, size_t inlen, int order);
 
-/* convert one u32 integer to u8 array */
+/**
+ * convert one 32 bit integer to u8 array.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the 32 bit integer to convert.
+ * @param[in] order       - byte order of the result u8 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int u32_to_u8(u8 out[4], const u32 in, int order);
 
-/* convert u8 array to one u64 integer, inlen <= 8 */
+/**
+ * convert u8 array to one 64 bit integer.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the u8 array to convert.
+ * @param[in] inlen       - length of u8 array.
+ * @param[in] order       - byte order of u8 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int u8_to_u64(u64 *out, const u8 *in, size_t inlen, int order);
 
-/* convert one u64 integer to u8 array */
+/**
+ * convert one 64 bit integer to u8 array.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the 64 bit integer to convert.
+ * @param[in] order       - byte order of the result u8 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int u64_to_u8(u8 out[8], const u64 in, int order);
 
-/* convert hex array to one u64 integer, inlen <= 16 */
+/**
+ * convert hex array to one 64 bit integer.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the hex array to convert.
+ * @param[in] inlen       - length of hex array.
+ * @param[in] order       - byte order of hex array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int hex_to_u64(u64 *out, const u8 *in, size_t inlen, int order);
 
-/* convert one u32 integer to hex array */
+/**
+ * convert one 32 bit integer to hex array.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the 32 bit integer to convert.
+ * @param[in] order       - byte order of the result hex array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int u32_to_hex(u8 out[8], const u32 in, int order);
 
-/* convert one u64 integer to hex array */
+/**
+ * convert one 64 bit integer to hex array.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the 64 bit integer to convert.
+ * @param[in] order       - byte order of the result hex array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int u64_to_hex(u8 out[16], const u64 in, int order);
 
-/* convert one u8 array to hex array */
-FP256_EXPORT int u8_to_hex(u8 *out, const u8 *in, size_t in_len);
+/**
+ * convert u8 array to hex array.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the u8 array to convert.
+ * @param[in] inlen       - length of u8 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int u8_to_hex(u8 *out, const u8 *in, size_t inlen);
 
-/* convert one hex array to u8 array */
-FP256_EXPORT int hex_to_u8(u8 *out, const u8 *in, size_t in_len);
+/**
+ * convert hex array to u8 array.
+ * 
+ * @param[out] out        - result.
+ * @param[in] in          - the hex array to convert.
+ * @param[in] inlen       - length of hex array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int hex_to_u8(u8 *out, const u8 *in, size_t inlen);
 
-/* byte array to u64 array */
+/**
+ * convert u8 array to u64 array.
+ * 
+ * @param[out] rd         - result.
+ * @param[out] rl         - length of result.
+ * @param[in] bytes       - the u8 array to convert.
+ * @param[in] blen        - length of u8 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int ll_from_bytes(u64 *rd, size_t *rl, const u8 *bytes, size_t blen);
 
-/* hex array to u64 array */
+/**
+ * convert hex array to u64 array.
+ * 
+ * @param[out] rd         - result.
+ * @param[out] rl         - length of result.
+ * @param[in] bytes       - the hex array to convert.
+ * @param[in] blen        - length of hex array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int ll_from_hex(u64 *rd, size_t *rl, const u8 *hex, size_t hexlen);
 
-/* u64 array to byte array */
+/**
+ * convert u64 array to u8 array.
+ * 
+ * @param[out] bytes      - result.
+ * @param[out] blen       - length of result.
+ * @param[in] rd          - the u64 array to convert.
+ * @param[in] rl          - length of u64 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int ll_to_bytes(u8 *bytes, size_t *blen, const u64 *rd, size_t rl);
 
-/* u64 array to hex array */
+/**
+ * convert u64 array to hex array.
+ * 
+ * @param[out] hex        - result.
+ * @param[out] hlen       - length of result.
+ * @param[in] rd          - the u64 array to convert.
+ * @param[in] rl          - length of u64 array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int ll_to_hex(u8 *hex, size_t *hlen, const u64 *rd, size_t rl);
 
-/* add two 256 bit integers, return carry */
+/**
+ * add two 256 bit integers, return carry.\n
+ * rd = ad + bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first 256 bit integer to add.
+ * @param[in] bd          - the second 256 bit integer to add.
+ * @return carry.
+ */
 FP256_EXPORT u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 
-/* sub two 256 bit integers, return borrow */
+/**
+ * subtract two 256 bit integers, return borrow.\n
+ * rd = ad - bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first 256 bit integer to add.
+ * @param[in] bd          - the second 256 bit integer to sub.
+ * @return borrow.
+ */
 FP256_EXPORT u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 
-/* rd = ad + bd, 
- * return carry
+/**
+ * add two integers represented by u64 array, return the most significant limb of the result(carry).\n
+ * rd = ad + bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to add.
+ * @param[in] bd          - the second u64 array to add.
+ * @param[in] al          - length of ad array.
+ * @param[in] bl          - length of bd array.
+ * @return carry.
  */
 FP256_EXPORT u64 ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
-/* rd = ad - bd, assume ad >= bd
- * return borrow, which is always 0
+/**
+ * subtract two integers represented by u64 array, assume ad >= bd.\n
+ * return borrow, which is always 0.\n
+ * rd = ad - bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to add.
+ * @param[in] bd          - the second u64 array to sub.
+ * @param[in] al          - length of ad array.
+ * @param[in] bl          - length of bd array.
+ * @return 0.
  */
 FP256_EXPORT u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
-/* rd = ad * b
- * return rd[al]
+/**
+ * multiply big integer by a 64 bit integer, return the most significant limb of the result.\n
+ * rd = ad * b.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] b           - the second 64 bit integer to multiply.
+ * @param[in] al          - length of ad array.
+ * @return the most significant limb of the result.
  */
 FP256_EXPORT u64 ll_mul_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
 
-/* rd = rd + ad * b
- * return rd[max{rl,al}]
+/**
+ * multiply big integer by a 64 bit integer and add it to another big integer, return the most significant limb of the result.\n
+ * rd = rd + ad * b.
+ * 
+ * @param[in,out] rd      - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] b           - the second 64 bit integer to multiply.
+ * @param[in] rl          - length of the input rd array.
+ * @param[in] al          - length of ad array.
+ * @return the most significant limb of the result.
  */
 FP256_EXPORT u64 ll_muladd_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al);
 
-/* rd = rd - ad * b, assume rd > ad * b
- * return rd[rl-1]
+/**
+ * multiply big integer by a 64 bit integer and subtract it to a big integer, return the most significant limb of the result.
+ * assume result >= 0.\n
+ * rd = rd - ad * b.
+ * 
+ * @param[in,out] rd      - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] b           - the second 64 bit integer to multiply.
+ * @param[in] al          - length of the input rd array.
+ * @return the most significant limb of the result.
  */
 FP256_EXPORT u64 ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al);
 
-/* rd = ad * bd 
- * return rd[al+bl-1]
+/**
+ * multiply two big integer represented by u64 array, return the most significant limb of the result.\n
+ * rd = ad * bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] bd          - the second u64 array to multiply.
+ * @param[in] al          - length of ad array.
+ * @param[in] bl          - length of bd array.
+ * @return the most significant limb of the result.
  */
 FP256_EXPORT u64 ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
-/* rd = ad * bd
- * ad, bd are less than 2^256
+/**
+ * multiply two integer represented by u64 array.\n
+ * rd = ad * bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] bd          - the second u64 array to multiply.
+ * @param[in] al          - length of ad array, al <= 4.
+ * @param[in] bl          - length of bd array, bl <= 4.
  */
-FP256_EXPORT void ll_u256_mul_limbs(u64 rd[4*2], const u64 ad[4], const u64 bd[4], size_t al, size_t bl);
-FP256_EXPORT void ll_u256_mul(u64 rd[4*2], const u64 ad[4], const u64 bd[4]);
+FP256_EXPORT void ll_u256_mul_limbs(u64 rd[8], const u64 ad[4], const u64 bd[4], size_t al, size_t bl);
 
-/* rd = ad^2
- * ad is less than 2^256
+/**
+ * multiply two 256 bit integer represented by u64 array.\n
+ * rd = ad * bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] bd          - the second u64 array to multiply.
  */
-FP256_EXPORT void ll_u256_sqr(u64 rd[4*2], const u64 ad[4]);
+FP256_EXPORT void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4]);
 
-/* rd = montgomery multiplication of ad and bd, 
- * or rd = ad * bd * R^{-1} mod Nd, R = 2^256.
- * ad and bd should be less than Nd.
+/**
+ * square a 256 bit integer represented by u64 array.\n
+ * rd = ad ^ 2.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to square.
+ */
+FP256_EXPORT void ll_u256_sqr(u64 rd[8], const u64 ad[4]);
+
+/**
+ * montgomery multiplication of two integers in montgomery representation.\n
+ * rd = ad * bd * R^{-1} mod Nd, R = 2^256.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] bd          - the second u64 array to multiply.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
  */
 FP256_EXPORT void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 Nd[4], u64 k0);
 
-/* rd = montgomery multiplication of ad and ad, 
- * or rd = ad^2 * R^{-1} mod Nd, R = 2^256.
- * ad should be less than Nd.
+/**
+ * montgomery square an integer in montgomery representation.\n
+ * rd = ad^2 * R^{-1} mod Nd, R = 2^256.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to square.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
  */
 FP256_EXPORT void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 
-/* divide nd by dd
- * rd = nd % dd
- * qd = nd / dd
- * 
- * require
- * rd, qd, nd and dd are pairwise diffrent pointer
- * dd is less than 2^256
- * rd has at least dl limbs
- * qd has at least (nl - dl + 1) limbs
- */
-FP256_EXPORT int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl);
+// /**
+//  * divide two big integers represented by u64 array, TODO : add reference.\n
+//  * rd = nd % dd, qd = nd / dd.\n
+//  * @pre
+//  * rd, qd, nd and dd must be pairwise diffrent pointer,\n
+//  * rd must have at least dl limbs,\n
+//  * qd must have at least (nl - dl + 1) limbs.
+//  * 
+//  * @param[out] rd         - remainder.
+//  * @param[out] qd         - quotient.
+//  * @param[out] rl         - length of rd array.
+//  * @param[out] ql         - length of qd array.
+//  * @param[in]  nd         - numerator.
+//  * @param[in]  dd         - divisor.
+//  * @param[in]  nl         - length of nd array.
+//  * @param[in]  dl         - length of dd array.
+//  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+//  */
+// FP256_EXPORT int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl);
 
+/**
+ * divide two big integers represented by u64 array, TODO : add reference.\n
+ * rd = nd % dd, qd = nd / dd.\n
+ * @pre
+ * rd, qd, nd and dd must be pairwise diffrent pointer,\n
+ * dd must be less than 2^256,\n
+ * rd must have at least dl limbs,\n
+ * qd must have at least (nl - dl + 1) limbs.
+ * 
+ * @param[out] rd         - remainder.
+ * @param[out] qd         - quotient.
+ * @param[out] rl         - length of rd array.
+ * @param[out] ql         - length of qd array.
+ * @param[in]  nd         - numerator.
+ * @param[in]  dd         - divisor.
+ * @param[in]  nl         - length of nd array.
+ * @param[in]  dl         - length of dd array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int ll_naive_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl);
 FP256_EXPORT void ll_naive_div_1_limb(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
 FP256_EXPORT void ll_naive_div_2_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
 FP256_EXPORT void ll_naive_div_3_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
 FP256_EXPORT void ll_naive_div_4_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
 
-/* lehmer gcd algorithm.
- * it calculates gcd, sd, td, sl and tl, satisfying
- * gcd = gcd(ad, bd), gcd = ad * sd + bd * td.
- * 
+/** 
+ * lehmer gcd algorithm.\n
  * use double digit(2*64 bit) and approximative condition in simulate step,
- * reference : https://www.sciencedirect.com/science/article/pii/S0747717185710097.
+ * reference : https://www.sciencedirect.com/science/article/pii/S0747717185710097. \n
  * 
- * only track v0, v1 where 
- * a0 >= a1,
- * u0 * a + v0 * b = a0, 
- * u1 * a + v1 * b = a1.
+ * it calculates gcd, sd, td, sl and tl satisfying:
+ * - gcd = greatest comon divisor of ad and bd,
+ * - gcd = ad * sd + bd * td.
  * 
- * if gcd != NULL, returns nlimbs of gcd, otherwise returns 0.
- * sl < 0 means sd < 0, 
- * tl < 0 means td < 0.
- * gcd, sd, td, sl and tl can be NULL.
+ * @param[out] gcd        - greatest common divisor of ad and bd.
+ * @param[out] sd         - .
+ * @param[out] td         - .
+ * @param[out] sl         - length of sd array, sl < 0 means sd < 0.
+ * @param[out] tl         - length of td array, tl < 0 means td < 0.
+ * @param[in]  ad         - u64 array.
+ * @param[in]  bd         - u64 array.
+ * @param[in]  al         - length of ad array.
+ * @param[in]  bl         - length of bd array.
+ * @param[in]  extended   - 1 : extended gcd algorithm, 0 : gcd algorithm.
+ * @return length of gcd array if gcd is not NULL, 0 otherwise.
  */
 FP256_EXPORT size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl, 
                     const u64 *ad, const u64 *bd, size_t al, size_t bl, int extended);
@@ -227,65 +550,196 @@ FP256_EXPORT size_t ll_lshift(u64 *r, const u64 *a, size_t al, size_t n);
  */
 FP256_EXPORT size_t ll_rshift(u64 *r, const u64 *a, size_t al, size_t n);
 
-/* left shift a by b bits,  r = a << b, 0 <= b < 64 */
+/**
+ * left shift a 256 bit integer.\n
+ * rd = ad << n, n < 64.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to shift.
+ * @param[in] n           - number of bits to shift.
+ */
 FP256_EXPORT void ll_u256_lshift(u64 rd[5], const u64 ad[4], const size_t n);
 
-/* right shift a by b bits, r = a >> b, 0 <= b < 64 */
+/**
+ * right shift a 256 bit integer.\n
+ * rd = ad >> n, n < 64.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to shift.
+ * @param[in] n           - number of bits to shift.
+ */
 FP256_EXPORT void ll_u256_rshift(u64 rd[4], const u64 ad[4], const size_t n);
 
-/* left shift a by b bits,  r = a << b, 0 <= b < 64 */
+/**
+ * left shift a 512 bit integer.\n
+ * rd = ad << n, n < 64.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to shift.
+ * @param[in] n           - number of bits to shift.
+ */
 FP256_EXPORT void ll_u512_lshift(u64 rd[9], const u64 ad[8], const size_t n);
 
-/* right shift a by b bits, r = a >> b, 0 <= b < 64 */
+/**
+ * right shift a 512 bit integer.\n
+ * rd = ad >> n, n < 64.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to shift.
+ * @param[in] n           - number of bits to shift.
+ */
 FP256_EXPORT void ll_u512_rshift(u64 rd[8], const u64 ad[8], const size_t n);
 
 /* ll_u256_fmod(f means fast) assume inputs are already reduced and 
  * outputs will also be reduced(i.e. in range [0, m)). 
  */
 
-/* r = -a mod m */
-FP256_EXPORT void ll_u256_fmod_neg(u64 r[4], const u64 a[4], const u64 m[4]);
+/**
+ * compute rd = -ad mod md, they are all 256 bit integer. \n
+ * @pre ad < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_neg(u64 rd[4], const u64 ad[4], const u64 md[4]);
 
-/* r = 2a mod m */
-FP256_EXPORT void ll_u256_fmod_double(u64 r[4], const u64 a[4], const u64 m[4]);
+/**
+ * compute rd = 2 * ad mod md, they are all 256 bit integer. \n
+ * @pre ad < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_double(u64 rd[4], const u64 ad[4], const u64 md[4]);
 
-/* r = 3a mod m */
-FP256_EXPORT void ll_u256_fmod_triple(u64 r[4], const u64 a[4], const u64 m[4]);
+/**
+ * compute rd = 3 * ad mod md, they are all 256 bit integer. \n
+ * @pre ad < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_triple(u64 rd[4], const u64 ad[4], const u64 md[4]);
 
-/* r = a/2 mod m */
-FP256_EXPORT void ll_u256_fmod_div_by_2(u64 r[4], const u64 a[4], const u64 m[4]);
+/**
+ * compute rd = ad / 2 mod md, they are all 256 bit integer. \n
+ * @pre ad < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_div_by_2(u64 rd[4], const u64 ad[4], const u64 md[4]);
 
-/* r = a + b mod m */
-FP256_EXPORT void ll_u256_fmod_add(u64 r[4], const u64 a[4], const u64 b[4], const u64 m[4]);
+/**
+ * compute rd = ad + bd mod md, they are all 256 bit integer. \n
+ * @pre ad < md, bd < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] bd          - u64 array.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_add(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 md[4]);
 
-/* r = a + w mod m, w is a 64bit integer */
-FP256_EXPORT void ll_u256_fmod_add_limb(u64 r[4], const u64 a[4], const u64 w, const u64 m[4]);
+/**
+ * compute rd = ad + b mod md. \n
+ * @pre ad < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] b           - 64 bit integer.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_add_limb(u64 rd[4], const u64 ad[4], const u64 b, const u64 md[4]);
 
-/* r = a - b mod m */
-FP256_EXPORT void ll_u256_fmod_sub(u64 r[4], const u64 a[4], const u64 b[4], const u64 m[4]);
+/**
+ * compute rd = ad - bd mod md, they are all 256 bit integer. \n
+ * @pre ad < md, bd < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] bd          - u64 array.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_sub(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 md[4]);
 
-/* r = a - w mod m, w is a 64bit integer */
-FP256_EXPORT void ll_u256_fmod_sub_limb(u64 r[4], const u64 a[4], const u64 w, const u64 m[4]);
+/**
+ * compute rd = ad - b mod md. \n
+ * @pre ad < md.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] b           - 64 bit integer.
+ * @param[in] md          - modulus, u64 array.
+ */
+FP256_EXPORT void ll_u256_fmod_sub_limb(u64 rd[4], const u64 ad[4], const u64 b, const u64 md[4]);
 
-/* generate random data */
+/**
+ * fill u8 array with random data. \n
+ * 
+ * @param[out] buf        - result.
+ * @param[in] ad          - length of buf.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
 FP256_EXPORT int ll_rand_buf(unsigned char *buf, size_t len);
 
-/* random integer in [0, 2^(64*nlimbs)) */
-FP256_EXPORT int ll_rand_limbs(u64 *ad, size_t nlimbs);
+/**
+ * fill u64 array with random data so that the integer it represents is in range [0, 2^(64*nlimbs)). \n
+ * 
+ * @param[out] rd         - result.
+ * @param[in] nlimbs      - number of limbs of random data.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int ll_rand_limbs(u64 *rd, size_t nlimbs);
 
-/* random integer in [0, 2^(8*nbytes)) */
-FP256_EXPORT int ll_rand_bytes(u64 *ad, size_t nbytes);
+/**
+ * fill u64 array with random data so that the integer it represents is in range [0, 2^(8*nbytes)) \n
+ * 
+ * @param[out] rd         - result.
+ * @param[in] nbytes      - number of bytes of random data.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int ll_rand_bytes(u64 *rd, size_t nbytes);
 
-/* random integer in [0, 2^(nbits)) */
-FP256_EXPORT int ll_rand_bits(u64 *ad, size_t nbits);
+/**
+ * fill u64 array with random data so that the integer it represents is in range [0, 2^(nbits)) \n
+ * 
+ * @param[out] rd         - result.
+ * @param[in] nbits       - number of bits of random data.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int ll_rand_bits(u64 *rd, size_t nbits);
 
-/* random integer in [0, range) */
-FP256_EXPORT int ll_rand_range(u64 *ad, const u64 *range, size_t rl);
+/**
+ * fill u64 array with random data so that the integer it represents is in range [0, range) \n
+ * 
+ * @param[out] rd         - result.
+ * @param[in] range       - range of result.
+ * @param[in] rgl         - length of range array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int ll_rand_range(u64 *rd, const u64 *range, size_t rgl);
 
-/* convert rd to hex array and print it */
-FP256_EXPORT int ll_print_hex(const u64 *rd, size_t rl);
+/**
+ * convert u64 array to hex array and print it
+ * 
+ * @param[in] ad          - the u64 array to print.
+ * @param[in] al          - length of ad array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int ll_print_hex(const u64 *ad, size_t rl);
 
-/* convert s to hex array and print it */
+/**
+ * convert u8 array to hex array and print it
+ * 
+ * @param[in] name        - description for s.
+ * @param[in] s           - the u8 array to print.
+ * @param[in] slen        - length of s array.
+ */
 FP256_EXPORT void print_hex(const char *name, const unsigned char *s, size_t slen);
 
 #ifdef __cplusplus

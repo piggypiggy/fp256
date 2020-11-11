@@ -15,6 +15,7 @@ set(FP256_VERSION "${FP256_VERSION_MAJOR}.${FP256_VERSION_MINOR}.${FP256_VERSION
 
 option(BUILD_STATIC "build static library" ON)
 option(BUILD_SHARED "build shared library" ON)
+option(BUILD_DOC "build api documentation" ON)
 option(USE_DEV_RANDOM "use dev/random, default : use dev/urandom" OFF)
 option(USE_ASM "use assembly code" ON)
 option(USE_ASAN "use AddressSanitizer" OFF)
@@ -79,7 +80,7 @@ set(OUTPUT_DIRECTORY_SHARED ${FP256_DIR}/bin/$<CONFIG>/shared)
 # check_include_files(immintrin.h HAVE_IMMINTRIN_H)
 
 # endianess
-include (TestBigEndian)
+include(TestBigEndian)
 TEST_BIG_ENDIAN(IS_BIG_ENDIAN)
 if(IS_BIG_ENDIAN)
     set(ORDER 0) # config
@@ -87,6 +88,12 @@ else()
     set(ORDER 1) # config
 endif()
 set(ENDIANESS "O.O") # config
+
+# document
+if(BUILD_DOC)
+    set(FP256_DOC_DIR ${FP256_DIR}/doc)
+    include(${CMAKE_MODULE_DIR}/doxygen.cmake)
+endif()
 
 enable_testing()
 add_subdirectory(src)

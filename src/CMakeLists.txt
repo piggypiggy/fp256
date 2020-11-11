@@ -117,7 +117,7 @@ set(FP256_SRC
     ${LL_DIR}/ll_add.c
     ${LL_DIR}/ll_convert.c
     ${LL_DIR}/ll_cpuid.c
-    ${LL_DIR}/ll_div.c
+    # ${LL_DIR}/ll_div.c
     ${LL_DIR}/ll_naive_div.c
     ${LL_DIR}/ll_lehmer.c
     ${LL_DIR}/ll_mul.c
@@ -134,6 +134,7 @@ set(FP256_SRC
     ${FP256_SRC_DIR}/cpuid.c
     ${FP256_SRC_DIR}/fp256_add.c
     ${FP256_SRC_DIR}/fp256_cmp.c
+    ${FP256_SRC_DIR}/fp256_div.c
     ${FP256_SRC_DIR}/fp256_naive_div.c
     ${FP256_SRC_DIR}/fp256_gcd.c
     ${FP256_SRC_DIR}/fp256_init.c
