@@ -97,13 +97,13 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
     }
 
     for (int i = 1; i < argc; i++) {
-        if ((len = arg_cmp(argv[i], "t=")) > 0) {
-            args->T = atoi(argv[i] + len);
+        if (memcmp(argv[i], "t=", 2) == 0 || memcmp(argv[i], "T=", 2) == 0) {
+            args->T = atoi(argv[i] + 2);
             continue;
         }
 
-        if ((len = arg_cmp(argv[i], "n=")) > 0) {
-            args->N = atoi(argv[i] + len);
+        if (memcmp(argv[i], "n=", 2) == 0 || memcmp(argv[i], "N=", 2) == 0) {
+            args->N = atoi(argv[i] + 2);
             continue;
         }
 
