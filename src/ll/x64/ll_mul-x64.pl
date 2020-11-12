@@ -131,7 +131,7 @@ ll_mulsub_limb:
 
 .ll_mulsub_limb_mul_loop:          # rd[0, al-1] -= ad * b
     cmp $al, $i
-    jz .ll_mulsub_limb_sub_loop
+    je .ll_mulsub_limb_sub_loop
     mov 0($a_ptr), %rax
     lea 8($a_ptr), $a_ptr
     mulq $b
