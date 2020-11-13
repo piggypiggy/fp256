@@ -16,8 +16,10 @@
  *                                                                            *
  *****************************************************************************/
 
+#include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
+#include <stdio.h>
 
 /** lookup_table[i] = floor(0x7fd00 / (256 + i)) */
 static const unsigned short lookup_table[256] = {
@@ -250,7 +252,7 @@ void ll_div_2_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, u64 v)
 void ll_div_n_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, size_t dl, u64 v)
 {
     size_t i;
-    u64 n1, n0, borrow, q;
+    u64 d1, d0, borrow, q;
     u64 *dd2;
 
     assert((nl >= dl) && (dl >= 3));
@@ -266,14 +268,23 @@ void ll_div_n_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, size_t dl, u64 v)
     dd2 = dd + dl;
     nd += (dl - 1);
     qd--;
+    d1 = dd2[1]; d0 = dd2[0];
     for (i = nl; i > 0; i--) {
-        q = ll_div3by2_pi1(nd, nd, dd2, v);
-        borrow = ll_mulsub_limb(nd - dl, dd, q, dl, dl);
-        n1 = nd[1]; n0 = nd[0];
+        if (nd[2] == d1 && nd[1] == d0) {
+            q = -1ULL;
+            ll_mulsub_limb(nd - dl, dd, q, dl + 2, dl + 2);
+        }
+        else {
+            /* divrem((nd[2],nd[1],nd[0]), (d1,d0)) */
+            q = ll_div3by2_pi1(nd, nd, dd2, v);
+            /* nd[1],nd[0],...,nd[-dl] -= (q * (dd[dl-1],dd[dl-2],...dd[0])) */
+            borrow = ll_mulsub_limb(nd - dl, dd, q, dl + 2, dl);
 
-        if (n1 == 0 && n0 < borrow) { /* 0,borrow > n1,n0 */
-            ll_add_limbs(nd - dl, nd - dl, dd, dl + 2);
-            q--;
+            if (borrow) {
+                /* q is 1 larger than the real quotient */
+                ll_add_limbs(nd - dl, nd - dl, dd, dl + 2);
+                q--;
+            }
         }
 
         qd[0] = q;
