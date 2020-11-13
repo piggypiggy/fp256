@@ -86,7 +86,7 @@ static size_t arg_cmp(const char *arg1, const char *arg2)
 void get_test_args(int argc, char **argv, TEST_ARGS *args)
 {
     int do_all = 1;
-    size_t len;
+    // size_t len;
     DO_WHICH *do_which;
     memset(args, 0, sizeof(TEST_ARGS));
     do_which = &args->do_which;
@@ -156,7 +156,12 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
         }
 
         if (arg_cmp(argv[i], "mul") > 0) {
-            printf("please do naivediv test\n");
+            do_which->do_mul = 1;
+            do_all = 0;
+            continue;
+        }
+
+        if (arg_cmp(argv[i], "div") > 0) {
             do_which->do_div = 1;
             do_all = 0;
             continue;

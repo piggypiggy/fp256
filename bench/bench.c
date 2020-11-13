@@ -165,7 +165,7 @@ static void bench_fp256_convert_clear(void *data)
     free(data);
 }
 
-/*************************** fp256_naive_div ***************************/
+/*************************** fp256_naive_div, fp256_div ***************************/
 typedef struct {
     fp256 rem;
     fp256 quo;
@@ -173,7 +173,7 @@ typedef struct {
     fp256 div;
 } FP256_DIV_DATA;
 
-static void* bench_fp256_naive_div_setup(void)
+static void* bench_fp256_div_setup(void)
 {
     int k;
     size_t nl, dl;
@@ -208,7 +208,21 @@ static void bench_fp256_naive_div_run(void *_data, int64_t N)
     }
 }
 
-static void bench_fp256_naive_div_clear(void *data)
+static void bench_fp256_div_run(void *_data, int64_t N)
+{
+    int k;
+    int64_t i;
+    FP256_DIV_DATA *data;
+
+    k = 0;
+    data = (FP256_DIV_DATA*)_data;
+    for (i = 0; i < N; i++) {
+        fp256_div(&data[k].rem, &data[k].quo, &data[k].num, &data[k].div);
+        k = (k + 1) % NUM;
+    }
+}
+
+static void bench_fp256_div_clear(void *data)
 {
     free(data);
 }
@@ -754,8 +768,11 @@ int main(int argc, char **argv)
     if (args.do_which.do_convert)
         run_bench("fp256_convert", bench_fp256_convert_setup, bench_fp256_convert_run, bench_fp256_convert_clear, args.N, args.T);
 
+    if (args.do_which.do_div)
+        run_bench("fp256_div", bench_fp256_div_setup, bench_fp256_div_run, bench_fp256_div_clear, args.N, args.T);
+
     if (args.do_which.do_naive_div)
-        run_bench("fp256_naive_div", bench_fp256_naive_div_setup, bench_fp256_naive_div_run, bench_fp256_naive_div_clear, args.N, args.T);
+        run_bench("fp256_naive_div", bench_fp256_div_setup, bench_fp256_naive_div_run, bench_fp256_div_clear, args.N, args.T);
 
     if (args.do_which.do_gcd)
         run_bench("fp256_gcd", bench_fp256_gcd_setup, bench_fp256_gcd_run, bench_fp256_gcd_clear, args.N, args.T);
