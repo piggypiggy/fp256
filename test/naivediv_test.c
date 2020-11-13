@@ -30,7 +30,7 @@ int main(int argc, char **argv)
     get_test_args(argc, argv, &args);
     test_rand_init();
 
-    RETURN_IF_ERROR(run_test("fp256_div", fp256_div_test_vector, fp256_div_test, args.N, args.T));
+    RETURN_IF_ERROR(run_test("fp256_naive_div", fp256_naive_div_test_vector, fp256_naive_div_test, args.N, args.T));
 
     fp256_deinit();
     return 0;
