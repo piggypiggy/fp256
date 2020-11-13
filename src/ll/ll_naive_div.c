@@ -52,8 +52,9 @@ int ll_naive_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const 
     if (dl > 4 || dl == 0)
         return FP256_ERR;
 
-    nl1 = nl + 1;
-    tmp = (u64*)calloc(1, sizeof(u64) * 4 * nl1 + 1);
+    nl1 = (nl > dl ? nl : dl);
+    nl1++;
+    tmp = (u64*)calloc(1, sizeof(u64) * 4 * nl1);
     trd = tmp;
     tqd = tmp + nl1;
 

@@ -16,10 +16,8 @@
  *                                                                            *
  *****************************************************************************/
 
-#include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
-#include <stdio.h>
 
 /** lookup_table[i] = floor(0x7fd00 / (256 + i)) */
 static const unsigned short lookup_table[256] = {
@@ -302,8 +300,9 @@ int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *d
     nl = ll_num_limbs(nd, nl);
     dl = ll_num_limbs(dd, dl);
 
-    nl1 = nl + 1;
-    tmp = (u64*)calloc(1, sizeof(u64) * 4 * nl1 + 1);
+    nl1 = (nl > dl ? nl : dl);
+    nl1++;
+    tmp = (u64*)calloc(1, sizeof(u64) * 4 * nl1);
     tqd = tmp;
     tnd = tqd + nl1;
 
