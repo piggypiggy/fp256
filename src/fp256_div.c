@@ -21,28 +21,23 @@
 
 int fp256_div(fp256 *rem, fp256 *quo, const fp256 *num, const fp256 *div)
 {
-    // size_t rl, ql;
-    // u64 rd[4], qd[4];
+    size_t rl, ql;
+    u64 rd[4], qd[4];
 
-    // if (num == NULL || div == NULL)
-    //     return FP256_ERR;
+    if (num == NULL || div == NULL)
+        return FP256_ERR;
 
-    // if (rem == NULL && quo == NULL)
-    //     return FP256_ERR;
+    if (rem == NULL && quo == NULL)
+        return FP256_ERR;
 
-    // if (ll_div(rd, qd, &rl, &ql, num->d, div->d, num->nlimbs, div->nlimbs) != FP256_OK)
-    //     return FP256_ERR;
+    if (ll_div(rd, qd, &rl, &ql, num->d, div->d, num->nlimbs, div->nlimbs) != FP256_OK)
+        return FP256_ERR;
 
-    // if (rem != NULL)
-    //     fp256_set_limbs(rem, rd, rl, num->neg);
+    if (rem != NULL)
+        fp256_set_limbs(rem, rd, rl, num->neg);
 
-    // if (quo != NULL)
-    //     fp256_set_limbs(quo, qd, ql, num->neg ^ div->neg);
-
-    (void) rem;
-    (void) quo;
-    (void) num;
-    (void) div;
+    if (quo != NULL)
+        fp256_set_limbs(quo, qd, ql, num->neg ^ div->neg);
 
     return FP256_OK;
 }

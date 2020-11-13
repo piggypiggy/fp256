@@ -18,6 +18,18 @@
 
 /**
  * @file fp256_ll.h
+ * 
+ * @defgroup ll Low level routines
+ * @{
+ *     @defgroup ll_utils Utility
+ *     @defgroup ll_addition Low level addition routines
+ *     @defgroup ll_subtraction Low level subtraction routines
+ *     @defgroup ll_multiplication Low level multiplication routines
+ *     @defgroup ll_division Low level division routines
+ *     @defgroup ll_conversion Low level format conversion routines
+ *     @defgroup ll_shift Low level shift routines
+ *     @defgroup ll_mont_multiplication Low level montgomery multiplication routines
+ * @}
  */
 
 #pragma once
@@ -27,6 +39,9 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+//! @addtogroup ll_utils
+//! @{
 
 /**
  * set integer represented by an u64 array to 0.
@@ -141,6 +156,8 @@ FP256_EXPORT int ll_is_zero(const u64 *ad, size_t al);
  * - -1 if ad < bd.
  */
 FP256_EXPORT int ll_cmp_limbs(const u64 *ad, const u64 *bd, size_t al, size_t bl);
+
+//! @} ll_utils
 
 /**
  * reverse byte order of a 32 bit integer 
@@ -465,25 +482,25 @@ FP256_EXPORT void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], 
  */
 FP256_EXPORT void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 
-// /**
-//  * divide two big integers represented by u64 array, TODO : add reference.\n
-//  * rd = nd % dd, qd = nd / dd.\n
-//  * @pre
-//  * rd, qd, nd and dd must be pairwise diffrent pointer,\n
-//  * rd must have at least dl limbs,\n
-//  * qd must have at least (nl - dl + 1) limbs.
-//  * 
-//  * @param[out] rd         - remainder.
-//  * @param[out] qd         - quotient.
-//  * @param[out] rl         - length of rd array.
-//  * @param[out] ql         - length of qd array.
-//  * @param[in]  nd         - numerator.
-//  * @param[in]  dd         - divisor.
-//  * @param[in]  nl         - length of nd array.
-//  * @param[in]  dl         - length of dd array.
-//  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
-//  */
-// FP256_EXPORT int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl);
+/**
+ * divide two big integers represented by u64 array, TODO : add reference.\n
+ * rd = nd % dd, qd = nd / dd.\n
+ * @pre
+ * rd, qd, nd and dd must be pairwise diffrent pointer,\n
+ * rd must have at least dl limbs,\n
+ * qd must have at least (nl - dl + 1) limbs.
+ * 
+ * @param[out] rd         - remainder.
+ * @param[out] qd         - quotient.
+ * @param[out] rl         - length of rd array.
+ * @param[out] ql         - length of qd array.
+ * @param[in]  nd         - numerator.
+ * @param[in]  dd         - divisor.
+ * @param[in]  nl         - length of nd array.
+ * @param[in]  dl         - length of dd array.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl);
 
 /**
  * divide two big integers represented by u64 array, TODO : add reference.\n

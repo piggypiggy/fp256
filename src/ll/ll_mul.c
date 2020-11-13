@@ -103,7 +103,6 @@ u64 ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t al)
         rd++;
     }
 
-    assert(borrow == 0);
     return t1;
 }
 #endif

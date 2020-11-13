@@ -40,10 +40,10 @@ extern "C" {
     (r0) = __c; \
 } while(0);
 
-/* r1,r0 = a1,a0 - b1,b0 and cond = 1 if a1,a0 >= b1,b0
- * r1,r0 = a1,a0         and cond = 0 if a1,a0 <  b1,b0
+/* r1,r0 = a1,a0 - b1,b0 and cmp = 1 if a1,a0 >= b1,b0
+ * r1,r0 = a1,a0         and cmp = 0 if a1,a0 <  b1,b0
  */
-# define LL_COND_SUB2(cond, r1, r0, a1, a0, b1, b0) do { \
+# define LL_CMP_SUB2(cmp, r1, r0, a1, a0, b1, b0) do { \
     u64 __c, __c1, __c0, __mask1, __mask2; \
     __c = (a0) - (b0); \
     __mask1 = ((a0) < (b0)); \
@@ -51,7 +51,7 @@ extern "C" {
     __c0 = __c; \
     __mask1 &= ((a0) == (b0)); \
     __mask1 |= ((a1) < (b1)); \
-    (cond) = __mask1 ^ 1; \
+    (cmp) = __mask1 ^ 1; \
     __mask1 = ~__mask1 + 1; \
     __mask2 = ~__mask1; \
     (r1) = ((a1) & __mask1) | (__c1 & __mask2); \
