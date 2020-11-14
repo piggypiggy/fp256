@@ -279,6 +279,7 @@ void ll_div_n_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, size_t dl, u64 v)
             borrow = ll_mulsub_limb(nd - dl, dd, q, dl + 2, dl);
 
             if (borrow) {
+                assert(borrow == 1);
                 /* q is 1 larger than the real quotient */
                 ll_add_limbs(nd - dl, nd - dl, dd, dl + 2);
                 q--;

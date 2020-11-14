@@ -143,7 +143,6 @@ ll_mulsub_limb:
     b .ll_mulsub_limb_add_loop
 
 .ll_mulsub_limb_done:
-    str $t1,[$rd]
     ret
 .size	ll_mulsub_limb,.-ll_mulsub_limb
 ___
