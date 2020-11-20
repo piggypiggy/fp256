@@ -76,6 +76,18 @@ matrix:
         - sanitizer=-DUSE_ASAN=ON
 
     - os: linux
+      arch: amd64
+      addons:
+        apt:
+          packages:
+            - aarch64-linux-gnu-gcc
+      compiler: aarch64-linux-gnu-gcc
+      env: 
+        - CROSS=1
+        - toolchain=-DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gcc.cmake
+        - buildtype=-DCMAKE_BUILD_TYPE=Release
+
+    - os: linux
       arch: arm64
       compiler: gcc
       env: 
