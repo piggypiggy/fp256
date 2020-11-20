@@ -235,10 +235,10 @@ void* fp256_gcd_test(void *p)
             goto end;
 
         /* amr = a % r, adr = a / r */
-        if (fp256_naive_div(&amr, &adr, &a, &r) != FP256_OK)
+        if (fp256_div(&amr, &adr, &a, &r) != FP256_OK)
             goto end;
         /* bmr = b % r, bdr = b / r */
-        if (fp256_naive_div(&bmr, &bdr, &b, &r) != FP256_OK)
+        if (fp256_div(&bmr, &bdr, &b, &r) != FP256_OK)
             goto end;
 
         /* adr and bdr should be coprime, amr and bmr should be 0 */

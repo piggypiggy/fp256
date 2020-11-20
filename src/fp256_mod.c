@@ -21,12 +21,12 @@
 
 int fp256_mod(fp256 *r, const fp256 *a, const fp256 *m)
 {
-    return fp256_naive_div(r, NULL, a, m);
+    return fp256_div(r, NULL, a, m);
 }
 
 int fp256_mod_neg(fp256 *r, const fp256 *a, const fp256 *m)
 {
-    if (fp256_naive_div(r, NULL, a, m) != FP256_OK)
+    if (fp256_div(r, NULL, a, m) != FP256_OK)
         return FP256_ERR;
 
     return fp256_sub(r, m, r);
