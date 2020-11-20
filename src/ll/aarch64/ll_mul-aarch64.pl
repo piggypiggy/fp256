@@ -47,17 +47,15 @@ ll_mul_limb:
 .ll_mul_limb_loop:
     cbz $al,.ll_mul_limb_done
     ldr $t,[$ad],#8
-    ldr $t2,[$rd]
     mul $lo,$t,$b
     sub $al,$al,#1
     adds $lo,$lo,$t1
     umulh $t1,$t,$b
-    adc $lo,$lo,$t2
     str $lo,[$rd],#8
+    adc $t1,$t1,xzr
     b .ll_mul_limb_loop
 
 .ll_mul_limb_done:
-    adc $t1,$t1,xzr
     str $t1,[$rd]
     ret
 .size	ll_mul_limb,.-ll_mul_limb
@@ -119,7 +117,7 @@ ll_mulsub_limb:
 
 .ll_mulsub_limb_mul_loop:           // rd[0, al-1] -= ad * b
     cmp $i,$al
-    beq .ll_mulsub_limb_add_loop
+    beq .ll_mulsub_limb_sub_loop
     ldr $t,[$ad],#8
     ldr $t2,[$rd]
     mul $lo,$t,$b
@@ -132,7 +130,7 @@ ll_mulsub_limb:
     csinc $t1,$hi,$hi,cs
     b .ll_mulsub_limb_mul_loop
 
-.ll_mulsub_limb_add_loop:           // rl > al, rd[al, rl-1] -= t1
+.ll_mulsub_limb_sub_loop:           // rl > al, rd[al, rl-1] -= t1
     cmp $i,$rl
     bhs .ll_mulsub_limb_done
     ldr $t2,[$rd]
@@ -140,7 +138,7 @@ ll_mulsub_limb:
     subs $t2,$t2,$t1
     csinc $t1,xzr,xzr,cs
     str $t2,[$rd],#8
-    b .ll_mulsub_limb_add_loop
+    b .ll_mulsub_limb_sub_loop
 
 .ll_mulsub_limb_done:
     ret
