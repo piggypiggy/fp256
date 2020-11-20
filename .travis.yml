@@ -80,7 +80,7 @@ matrix:
       addons:
         apt:
           packages:
-            - aarch64-linux-gnu-gcc
+            - gcc-aarch64-linux-gnu
       compiler: aarch64-linux-gnu-gcc
       env: 
         - CROSS=1
