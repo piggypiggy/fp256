@@ -36,7 +36,7 @@ int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
     /* tmp = 2^(2 * 64 * w) */
     ll_clear_set_bit(tmp, 2 * 64 * w, 9);
     /* RRm = tmp mod N */
-    ll_naive_div(RRN, NULL, &RRNl, NULL, tmp, N->d, 9, N->nlimbs);
+    ll_div(RRN, NULL, &RRNl, NULL, tmp, N->d, 9, N->nlimbs);
     fp256_set_limbs(&mctx->RR, RRN, RRNl, 0);
 
 #if 0
