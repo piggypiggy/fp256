@@ -211,7 +211,7 @@ int fp256_mont_mul_test_vector(void)
             test_fp256_print_hex("r = ", &tr);
             test_fp256_print_hex("a = ", &a);
             test_fp256_print_hex("b = ", &b);
-            printf("tr should be :\n");
+            printf("r should be :\n");
             test_fp256_print_hex("r = ", &r);
             return FP256_ERR;
         }

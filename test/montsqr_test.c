@@ -167,7 +167,7 @@ int fp256_mont_sqr_test_vector(void)
             test_fp256_print_mont_ctx("mont ctx:\n", &mctx);
             test_fp256_print_hex("r = ", &tr);
             test_fp256_print_hex("a = ", &a);
-            printf("tr should be :\n");
+            printf("r should be :\n");
             test_fp256_print_hex("r = ", &r);
             return FP256_ERR;
         }

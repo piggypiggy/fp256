@@ -21,21 +21,41 @@
 #ifndef USE_ASM_U256_DIV
 void ll_naive_div_1_limb(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl)
 {
+    (void) rd;
+    (void) qd;
+    (void) nd;
+    (void) dd;
+    (void) nl;
     return;
 }
 
 void ll_naive_div_2_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl)
 {
+    (void) rd;
+    (void) qd;
+    (void) nd;
+    (void) dd;
+    (void) nl;
     return;
 }
 
 void ll_naive_div_3_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl)
 {
+    (void) rd;
+    (void) qd;
+    (void) nd;
+    (void) dd;
+    (void) nl;
     return;
 }
 
 void ll_naive_div_4_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl)
 {
+    (void) rd;
+    (void) qd;
+    (void) nd;
+    (void) dd;
+    (void) nl;
     return;
 }
 #endif
