@@ -1,3 +1,11 @@
+## v0.4.0
+- use doxygen to generate document.
+- fix bugs in ll_add-aarch64.pl, ll_mul-aarch64.pl, ll_mulsub_limb-aarch64.pl etc.
+- implement faster division algorithm in C.
+- add arm64 build in travis-ci.
+- implement lehmer exgcd algorithm, montgomery multiplication in aarch64 assembly.
+- better argument parsing for test.
+
 ## v0.3.0
 - implementing low level routines in aarch64 assembly.
 - add C implementation of some low level routines.
