@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include <fp256/fp256_ll.h>
+#include "ll_local.h"
 
 /* fill l = (nbits/64 + 1) limbs with random data, then clear higher bits of ad[l-1] */
 int ll_rand_bits(u64 *rd, size_t nbits)

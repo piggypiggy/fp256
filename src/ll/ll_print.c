@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include <fp256/fp256_ll.h>
+#include "ll_local.h"
 #include <stdio.h>
 
 int ll_print_hex(const u64 *ad, size_t rl)

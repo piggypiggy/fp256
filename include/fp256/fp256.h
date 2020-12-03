@@ -27,7 +27,6 @@
 #include <string.h>
 #include <assert.h>
 #include <errno.h>
-#include "config.h"
 
 /** 64 bit unsigned integer */
 #define u64 unsigned long long

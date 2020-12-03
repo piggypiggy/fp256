@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include <fp256/fp256_ll.h>
+#include "ll_local.h"
 
 #ifndef USE_ASM_U256_DIV
 void ll_naive_div_1_limb(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl)

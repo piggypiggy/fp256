@@ -19,6 +19,7 @@
 #pragma once
 
 #include <fp256/fp256.h>
+#include "../../config.h"
 
 #ifdef __cplusplus
 extern "C" {

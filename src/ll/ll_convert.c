@@ -17,6 +17,7 @@
  *****************************************************************************/
 
 #include <fp256/fp256_ll.h>
+#include "ll_local.h"
 
 /* 0->'0', 1->'1', ... , 15->'F' */
 static const unsigned char ascii_table[16] = {
