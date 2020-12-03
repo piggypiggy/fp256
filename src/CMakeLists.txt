@@ -113,9 +113,8 @@ set(FP256_HEADER
     ${FP256_SRC_DIR}/fp256_local.h
 )
 
-set(FP256_SRC
+set(FP256_C_SRC
     ${FP256_HEADER}
-    ${LL_ASM_SRC}
     ${LL_DIR}/ll_add.c
     ${LL_DIR}/ll_convert.c
     ${LL_DIR}/ll_cpuid.c
@@ -155,10 +154,15 @@ include_directories(${FP256_INCLUDE_DIR}/)
 
 if(BUILD_STATIC)
     # build static object
-    add_library(fp256_static_object OBJECT ${FP256_SRC})
+    add_library(fp256_static_object OBJECT ${FP256_C_SRC})
+    add_library(fp256_asm_static_object OBJECT ${LL_ASM_SRC})
     target_compile_definitions(fp256_static_object PRIVATE BUILD_STATIC)
+    target_compile_options(fp256_static_object PRIVATE ${EXTRA_C_FLAGS})
+    # set_target_properties(fp256_static_object PROPERTIES COMPILE_FLAGS ${EXTRA_C_FLAGS})
     #
-    add_library(fp256_static STATIC $<TARGET_OBJECTS:fp256_static_object>)
+    add_library(fp256_static STATIC 
+                $<TARGET_OBJECTS:fp256_static_object>
+                $<TARGET_OBJECTS:fp256_asm_static_object>)
     target_compile_definitions(fp256_static PRIVATE BUILD_STATIC)
     # static library output directory
     set_target_properties(fp256_static PROPERTIES
@@ -171,20 +175,24 @@ endif()
 
 if(BUILD_SHARED)
     # build shared object
-    add_library(fp256_shared_object OBJECT ${FP256_SRC})
+    add_library(fp256_shared_object OBJECT ${FP256_C_SRC})
+    add_library(fp256_asm_shared_object OBJECT ${LL_ASM_SRC})
     target_compile_definitions(fp256_shared_object PRIVATE BUILD_SHARED)
+    target_compile_options(fp256_shared_object PRIVATE ${EXTRA_C_FLAGS})
+    # set_target_properties(fp256_shared_object PROPERTIES COMPILE_FLAGS ${EXTRA_C_FLAGS})
     # PIC
     set_property(TARGET fp256_shared_object PROPERTY POSITION_INDEPENDENT_CODE 1)
 
     #
-    add_library(fp256_shared SHARED $<TARGET_OBJECTS:fp256_shared_object>)
+    add_library(fp256_shared SHARED 
+                $<TARGET_OBJECTS:fp256_shared_object> 
+                $<TARGET_OBJECTS:fp256_asm_shared_object>)
     target_compile_definitions(fp256_shared PRIVATE BUILD_SHARED)
     # shared library output directory
     set_target_properties(fp256_shared PROPERTIES
         # msvc
         RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY_SHARED}
         ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY_SHARED}
-
         LIBRARY_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY_SHARED}
         VERSION ${FP256_VERSION}
         SOVERSION ${FP256_VERSION_MAJOR})
@@ -196,5 +204,3 @@ endif()
 
 # install headers
 INSTALL(DIRECTORY ${FP256_INCLUDE_DIR}/fp256 DESTINATION include)
-INSTALL(FILES ${FP256_DIR}/config.h DESTINATION include/fp256)
-

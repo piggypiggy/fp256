@@ -38,4 +38,5 @@ if(HAVE_PTHREAD)
     list(APPEND speed_DEP pthread)
 endif()
 
-target_link_libraries(bench ${speed_DEP})
+target_link_libraries(bench ${speed_DEP} ${SANITIZER_FLAG})
+target_compile_options(bench PRIVATE ${EXTRA_C_FLAGS})

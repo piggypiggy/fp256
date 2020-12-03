@@ -5,22 +5,23 @@ endif()
 
 if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
     set(COMPILER_CLANG 1)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic")
+    set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} -Wall -Wextra -pedantic)
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS})
     endif()
 
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer")
+        set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} -fomit-frame-pointer)
     endif()
 
     # sanitizer
     if(USE_ASAN)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+        set(SANITIZER_FLAG -fsanitize=address)
     elseif(USE_MSAN AND NOT OS_MACOSX)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=memory")
+        set(SANITIZER_FLAG -fsanitize=memory)
     endif()
+    set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} ${SANITIZER_FLAG})
 
     if(USE_ASM)
         enable_language(ASM)
@@ -31,20 +32,21 @@ if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
 
 elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
     set(COMPILER_GCC 1)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic")
+    set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} -Wall -Wextra -pedantic)
 
     if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}")
+        set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS})
     endif()
 
     if(CMAKE_BUILD_TYPE STREQUAL "Release")
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fomit-frame-pointer")
+        set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} -fomit-frame-pointer)
     endif()
 
     # sanitizer
     if(USE_ASAN)
-        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
+        set(SANITIZER_FLAG -fsanitize=address)
     endif()
+    set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} ${SANITIZER_FLAG})
 
     if(USE_ASM)
         enable_language(ASM)
@@ -57,7 +59,7 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     set(COMPILER_MSVC 1)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Wall wd4668 /wd4820")
+    set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} /Wall /wd4668 /wd4820)
     add_definitions(/D_CRT_SECURE_NO_WARNINGS)
     if(USE_ASM)
         enable_language(ASM_MASM)
