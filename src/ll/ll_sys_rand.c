@@ -17,11 +17,17 @@
  *****************************************************************************/
 
 #include <fp256/fp256_ll.h>
+#include "ll_local.h"
 
 #if defined(OS_LINUX)
 # if defined(HAVE_SYS_RANDOM_H)
+# include <sys/random.h>
 #  define HAVE_RANDOM
-#  include <sys/random.h>
+#   if !defined(HAVE_GETRANDOM)
+#    include <sys/syscall.h>
+#    include <unistd.h>
+#    define getrandom(buf, len, flag) syscall(SYS_getrandom, (buf), (int) (len), (flag))
+#   endif
 
 #  ifdef USE_DEV_RANDOM
 #   define RANDOM_FLAG GRND_RANDOM
