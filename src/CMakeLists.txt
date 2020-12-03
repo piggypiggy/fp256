@@ -164,6 +164,7 @@ if(BUILD_STATIC)
                 $<TARGET_OBJECTS:fp256_static_object>
                 $<TARGET_OBJECTS:fp256_asm_static_object>)
     target_compile_definitions(fp256_static PRIVATE BUILD_STATIC)
+    target_link_libraries(fp256_static ${SANITIZER_FLAG})
     # static library output directory
     set_target_properties(fp256_static PROPERTIES
         ARCHIVE_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY_STATIC})
@@ -188,6 +189,7 @@ if(BUILD_SHARED)
                 $<TARGET_OBJECTS:fp256_shared_object> 
                 $<TARGET_OBJECTS:fp256_asm_shared_object>)
     target_compile_definitions(fp256_shared PRIVATE BUILD_SHARED)
+    target_link_libraries(fp256_shared ${SANITIZER_FLAG})
     # shared library output directory
     set_target_properties(fp256_shared PROPERTIES
         # msvc
