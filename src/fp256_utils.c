@@ -188,7 +188,7 @@ int fp256_from_hex(fp256 *r, const u8 *hex, size_t hlen)
 }
 
 /* convert 256bit number to hex string */
-int fp256_to_hex(u8 hex[FP256_LIMBS*16], const fp256 *a)
+int fp256_to_hex(u8 hex[64], const fp256 *a)
 {
     if (hex == NULL || a == NULL)
         return FP256_ERR;
@@ -213,7 +213,7 @@ int fp256_from_bytes(fp256 *r, const u8 *bytes, size_t blen)
 }
 
 /* convert 256bit number to byte array */
-int fp256_to_bytes(u8 bytes[FP256_LIMBS*8], const fp256 *a)
+int fp256_to_bytes(u8 bytes[32], const fp256 *a)
 {
     if (bytes == NULL || a == NULL)
         return FP256_ERR;
@@ -230,7 +230,7 @@ int fp256_test_bit(const fp256 *a, size_t idx)
     size_t l, b;
     u64 bit;
 
-    if (a == NULL || idx > 256)
+    if (a == NULL || idx >= 256)
         return -1;
 
     b = idx & 0x3f;
@@ -246,7 +246,7 @@ int fp256_set_bit(fp256 *a, size_t idx)
     size_t l, b; 
     u64 z;
 
-    if (a == NULL || idx > 256)
+    if (a == NULL || idx >= 256)
         return FP256_ERR;
 
     b = idx & 0x3f;
@@ -263,7 +263,7 @@ int fp256_clear_set_bit(fp256 *a, size_t idx)
     size_t l, b; 
     u64 z;
 
-    if (a == NULL || idx > 256)
+    if (a == NULL || idx >= 256)
         return FP256_ERR;
 
     fp256_set_zero(a);

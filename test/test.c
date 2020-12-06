@@ -241,7 +241,7 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
     /* default N = 200000 */
     args->N = args->N > 0 ? args->N : 200000;
 
-    if(do_all) {
+    if (do_all) {
         /* do all speed test */
         memset(do_which, 1, sizeof(DO_WHICH));
     }

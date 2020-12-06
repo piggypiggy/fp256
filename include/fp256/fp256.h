@@ -313,7 +313,7 @@ FP256_EXPORT int fp256_from_bytes(fp256 *r, const u8 *bytes, size_t blen);
  * @param[in] a           - the 256 bit integer to convert.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */ 
-FP256_EXPORT int fp256_to_bytes(u8 bytes[FP256_LIMBS*8], const fp256 *a);
+FP256_EXPORT int fp256_to_bytes(u8 bytes[32], const fp256 *a);
 
 /** 
  * convert hex array to 256 bit integer.
@@ -332,7 +332,7 @@ FP256_EXPORT int fp256_from_hex(fp256 *r, const u8 *hex, size_t hlen);
  * @param[in] a           - the 256 bit integer to convert.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */ 
-FP256_EXPORT int fp256_to_hex(u8 hex[FP256_LIMBS*16], const fp256 *a);
+FP256_EXPORT int fp256_to_hex(u8 hex[64], const fp256 *a);
 
 /**
  * convert 256 bit integer to hex array, then print it.
