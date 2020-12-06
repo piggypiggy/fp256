@@ -3,8 +3,7 @@
 # introduction
 fp256 is a simple and efficient library implemented in C and assembly for 256 bit integer arithmetic.  
 
-It supports Windows, Linux and Macosx on x86_64 processor and can be compiled with MSVC, mingw-w64, gcc and clang.  
-More platform and processor support will be added soon.
+It supports Windows, Linux and Macosx on x86_64 and arm64 processor, and can be compiled with MSVC, mingw-w64, gcc and clang.  
 
 # implementation
 * Use 4×64bit to represent 256 bit integer.
@@ -13,7 +12,7 @@ More platform and processor support will be added soon.
 low level api operates directly on integer array, most low level api are specific for 256 bit integer, there are also a few api for arbitrary length array.  
 high level api operates on 256 bit integer.
 
-* Most low level arithmetic are implemented in x64 assembly, including  `add`, `mul`, `u256 mul`, `div`, `shift`, `fmod`, `exgcd`, etc, they are very efficient and (maybe)well commented, see [ll/x64](https://github.com/piggypiggy/fp256/tree/master/src/ll/x64) and [ll/aarch64](https://github.com/piggypiggy/fp256/tree/master/src/ll/aarch64).
+* Most low level arithmetic are implemented in x64 assembly, including `add`, `mul`, `u256 mul`, `div`, `shift`, `fmod`, `exgcd`, `mont mul`, etc, they are very efficient and (maybe)well commented, see [ll/x64](https://github.com/piggypiggy/fp256/tree/master/src/ll/x64) and [ll/aarch64](https://github.com/piggypiggy/fp256/tree/master/src/ll/aarch64).
 
 * 
 
@@ -34,22 +33,21 @@ Or cross compilation (cmake toolchain files are [here](https://github.com/piggyp
 ### configuration
 `-DCMAKE_BUILD_TYPE` : possible values are empty, Debug, Release, RelWithDebInfo and MinSizeRel, default is `Release`.  
 `-DCMAKE_INSTALL_PREFIX` : where to install fp256 library, default is `/usr/local`.  
-`-DBUILD_STATIC` : build static library, default is `ON`.   
-`-DBUILD_SHARED` : build shared library, default is `ON`.   
+`-DBUILD_STATIC` : build static library, default is `ON`.  
+`-DBUILD_SHARED` : build shared library, default is `ON`.  
 `-DUSE_DEV_RANDOM` : use /dev/random to get random number, default is `OFF`(use /dev/urandom).  
-`-DUSE_ASM` : use assembly code, default is `ON`. it can not be turned off since there is no C implementation to fall back yet.  
+`-DUSE_ASM` : use assembly code, default is `ON`. it can not be turned off since some algorithms have no C implementation to fall back yet.  
 `-DUSE_ASAN` : use AddressSanitizer, default is `OFF`.  
-`-DUSE_MSAN` : use MemorySanitizer default is `OFF`.  
+`-DUSE_MSAN` : use MemorySanitizer, default is `OFF`.  
 
 # TODO
-* Division can be much more faster by replacing division with multiplication.
+* Assembly implementation of faster division algorithm.
 * Add prime test, modular exponential, square root related, etc.
-* Add C implementation for low level arithmetic, fall back to C if assembly is not prefered.
-* Add assembly implementation for other processors : arm64, mips64, etc.
+* Constant-time implementation of division and exgcd.
 * more tests.
 
 # benchmark
-Some of benchmark results are listed below. Build and run build/bench/bench to get more.
+Some of benchmark results are listed below. Build and run build/bench/bench to get ful result.
 ### AMD Ryzen 5 4600U 2.1GHz, Ubuntu 20.04 LTS, gcc-9.3.0
 arithmetic(256 bit)     |      cycles / op      |      op / s      |
 ------------------------|-----------------------|------------------|
