@@ -1,5 +1,3 @@
-
-
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(OS_LINUX 1)
 
