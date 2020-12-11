@@ -34,6 +34,7 @@
 /* control which asm to generate, make it easier to test new asm code */
 #cmakedefine USE_ASM_ADD
 #cmakedefine USE_ASM_CPUID
+#cmakedefine USE_ASM_DIV
 #cmakedefine USE_ASM_LEHMER
 #cmakedefine USE_ASM_MUL
 #cmakedefine USE_ASM_SHIFT

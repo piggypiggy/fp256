@@ -19,6 +19,7 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
+#ifndef USE_ASM_DIV
 /** lookup_table[i] = floor(0x7fd00 / (256 + i)) */
 static const unsigned short lookup_table[256] = {
     0x7fd, 0x7f5, 0x7ed, 0x7e5, 0x7dd, 0x7d5, 0x7ce, 0x7c6, 
@@ -95,6 +96,7 @@ u64 ll_reciprocal1(u64 d)
 
     return v4;
 }
+#endif
 
 u64 ll_reciprocal2(u64 d1, u64 d0)
 {

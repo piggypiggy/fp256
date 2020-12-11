@@ -120,6 +120,9 @@ size_t ll_lehmer_update_v(u64 *t1d, u64 *t2d, const u64 *v0, const u64 *v1, size
 
 u64 ll_lehmer_exgcd11(u64 mat[4], u64 a0, u64 b0);
 
+u64 ll_reciprocal1(u64 d);
+// u64 ll_reciprocal2(u64 d1, u64 d0);
+
 typedef struct cpu_flags_st {
     int initialized;
     /* arm */
