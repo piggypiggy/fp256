@@ -34,19 +34,19 @@ matrix:
         - buildtype=-DCMAKE_BUILD_TYPE=Release
         - sanitizer=-DUSE_ASAN=ON
 
-    - os: linux
-      arch: amd64
-      compiler: clang
-      env: 
-        - buildtype=-DCMAKE_BUILD_TYPE=Debug
-        - sanitizer=-DUSE_MSAN=ON
+    # - os: linux
+    #   arch: amd64
+    #   compiler: clang
+    #   env: 
+    #     - buildtype=-DCMAKE_BUILD_TYPE=Debug
+    #     - sanitizer=-DUSE_MSAN=ON
 
-    - os: linux
-      arch: amd64
-      compiler: clang
-      env: 
-        - buildtype=-DCMAKE_BUILD_TYPE=Release
-        - sanitizer=-DUSE_MSAN=ON
+    # - os: linux
+    #   arch: amd64
+    #   compiler: clang
+    #   env: 
+    #     - buildtype=-DCMAKE_BUILD_TYPE=Release
+    #     - sanitizer=-DUSE_MSAN=ON
 
     - os: linux
       addons:
