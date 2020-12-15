@@ -96,7 +96,6 @@ u64 ll_reciprocal1(u64 d)
 
     return v4;
 }
-#endif
 
 u64 ll_reciprocal2(u64 d1, u64 d0)
 {
@@ -149,7 +148,7 @@ u64 ll_div2by1_pi1(u64 *r, u64 n[2], u64 d, u64 v)
         t -= d;
     }
 
-    *r = t;
+    r[0] = t;
     r[1] = 0;
     return q1;
 }
@@ -191,6 +190,7 @@ u64 ll_div3by2_pi1(u64 *r, u64 n[3], u64 d[2], u64 v)
     r[2] = 0;
     return q1;
 }
+#endif
 
 void ll_div_1_limb_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, u64 v)
 {
@@ -202,6 +202,7 @@ void ll_div_1_limb_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, u64 v)
     d = dd[0];
     nd += nl; /* points to the most significant limb */
     qd += nl;
+    qd[0] = 0;
 
     /* TODO : conditional sub */
     if (nd[0] >= d) {
@@ -259,6 +260,7 @@ void ll_div_n_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, size_t dl, u64 v)
     nl -= dl;
     qd += nl;
     nd += nl;
+    qd[0] = 0;
     if (ll_cmp_limbs(nd, dd, dl, dl) >= 0) {
         ll_sub_limbs(nd, nd, dd, dl);
         qd[0] = 1;
@@ -303,18 +305,24 @@ int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *d
     nl = ll_num_limbs(nd, nl);
     dl = ll_num_limbs(dd, dl);
 
-    nl1 = (nl > dl ? nl : dl);
-    nl1++;
-    tmp = (u64*)calloc(1, sizeof(u64) * 4 * nl1);
-    tqd = tmp;
-    tnd = tqd + nl1;
-
     if (ll_cmp_limbs(nd, dd, nl, dl) < 0) {
         /* if nd < dd, rd = nd and qd = 0 */
-        ll_copy_limbs(tnd, nd, nl);
-        ll_set_zero(tqd, nl);
-        goto end;
+        if (rd != NULL)
+            ll_copy_limbs(rd, nd, nl);
+        if (qd != NULL)
+            ll_set_zero(qd, nl);
+        if (rl != NULL) 
+            *rl = nl;
+        if (ql != NULL) 
+            *ql = 0;
+        return FP256_OK;
     }
+
+    nl1 = (nl > dl ? nl : dl);
+    nl1++;
+    tmp = (u64*)malloc(sizeof(u64) * 4 * nl1);
+    tqd = tmp;
+    tnd = tqd + nl1;
 
     assert(nl >= dl);
     if (dl == 1) {
@@ -352,19 +360,16 @@ int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *d
         ll_rshift(tnd, tnd, nl1, shift);
     }
 
-end:
     if (rd != NULL)
         ll_copy_limbs(rd, tnd, dl);
     if (rl != NULL) 
         *rl = ll_num_limbs(tnd, dl);
 
     if (qd != NULL)
-        /* if nl >= dl, qd has at most nl + 1 - dl limbs,
-         * if nl < dl, qd has exactly nl limbs.
-         */
-        ll_copy_limbs(qd, tqd, (nl >= dl ? (nl + 1 - dl) : nl));
+        /* if nl >= dl, qd has at most nl + 1 - dl limbs */
+        ll_copy_limbs(qd, tqd, nl + 1 - dl);
     if (ql != NULL)
-        *ql = ll_num_limbs(tqd, nl);
+        *ql = ll_num_limbs(tqd, nl + 1 - dl);
 
     free(tmp);
     return FP256_OK;

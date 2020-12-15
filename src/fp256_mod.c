@@ -38,7 +38,8 @@ int fp256_mod_add(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     u64 rd[5], remd[4];
     size_t rl, reml;
 
-    rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
+    // memory sanitizer...
+    // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
     if (a->neg == b->neg) {
         rem_neg = a->neg;
         rd[4] = ll_u256_add(rd, a->d, b->d);
@@ -73,7 +74,8 @@ int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     u64 rd[5], remd[4];
     size_t rl, reml;
 
-    rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
+    // memory sanitizer...
+    // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
     if (a->neg == b->neg) {
         if (fp256_cmp_abs(a, b) >= 0) {
             /* |a| >= |b| */
@@ -95,10 +97,10 @@ int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     }
 
     ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs);
+    fp256_set_limbs(r, remd, reml, 0);
     if (rem_neg && reml)
-        ll_u256_sub(remd, m->d, remd);
+        fp256_sub(r, m, r);
 
-    fp256_set_limbs(r, remd, m->nlimbs, 0);
     return FP256_OK;
 }
 

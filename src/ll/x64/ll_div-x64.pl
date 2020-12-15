@@ -116,21 +116,124 @@ ll_reciprocal1:
 .size	ll_reciprocal1,.-ll_reciprocal1
 
 
-# # u64 ll_reciprocal2(u64 d1, u64 d0)
-# .globl	ll_reciprocal2
-# .type	ll_reciprocal2,\@function,2
-# .align	32
-# ll_reciprocal2:
-#     call ll_reciprocal1
-#     mov %rax, $t1
-#     imul $d1, $t1
-#     add $d0, $t1
-#     cmp 
+# u64 ll_reciprocal2(u64 d1, u64 d0)
+.globl	ll_reciprocal2
+.type	ll_reciprocal2,\@function,2
+.align	32
+ll_reciprocal2:
+    call ll_reciprocal1
+    mov %rax, $t1
+    imul $d1, $t1
+    add $d0, $t1
+    jnc .L1
+    mov $t1, $t2
+    sub $d1, $t1
+    dec %rax
+    cmovc $t2, $t1
+    adc \$0, %rax
+    sub $d1, $t1
+    dec %rax
+.L1:
+    mov %rax, $t3
+    mulq $d0
+    mov %rax, $t2
+    add %rdx, $t1
+    mov $t3, %rax
+    jnc .L2
+    sub $d0, $t2
+    dec %rax
+    sbb $d1, $t1
+    dec %rax
+    adc \$0, %rax
+.L2:
+    ret
+.size	ll_reciprocal2,.-ll_reciprocal2
+___
+}
+
+{
+my ($r_ptr,$n_ptr,$d_ptr,$d,$v)=("%rdi","%rsi","%rdx","%rdx","%rcx");
+my ($t0,$t1,$t2,$t3)=("%r8","%r9","%r10","%r11");
+$code.=<<___;
+
+# u64 ll_div2by1_pi1(u64 *r, u64 n[2], u64 d, u64 v)
+.globl	ll_div2by1_pi1
+.type	ll_div2by1_pi1,\@function,4
+.align	32
+ll_div2by1_pi1:
+    mov 0($n_ptr), $t0
+    mov 8($n_ptr), $t1
+    mov $v, %rax
+    mov $d, $t2
+    mulq $t1
+    inc $t1
+    add $t0, %rax
+    adc $t1, %rdx
+    xor $t3, $t3
+    mov %rdx, %rcx
+    imul $t2, %rdx
+    sub %rdx, $t0
+    cmp %rax, $t0
+    cmovae $t2, $t3
+    adc \$0, %rcx
+    add $t3, $t0
+     movq \$0, 8($r_ptr)
+    mov $t0, $t1
+    sub $t2, $t0
+    cmovnc $t0, $t1
+    sbb \$0, %rcx
+
+    mov $t1, 0($r_ptr)
+    mov %rcx, %rax
+    ret
+.size	ll_div2by1_pi1,.-ll_div2by1_pi1
 
 
-#     ret
-# .size	ll_reciprocal2,.-ll_reciprocal2
+# u64 ll_div3by2_pi1(u64 *r, u64 n[3], u64 d[2], u64 v)
+.globl	ll_div3by2_pi1
+.type	ll_div3by2_pi1,\@function,4
+.align	32
+ll_div3by2_pi1:
+    mov 8($n_ptr), $t1
+    mov 16($n_ptr), $t2
+    mov $v, %rax
+    mov 0($d_ptr), $t3     # d0
+    mov $d_ptr, $t0        # d_ptr
+    mulq $t2
+    add $t1, %rax
+    adc $t2, %rdx
+    mov 8($t0), $t2        # d1
+    mov 0($n_ptr), $t0     # n0
+    mov %rdx, %rcx         # q1
+    imul $t2, %rdx
+    mov %rax, %rsi         # q0
+    mov $t3, %rax
+    sub %rdx, $t1
+    mulq %rcx
+    sub %rax, $t0
+    sbb %rdx, $t1
+    mov $t0, %rax
+    mov $t1, %rdx
+    sub $t3, $t0
+    sbb $t2, $t1
+     movq \$0, 16($r_ptr)
+    cmp %rsi, $t1
+    cmovb $t0, %rax
+    cmovb $t1, %rdx
+    adc \$1, %rcx
+    mov %rax, $t0
+    mov %rdx, $t1
+    sub $t3, %rax
+    sbb $t2, %rdx
+    cmovnc %rax, $t0
+    cmovnc %rdx, $t1
+    sbb \$0, %rcx
 
+    mov $t0, 0($r_ptr)
+    mov $t1, 8($r_ptr)
+    mov %rcx, %rax
+    ret
+.size	ll_div3by2_pi1,.-ll_div3by2_pi1
 ___
 }
 
