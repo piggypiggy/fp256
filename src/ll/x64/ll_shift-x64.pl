@@ -39,20 +39,20 @@ ___
 my ($r_ptr,$a_ptr,$al,$shift,$l)=("%rdi","%rsi","%rdx","%rcx","%r8");
 my ($t0,$t1,$t2)=("%r9","%r10","%r11");
 $code.=<<___;
-# int ll_lshift(u64 *r, u64 *a, size_t al, size_t n);
+# u64 ll_lshift(u64 *r, u64 *a, size_t al, size_t n);
 .globl	ll_lshift
 .type	ll_lshift,\@function,4
 .align	32
 ll_lshift:
     xor %rax, %rax
     test $al, $al
-    jz .ll_lshift_done
+    jz .ll_lshift_done_ret
     mov $shift, $l
     xor $t1, $t1
-    shrq \$6, $l                # l = shift / 64
+    shrq \$6, $l                   # l = shift / 64
     and \$63, $shift
     mov $al, %rax
-    add $l, %rax    # al + (shift / 64)
+    add $l, %rax                   # al + l
     lea -8($a_ptr,$al,8), $a_ptr   # start shifting from the most significant limb
     lea 0($r_ptr,%rax,8), $r_ptr
     mov $r_ptr, $t2
@@ -60,9 +60,9 @@ ll_lshift:
     jnz .ll_lshift_loop
     mov $t1, 0($r_ptr)
     lea -8($r_ptr), $r_ptr
-    jmp .ll_lshift_copy         # if shift % 64 = 0, then copy limbs from a to r
+    jmp .ll_lshift_copy            # if shift % 64 = 0, then copy limbs from a to r
 
-.ll_lshift_loop:                # 
+.ll_lshift_loop:
     test $al, $al
     jz .ll_lshift_last_limb
     mov 0($a_ptr), $t0
@@ -90,27 +90,25 @@ ll_lshift:
     lea -8($r_ptr), $r_ptr
     jmp .ll_lshift_copy
 
-.ll_lshift_clear_lower_limbs:   # set (shift / 64) lower limbs to 0
+.ll_lshift_clear_lower_limbs:      # set (shift / 64) lower limbs to 0
     xor $t0, $t0
 .ll_lshift_clear_loop:
     test $l, $l
-    jz .ll_lshift_nlimbs
+    jz .ll_lshift_done
     mov $t0, 0($r_ptr)
     dec $l
     lea -8($r_ptr), $r_ptr
     jmp .ll_lshift_clear_loop
 
-.ll_lshift_nlimbs:              # check whether the highest limb of r is 0,
-    mov 0($t2), $t1             # and return nlimbs of r.
-    test $t1, $t1
-    jz .ll_lshift_done
-    inc %rax
 .ll_lshift_done:
+    mov 0($t2), %rax
+    ret
+.ll_lshift_done_ret:
     ret
 .size	ll_lshift,.-ll_lshift
 
 
-# int ll_rshift(u64 *r, u64 *a, size_t al, size_t n);
+# u64 ll_rshift(u64 *r, u64 *a, size_t al, size_t n);
 .globl	ll_rshift
 .type	ll_rshift,\@function,4
 .align	32
@@ -119,26 +117,23 @@ ll_rshift:
     test $al, $al
     jz .ll_rshift_done
     mov $shift, $l
-    xor $t0, $t0
     shrq \$6, $l                # l = shift / 64
-    mov $al, %rax
     and \$63, $shift
     cmp $al, $l
-    jae .ll_rshift_r_is_zero    # if (shift / 64) >= al, then r = 0
-    sub $l, %rax
+    jae .ll_rshift_r_is_zero    # if l >= al, then r = 0
     sub $l, $al
     dec $al
     lea 0($a_ptr,$l,8), $a_ptr  # discard lower l limbs of a
-    mov 0($a_ptr), $t0
+    mov 0($a_ptr), %rax
     test $shift, $shift         # start shifting from the (l+1)'s limb
     jnz .ll_rshift_loop
     jmp .ll_rshift_copy         # if shift % 64 = 0, then copy limbs from a to r
 
 .ll_rshift_r_is_zero:           # clear r
-    test %rax, %rax
+    test $al, $al
     jz .ll_rshift_done
-    mov $t0, 0($r_ptr)
-    dec %rax
+    mov %rax, 0($r_ptr)
+    dec $al
     lea 8($r_ptr), $r_ptr
     jmp .ll_rshift_r_is_zero
 
@@ -147,20 +142,17 @@ ll_rshift:
     test $al, $al
     jz .ll_rshift_last_limb
     mov 0($a_ptr), $t1
-    shrdq %cl, $t1, $t0
+    shrdq %cl, $t1, %rax
     dec $al
-    mov $t0, 0($r_ptr)
-    mov $t1, $t0
+    mov %rax, 0($r_ptr)
+    mov $t1, %rax
     lea 8($r_ptr), $r_ptr
     jmp .ll_rshift_loop
 
 .ll_rshift_last_limb:
-    shrq %cl, $t0
-    mov $t0, 0($r_ptr)
+    shrq %cl, %rax
+    mov %rax, 0($r_ptr)
     lea 8($r_ptr), $r_ptr
-    test $t0, $t0               # check whether the highest limb of r is 0,
-    jnz .ll_rshift_clear_upper_limbs
-    dec %rax                    # and return nlimbs of r
 
 .ll_rshift_clear_upper_limbs:   # set (shift / 64) higer limbs to 0
     xor $t0, $t0
@@ -175,9 +167,9 @@ ll_rshift:
 .ll_rshift_copy:
     test $al, $al
     jz .ll_rshift_done
-    mov 0($a_ptr), $t1
+    mov 0($a_ptr), %rax
     lea 8($a_ptr), $a_ptr
-    mov $t1, 0($r_ptr)
+    mov %rax, 0($r_ptr)
     dec $al
     lea 8($r_ptr), $r_ptr
     jmp .ll_rshift_copy

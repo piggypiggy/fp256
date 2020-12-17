@@ -555,17 +555,16 @@ FP256_EXPORT size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssi
  * r can be equal to a, n can be larger than 63.
  * caller should prepare enough space for the result, 
  * r must have at least (al + n/64 + 1) limbs.
- * return nlimbs of r.
+ * return most significant limb of r.
  */
-FP256_EXPORT size_t ll_lshift(u64 *r, const u64 *a, size_t al, size_t n);
+FP256_EXPORT u64 ll_lshift(u64 *r, const u64 *a, size_t al, size_t n);
 
 /* right shift a by n bits : r = a >> n.
  * r can be equal to a, n can be larger than 63.
  * caller should prepare enough space for the result, 
- * r must have at least al limbs.
- * return nlimbs of r.
+ * return most significant limb of r.
  */
-FP256_EXPORT size_t ll_rshift(u64 *r, const u64 *a, size_t al, size_t n);
+FP256_EXPORT u64 ll_rshift(u64 *r, const u64 *a, size_t al, size_t n);
 
 /**
  * left shift a 256 bit integer.\n

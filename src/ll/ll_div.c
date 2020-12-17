@@ -299,7 +299,7 @@ void ll_div_n_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, size_t dl, u64 v)
 int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl)
 {
     size_t shift, nl1, tnl;
-    u64 *tmp, *tqd, *tnd, *tdd, d, v;
+    u64 *tmp, *tqd, *tnd, *tdd, d, v, t;
 
     assert(dl > 0);
     nl = ll_num_limbs(nd, nl);
@@ -330,7 +330,8 @@ int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *d
         /* normalize divisor, leftshift nd by the same number */
         shift = ll_leading_zeros(d);
         d <<= shift;
-        tnl = ll_lshift(tnd, nd, nl, shift);
+        t = ll_lshift(tnd, nd, nl, shift);
+        tnl = nl + (t != 0);
 
         /* reciprocal */
         v = ll_reciprocal1(d);
@@ -346,7 +347,8 @@ int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *d
         /* normalize divisor, leftshift nd by the same number */
         shift = ll_leading_zeros(dd[dl - 1]);
         ll_lshift(tdd, dd, dl, shift);
-        tnl = ll_lshift(tnd, nd, nl, shift);
+        t = ll_lshift(tnd, nd, nl, shift);
+        tnl = nl + (t != 0);
 
         /* reciprocal */
         v = ll_reciprocal2(tdd[dl - 1], tdd[dl - 2]);

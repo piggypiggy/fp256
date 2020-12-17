@@ -179,18 +179,6 @@ static SHIFT_TEST_VECTOR shift_test_vector[] = {
         "0",
         0,
     },
-    /* 26 */
-    {
-        "0",
-        "0",
-        0,
-    },
-    /* 27 */
-    {
-        "0",
-        "0",
-        0,
-    },
 };
 
 int ll_shift_test_vector(void)
@@ -211,13 +199,17 @@ int ll_shift_test_vector(void)
 
         /* tr = a << n */
         n = shift_test_vector[i].n;
-        if (n >= 0)
-            trl = ll_lshift(tr, a, al, (size_t)n);
-        else
-            trl = ll_rshift(tr, a, al, (size_t)-n);
+        if (n >= 0) {
+            ll_lshift(tr, a, al, (size_t)n);
+            trl = ll_num_limbs(tr, al + (n >> 6) + 1);
+        }
+        else {
+            ll_rshift(tr, a, al, (size_t)-n);
+            trl = ll_num_limbs(tr, al);
+        }
 
         if (ll_cmp_limbs(tr, r, trl, rl) != 0) {
-            printf("rl=%zu,trl=%zu\n",rl,trl);
+            printf("al = %zu, rl = %zu, trl = %zu\n", al, rl, trl);
             max = (trl > rl ? trl : rl);
             max = (max > al ? max : al);
             printf("ll_shift_test_vector %d failed\n", i + 1);

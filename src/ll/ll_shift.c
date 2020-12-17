@@ -20,7 +20,7 @@
 #include "ll_local.h"
 
 #ifndef USE_ASM_SHIFT
-size_t ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
+u64 ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
 {
     u64 tmp;
     u64 *tr;
@@ -29,15 +29,16 @@ size_t ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
     if (al == 0)
         return 0;
 
-    tr = r;
     b = n & 0x3f;
     l = n >> 6;
+    tr = r + al + l;
 
     tmp = 0;
 
     if (b == 0) {
         a += (al - 1);
         r += (al - 1 + l);
+        r[1] = 0;
         /* copy */
         for (i = 0; i < al; i++) {
             r[0] = a[0];
@@ -66,10 +67,10 @@ size_t ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
         r--;
     }
 
-    return ll_num_limbs(tr, al + l + 1);
+    return tr[0];
 }
 
-size_t ll_rshift(u64 *r, const u64 *a, size_t al, size_t n)
+u64 ll_rshift(u64 *r, const u64 *a, size_t al, size_t n)
 {
     u64 tmp;
     u64 *tr;
@@ -78,12 +79,14 @@ size_t ll_rshift(u64 *r, const u64 *a, size_t al, size_t n)
     if (al == 0)
         return 0;
 
-    tr = r;
     b = n & 0x3f;
     l = n >> 6;
+    tr = r + al - l;
 
-    if (l >= al)
+    if (l >= al) {
+        tr = r;
         goto set_zero;
+    }
 
     /* start shifting from the (l + 1)'s limb */
     a += l;
@@ -117,6 +120,6 @@ set_zero:
         r++;
     }
 
-    return ll_num_limbs(tr, al);
+    return tr[0];
 }
 #endif

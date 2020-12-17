@@ -63,7 +63,7 @@ void ll_naive_div_4_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const 
 
 int ll_naive_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl)
 {
-    size_t shift, nl1, tnl;
+    size_t shift, nl1, tnl, t;
     u64 *tmp, *trd, *tqd, *tnd, *tdd;
 
     nl = ll_num_limbs(nd, nl);
@@ -100,7 +100,8 @@ int ll_naive_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const 
         tnd = tmp + 2 * nl1;
         tdd = tmp + 3 * nl1;
         /* */
-        tnl = ll_lshift(tnd, nd, nl, shift);
+        t = ll_lshift(tnd, nd, nl, shift);
+        tnl = nl + (t != 0);
         ll_lshift(tdd, dd, dl, shift);
 
         if (dl == 4)
