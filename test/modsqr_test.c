@@ -152,7 +152,7 @@ static FP256_MODSQR_TEST_VECTOR modsqr_test_vector[] = {
 int fp256_mod_sqr_test_vector(void)
 {
     unsigned int i;
-    fp256 tr, r, a, b, m;
+    fp256 tr, r, a, m;
 
     for (i = 0; i < sizeof(modsqr_test_vector) / sizeof(FP256_MODSQR_TEST_VECTOR); i++) {
         fp256_from_hex(&r, (u8*)modsqr_test_vector[i].r, strlen(modsqr_test_vector[i].r));
@@ -165,7 +165,6 @@ int fp256_mod_sqr_test_vector(void)
             printf("fp256_mod_sqr_test_vector %d failed\n", i + 1);
             test_fp256_print_hex("r = ", &tr);
             test_fp256_print_hex("a = ", &a);
-            test_fp256_print_hex("b = ", &b);
             test_fp256_print_hex("m = ", &m);
             printf("a*b mod m should be :\n");
             test_fp256_print_hex("r = ", &r);
