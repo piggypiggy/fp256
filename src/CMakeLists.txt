@@ -4,11 +4,11 @@ set(LL_DIR ${FP256_SRC_DIR}/ll)
 
 # for arm build...
 if(ARCH_AARCH64)
-    set(USE_ASM_ADD        1)
+    # set(USE_ASM_ADD        1)
     # set(USE_ASM_CPUID      1)
     # set(USE_ASM_DIV        1)
     set(USE_ASM_LEHMER     1)
-    set(USE_ASM_MUL        1)
+    # set(USE_ASM_MUL        1)
     # set(USE_ASM_SHIFT      1)
     set(USE_ASM_U256_ADD   1)
     # set(USE_ASM_U256_DIV   1)
@@ -20,10 +20,10 @@ if(ARCH_AARCH64)
 else()
     set(USE_ASM_ADD        1)
     set(USE_ASM_CPUID      1)
-    set(USE_ASM_DIV        1)
+    # set(USE_ASM_DIV        1)
     set(USE_ASM_LEHMER     1)
     set(USE_ASM_MUL        1)
-    set(USE_ASM_SHIFT      1)
+    # set(USE_ASM_SHIFT      1)
     set(USE_ASM_U256_ADD   1)
     set(USE_ASM_U256_DIV   1)
     set(USE_ASM_U256_FMOD  1)
@@ -161,7 +161,6 @@ if(BUILD_STATIC)
     add_library(fp256_asm_static_object OBJECT ${LL_ASM_SRC})
     target_compile_definitions(fp256_static_object PRIVATE BUILD_STATIC)
     target_compile_options(fp256_static_object PRIVATE ${EXTRA_C_FLAGS})
-    # set_target_properties(fp256_static_object PROPERTIES COMPILE_FLAGS ${EXTRA_C_FLAGS})
     #
     add_library(fp256_static STATIC 
                 $<TARGET_OBJECTS:fp256_static_object>
@@ -183,9 +182,9 @@ if(BUILD_SHARED)
     add_library(fp256_asm_shared_object OBJECT ${LL_ASM_SRC})
     target_compile_definitions(fp256_shared_object PRIVATE BUILD_SHARED)
     target_compile_options(fp256_shared_object PRIVATE ${EXTRA_C_FLAGS})
-    # set_target_properties(fp256_shared_object PROPERTIES COMPILE_FLAGS ${EXTRA_C_FLAGS})
     # PIC
     set_property(TARGET fp256_shared_object PROPERTY POSITION_INDEPENDENT_CODE 1)
+    set_property(TARGET fp256_asm_shared_object PROPERTY POSITION_INDEPENDENT_CODE 1)
 
     #
     add_library(fp256_shared SHARED 
