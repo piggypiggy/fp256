@@ -70,8 +70,8 @@ static inline unsigned __int64 gettime_i64()
     end_time = gettime_i64()
 
 //unsigned __int64 __rdtsc(void);
-#define TICKS() ((end_ticks - start_ticks) / 10)
-#define USEC() (end_time - start_time)
+#define TICKS() (end_ticks - start_ticks)
+#define USEC() ((end_time - start_time) / 10)
 
 #elif defined(__GNUC__) && defined(ARCH_AARCH64)
 #include "sys/time.h"
