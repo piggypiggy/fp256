@@ -183,6 +183,27 @@ static FP256_DIV_TEST_VECTOR div_test_vector[] = {
         "cccccccccccccccc",
         "99999dddddddddddddddddddddddddd9999999999999999999999",
     },
+    /* 23 */
+    {
+        "665190512125a5c241590774607112837bbef9aa812cca73",
+        "db6471304b36eb4f",
+        "bae935f418dd3fa3b207062fca4b963c829eb3d2b96ed28288de7301ce70286d",
+        "da194b901904189639e04631ee9df3fe069818bd20137be6",
+    },
+    /* 24 */
+    {
+        "273e986047f1291e37afd6574ca67d81",
+        "10daf38145190c152fd9b0caa942c8727",
+        "47b3a8bae551d257f604a757809f61368b96f4d0d6033ddff15ecd4fe2ba2498",
+        "44103f7d2e8a070b1df02a95396c5691",
+    },
+    /* 25 */
+    {
+        "71e424ad7b5fd4dc77837decfaab39a38476adefe2ac158f",
+        "d2cd4a252eafd4b7",
+        "aaf82b476ab6ebb1878d680186836ba8559e4e462609cc8a4190df63a718ae82",
+        "cfa0832e1960246f1d062cbc7a4a0045d1d9b66478e279a5",
+    },
 };
 
 int fp256_div_test_vector(void)
