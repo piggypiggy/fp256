@@ -44,6 +44,7 @@ Or cross compilation (cmake toolchain files are [here](https://github.com/piggyp
 * Assembly implementation of faster division algorithm.
 * Add prime test, modular exponential, square root related, etc.
 * Constant-time implementation of division and exgcd.
+* RISC-V implementation.
 * more tests.
 
 # benchmark
