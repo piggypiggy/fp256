@@ -20,7 +20,7 @@ high level api operates on 256 bit integer.
     $ mkdir build
     $ cd build
     $ cmake ..
-    $ make
+    $ make -j
     $ make test
 
 Or cross compilation (cmake toolchain files are [here](https://github.com/piggypiggy/fp256/tree/master/cmake/toolchain)):
@@ -28,7 +28,7 @@ Or cross compilation (cmake toolchain files are [here](https://github.com/piggyp
     $ mkdir build
     $ cd build
     $ cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gcc.cmake ..
-    $ make
+    $ make -j
 
 ### configuration
 `-DCMAKE_BUILD_TYPE` : possible values are empty, Debug, Release, RelWithDebInfo and MinSizeRel, default is `Release`.  
@@ -41,7 +41,6 @@ Or cross compilation (cmake toolchain files are [here](https://github.com/piggyp
 `-DUSE_MSAN` : use MemorySanitizer, default is `OFF`.  
 
 # TODO
-* Assembly implementation of faster division algorithm.
 * Add prime test, modular exponential, square root related, etc.
 * Constant-time implementation of division and exgcd.
 * RISC-V implementation.
