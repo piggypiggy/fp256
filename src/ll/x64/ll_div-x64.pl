@@ -59,6 +59,7 @@ $code.=<<___;
 
 # u64 ll_reciprocal1(u64 d)
 .globl	ll_reciprocal1
+.hidden	ll_reciprocal1
 .type	ll_reciprocal1,\@function,1
 .align	32
 ll_reciprocal1:
