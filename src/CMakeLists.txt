@@ -184,8 +184,8 @@ if(BUILD_SHARED)
     target_compile_definitions(fp256_shared_object PRIVATE BUILD_SHARED)
     target_compile_options(fp256_shared_object PRIVATE ${EXTRA_C_FLAGS})
     # PIC
-    set_property(TARGET fp256_shared_object PROPERTY POSITION_INDEPENDENT_CODE 1)
-    set_property(TARGET fp256_asm_shared_object PROPERTY POSITION_INDEPENDENT_CODE 1)
+    set_property(TARGET fp256_shared_object PROPERTY POSITION_INDEPENDENT_CODE ON)
+    # set_property(TARGET fp256_asm_shared_object PROPERTY POSITION_INDEPENDENT_CODE 1)
 
     #
     add_library(fp256_shared SHARED 
