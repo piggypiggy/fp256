@@ -91,7 +91,7 @@ static U256_MUL_TEST_VECTOR u256_mul_test_vector[] = {
     {
         "0",
         "0",
-        "0xe54ff64e6fb4513471fb",
+        "e54ff64e6fb4513471fb",
     },
     /* 12 */
     {
