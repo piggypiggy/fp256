@@ -48,6 +48,9 @@ ll_u256_lshift:
     ldp $a2,$a3,[$ad,#16]
     ldp $a0,$a1,[$ad]
 
+    cmp $n,xzr
+    beq .ll_u256_rshift_done
+
     lsr $a4,$a3,$m            // r[4] = a[3] >> (64-n)
     lsl $a3,$a3,$n            // a[3] <<= n
     lsr $t0,$a2,$m            // a[2] >> (64-n)
@@ -60,6 +63,7 @@ ll_u256_lshift:
     orr $a1,$a1,$t0           // r[1] = (a[0] >> (64-n)) | (a[1] << n)
     lsl $a0,$a0,$n            // r[0] = a[0] << n
 
+.ll_u256_rshift_done:
     str $a4,[$rd,#32]
     stp $a2,$a3,[$rd,#16]
     stp $a0,$a1,[$rd]
@@ -73,10 +77,12 @@ ll_u256_lshift:
 .align 5
 ll_u256_rshift:
     mov $m,#64
-    eor $a4,$a4,$a4
     sub $m,$m,$n              // m = 64 - n
     ldp $a2,$a3,[$ad,#16]
     ldp $a0,$a1,[$ad]
+
+    cmp $n,xzr
+    beq .ll_u256_rshift_done
 
     lsr $a0,$a0,$n            // a[0] >> n
     lsl $t0,$a1,$m            // a[1] << (64-n)
@@ -89,6 +95,7 @@ ll_u256_rshift:
     orr $a2,$a2,$t0           // r[2] = (a[3] << (64-n)) | (a[2] >> n)
     lsr $a3,$a3,$n            // r[3] = a[3] >> n
 
+.ll_u256_lshift_done:
     stp $a0,$a1,[$rd]
     stp $a2,$a3,[$rd,#16]
     ret
