@@ -105,7 +105,6 @@ $code.=<<___;
 ll_u256_select:
 ___
 $code.=<<___	if ($win64);
-.LSEH_begin_ll_u256_select:
     sub \$32, %rsp
     movaps %xmm6, 16*0(%rsp)
     movaps %xmm7, 16*1(%rsp)
@@ -138,7 +137,6 @@ $code.=<<___;
     movdqu %xmm2, 16*1(%rdi)
 ___
 $code.=<<___	if ($win64);
-.LSEH_end_ll_u256_select:
     movaps 16*0(%rsp), %xmm6
     movaps 16*1(%rsp), %xmm7
     add \$32, %rsp
