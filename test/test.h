@@ -48,6 +48,7 @@ typedef struct do_which_st {
     int do_mod_mul;
     int do_mod_sqr;
     int do_mod_inv;
+    int do_mod_exp;
     int do_fmod_add;
     int do_mont_mul;
     int do_mont_sqr;

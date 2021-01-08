@@ -167,12 +167,29 @@ int fp256_mod_inv(fp256 *r, const fp256 *a, const fp256 *m)
     return FP256_OK;
 }
 
-/* TODO :  */
 int fp256_mod_exp(fp256 *r, const fp256 *a, const fp256 *e, const fp256 *m)
 {
-    (void) r;
-    (void) a;
-    (void) e;
-    (void) m;
+    fp256 A, R;
+    mont_ctx mctx;
+
+    if (fp256_is_odd(m)) {
+        /* odd modulus */
+        fp256_mont_ctx_init(&mctx, 4, m);
+
+        /* A = a % m */
+        if (fp256_cmp(a, m) >= 0)
+            fp256_mod(&A, a, m);
+        else
+            fp256_copy(&A, a);
+
+        fp256_to_mont(&A, &A, &mctx);
+        fp256_mont_exp(&R, &A, e, &mctx);
+        fp256_from_mont(r, &R, &mctx);
+    }
+    else {
+        /* TODO : even modulus */
+        
+    }
+
     return FP256_OK;
 }

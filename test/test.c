@@ -215,6 +215,12 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
             continue;
         }
 
+        if (arg_cmp(argv[i], "modexp") > 0 || arg_cmp(argv[i], "mod_exp") > 0) {
+            do_which->do_mod_exp = 1;
+            do_all = 0;
+            continue;
+        }
+
         if (arg_cmp(argv[i], "fmodadd") > 0 || arg_cmp(argv[i], "fmod_add") > 0) {
             do_which->do_fmod_add = 1;
             do_all = 0;
