@@ -620,6 +620,51 @@ static void bench_fp256_mod_sqr_clear(void *data)
     free(data);
 }
 
+/*************************** fp256_mod_exp ***************************/
+typedef struct {
+    fp256 r;
+    fp256 a;
+    fp256 e;
+    fp256 m;
+}FP256_MOD_EXP_DATA;
+
+static void* bench_fp256_mod_exp_setup(void)
+{
+    int k;
+    FP256_MOD_EXP_DATA *data;
+
+    data = malloc(NUM * sizeof(FP256_MOD_EXP_DATA));
+    /* random num */
+    for (k = 0; k < NUM; k++) {
+        fp256_rand_limbs(&data[k].a, 4, 0);
+        fp256_rand_limbs(&data[k].e, 4, 0);
+        do {
+            fp256_rand_limbs(&data[k].m, 4, 0);
+        } while (fp256_is_zero(&data[k].m) || fp256_is_even(&data[k].m));
+    }
+
+    return data;
+}
+
+static void bench_fp256_mod_exp_run(void *_data, int64_t N)
+{
+    int k;
+    int64_t i;
+    FP256_MOD_EXP_DATA *data;
+
+    k = 0;
+    data = (FP256_MOD_EXP_DATA*)_data;
+    for (i = 0; i < N; i++) {
+        fp256_mod_exp(&data[k].r, &data[k].a, &data[k].e, &data[k].m);
+        k = (k + 1) % NUM;
+    }
+}
+
+static void bench_fp256_mod_exp_clear(void *data)
+{
+    free(data);
+}
+
 /*************************** fp256_mont_mul ***************************/
 typedef struct {
     fp256 r;
@@ -821,6 +866,9 @@ int main(int argc, char **argv)
 
     if (args.do_which.do_mod_sqr)
         run_bench("fp256_mod_sqr", bench_fp256_mod_sqr_setup, bench_fp256_mod_sqr_run, bench_fp256_mod_sqr_clear, args.N, args.T);
+
+    if (args.do_which.do_mod_exp)
+        run_bench("fp256_mod_exp", bench_fp256_mod_exp_setup, bench_fp256_mod_exp_run, bench_fp256_mod_exp_clear, args.N, args.T);
 
     if (args.do_which.do_mont_mul)
         run_bench("fp256_mont_mul", bench_fp256_mont_mul_setup, bench_fp256_mont_mul_run, bench_fp256_mont_mul_clear, args.N, args.T);
