@@ -33,6 +33,9 @@ open OUT,"| \"$^X\" \"$xlate\" $flavour \"$output\"";
 
 $code.=<<___;
 .text
+
+.LOne:
+.long 1,1,1,1,1,1,1,1
 ___
 
 # TODO : use inline assembly ?
@@ -91,6 +94,59 @@ ll_bswap8:
     mov %rdi, %rax
     ret
 .size	ll_bswap8,.-ll_bswap8
+___
+
+
+# void ll_u256_select(u64 r[4], u64 *table, size_t table_size, size_t index)
+$code.=<<___;
+.globl	ll_u256_select
+.type	ll_u256_select,\@function,4
+.align	32
+ll_u256_select:
+___
+$code.=<<___	if ($win64);
+.LSEH_begin_ll_u256_select:
+    sub \$32, %rsp
+    movaps %xmm6, 16*0(%rsp)
+    movaps %xmm7, 16*1(%rsp)
+___
+
+$code.=<<___;
+    movdqa .LOne(%rip), %xmm5  # 1
+    movd %rcx, %xmm0           # index
+    pxor %xmm1, %xmm1
+    pxor %xmm2, %xmm2
+    pxor %xmm7, %xmm7
+    pshufd \$0, %xmm0, %xmm0
+
+.Lu256_select_loop:
+    movdqa %xmm7,%xmm6
+    paddd %xmm5,%xmm7
+    pcmpeqd %xmm0,%xmm6
+
+    movdqa 16*0(%rsi), %xmm3
+    movdqa 16*1(%rsi), %xmm4
+    lea 16*2(%rsi), %rsi
+    pand %xmm6, %xmm3
+    pand %xmm6, %xmm4
+    por %xmm3, %xmm1
+    por %xmm4, %xmm2
+    dec %rdx                   # table_size
+    jnz .Lu256_select_loop
+
+    movdqu %xmm1, 16*0(%rdi)
+    movdqu %xmm2, 16*1(%rdi)
+___
+$code.=<<___	if ($win64);
+.LSEH_end_ll_u256_select:
+    movaps 16*0(%rsp), %xmm6
+    movaps 16*1(%rsp), %xmm7
+    add \$32, %rsp
+___
+
+$code.=<<___;
+    ret
+.size	ll_u256_select,.-ll_u256_select
 ___
 
 $code =~ s/\`([^\`]*)\`/eval $1/gem;

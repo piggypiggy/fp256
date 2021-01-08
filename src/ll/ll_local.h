@@ -125,6 +125,8 @@ u64 ll_reciprocal2(u64 d1, u64 d0);
 u64 ll_div2by1_pi1(u64 *r, u64 n[2], u64 d, u64 v);
 u64 ll_div3by2_pi1(u64 *r, u64 n[3], u64 d[2], u64 v);
 
+void ll_u256_select(u64 r[4], u64 *table, size_t table_size, size_t index);
+
 typedef struct cpu_flags_st {
     int initialized;
     /* arm */
