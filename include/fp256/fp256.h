@@ -634,6 +634,17 @@ FP256_EXPORT int fp256_mont_mul(fp256 *r, const fp256 *A, const fp256 *B, const 
 FP256_EXPORT int fp256_mont_sqr(fp256 *r, const fp256 *A, const mont_ctx *mctx);
 
 /**
+ * montgomery exponential, r = A^e * R mod N 
+ * 
+ * @param[out] r          - result.
+ * @param[in] A           - the base(in montgomery representation).
+ * @param[in] e           - the exponent.
+ * @param[in] mctx        - montgomery context.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int fp256_mont_exp(fp256 *r ,const fp256 *A, const fp256 *e, const mont_ctx *mctx);
+
+/**
  * transform integer a to montgomery representation
  * 
  * @param[out] A          - result.

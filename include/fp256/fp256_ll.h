@@ -483,6 +483,20 @@ FP256_EXPORT void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], 
 FP256_EXPORT void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 
 /**
+ * montgomery exponential of an integer in montgomery representation.\n
+ * rd = ad^ed * R mod Nd, R = 2^256.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the base.
+ * @param[in] ed          - the exponent.
+ * @param[in] el          - length of ed array.
+ * @param[in] RR          - R^2 mod N, see mont_ctx.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
+ */
+FP256_EXPORT void ll_u256_mont_exp(u64 rd[4], const u64 ad[4], const u64 *ed, size_t el, const u64 RR[4], const u64 Nd[4], u64 k0);
+
+/**
  * divide two big integers represented by u64 array, TODO : add reference.\n
  * rd = nd % dd, qd = nd / dd.\n
  * @pre
