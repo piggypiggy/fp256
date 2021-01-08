@@ -79,6 +79,18 @@ extern "C" {
     (rh) += (__t1 >> 32); \
 } while(0);
 
+# define LL_ALIGN_NUM(num, align) \
+    ((num) + ((num) % (align) == 0 ? 0 : ((align) - (num) % (align))))
+
+# define LL_ALIGN_PTR(ptr, align) \
+    ((unsigned char*)(ptr) + ((size_t)(ptr) % (align) == 0 ? 0 : ((align) - (size_t)(ptr) % (align))))
+
+# define LL_EXP_WINDOW_SIZE(b) \
+    ((b) > 937 ? 6 : \
+    (b) > 306 ? 5 : \
+    (b) >  89 ? 4 : \
+    (b) >  22 ? 3 : 1)
+
 /* rd = ad + b,
  * return carry */
 u64 ll_add_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
