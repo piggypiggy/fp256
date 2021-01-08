@@ -60,6 +60,7 @@ fp256_add_test(MODADD_TEST        modadd_test        modadd_test.c)
 fp256_add_test(MODSUB_TEST        modsub_test        modsub_test.c)
 fp256_add_test(MONTMUL_TEST       montmul_test       montmul_test.c)
 fp256_add_test(MONTSQR_TEST       montsqr_test       montsqr_test.c)
+fp256_add_test(SHIFT_TEST         shift_test         shift_test.c)
 
 if(ARCH_X86_64)
     fp256_add_test(NAIVEDIV_TEST      naivediv_test      naivediv_test.c div_test_local.h)
