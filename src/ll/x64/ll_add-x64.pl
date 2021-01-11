@@ -45,98 +45,109 @@ $code.=<<___;
 .type	ll_add_limb,\@function,4
 .align	32
 ll_add_limb:
-    mov %rdx, $b
-    xor %rdx, %rdx
-.ll_add_limb_loop:
+    mov %rdx, %rax
     test $l, $l
     jz .ll_add_limb_done
+    xor %rax, %rax
     mov 0($a_ptr), $t1
     lea 8($a_ptr), $a_ptr
-    add $b, $t1             # a + b
-    mov %rdx, $b
+    adc %rdx, $t1             # ad[0] + b
     mov $t1, 0($r_ptr)
-    dec $l
-    setc %al                # b = carry
     lea 8($r_ptr), $r_ptr
-    jmp .ll_add_limb_loop
+    dec $l
+    jz .ll_add_limb_done
+.ll_add_limb_loop:
+    mov 0($a_ptr), $t1
+    lea 8($a_ptr), $a_ptr
+    adc \$0, $t1              # ad[i] + carry
+    mov $t1, 0($r_ptr)
+    lea 8($r_ptr), $r_ptr
+    dec $l
+    jnz .ll_add_limb_loop
 
 .ll_add_limb_done:
+    adc \$0, %rax
     ret
 .size	ll_add_limb,.-ll_add_limb
+
 
 # u64 ll_add_limbs(u64 *rd, u64 *ad, u64 *bd, size_t l);
 .globl	ll_add_limbs
 .type	ll_add_limbs,\@function,4
 .align	32
 ll_add_limbs:
-    xor $carry, $carry
-.ll_add_limbs_loop:
+    xor %rax, %rax
     test $l, $l
     jz .ll_add_limbs_done
+.ll_add_limbs_loop:
     mov 0($a_ptr), $t1
     mov 0($b_ptr), $t2
-    add $carry, $t1
     lea 8($a_ptr), $a_ptr
-    setc %al               # set carry
-    add $t2, $t1
+    adc $t2, $t1              # ad[i] + bd[i]
     lea 8($b_ptr), $b_ptr
-    adc \$0, $carry
     mov $t1, 0($r_ptr)
-    dec $l
     lea 8($r_ptr), $r_ptr
-    jmp .ll_add_limbs_loop
+    dec $l
+    jnz .ll_add_limbs_loop
 
 .ll_add_limbs_done:
+    adc \$0, %rax
     ret
 .size	ll_add_limbs,.-ll_add_limbs
+
 
 # u64 ll_sub_limb(u64 *rd, u64 *ad, u64 b, size_t al);
 .globl	ll_sub_limb
 .type	ll_sub_limb,\@function,4
 .align	32
 ll_sub_limb:
-    mov %rdx, $b
-    xor %rdx, %rdx
-.ll_sub_limb_loop:
+    mov %rdx, %rax
     test $l, $l
     jz .ll_sub_limb_done
+    xor %rax, %rax
     mov 0($a_ptr), $t1
     lea 8($a_ptr), $a_ptr
-    sub $b, $t1             # a - b
-    mov %rdx, $b
+    sbb %rdx, $t1             # ad[0] - b
     mov $t1, 0($r_ptr)
-    dec $l
-    setc %al                # b = borrow
     lea 8($r_ptr), $r_ptr
-    jmp .ll_sub_limb_loop
+    dec $l
+    jz .ll_sub_limb_done
+.ll_sub_limb_loop:
+    mov 0($a_ptr), $t1
+    lea 8($a_ptr), $a_ptr
+    sbb \$0, $t1              # ad[i] - borrow
+    mov $t1, 0($r_ptr)
+    lea 8($r_ptr), $r_ptr
+    dec $l
+    jnz .ll_sub_limb_loop
 
 .ll_sub_limb_done:
+    adc \$0, %rax
     ret
 .size	ll_sub_limb,.-ll_sub_limb
+
 
 # u64 ll_sub_limbs(u64 *rd, u64 *ad, u64 *bd, size_t l);
 .globl	ll_sub_limbs
 .type	ll_sub_limbs,\@function,4
 .align	32
 ll_sub_limbs:
-    xor $borrow, $borrow
-.ll_sub_limbs_loop:
+    xor %rax, %rax
     test $l, $l
     jz .ll_sub_limbs_done
+.ll_sub_limbs_loop:
     mov 0($a_ptr), $t1
     mov 0($b_ptr), $t2
-    sub $borrow, $t1
     lea 8($a_ptr), $a_ptr
-    setc %al                # set borrow
-    sub $t2, $t1            # a - b
+    sbb $t2, $t1              # ad[i] - bd[i]
     lea 8($b_ptr), $b_ptr
-    adc \$0, $borrow
     mov $t1, 0($r_ptr)
-    dec $l
     lea 8($r_ptr), $r_ptr
-    jmp .ll_sub_limbs_loop
+    dec $l
+    jnz .ll_sub_limbs_loop
 
 .ll_sub_limbs_done:
+    adc \$0, %rax
     ret
 .size	ll_sub_limbs,.-ll_sub_limbs
 ___
