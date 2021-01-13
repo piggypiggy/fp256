@@ -125,7 +125,7 @@ u64 ll_reciprocal2(u64 d1, u64 d0)
     return v;
 }
 
-u64 ll_div2by1_pi1(u64 *r, u64 n[2], u64 d, u64 v)
+u64 ll_div2by1_pi1(u64 *r, const u64 n[2], u64 d, u64 v)
 {
     u64 q1, q0, t, n1, n0;
 
@@ -153,7 +153,7 @@ u64 ll_div2by1_pi1(u64 *r, u64 n[2], u64 d, u64 v)
     return q1;
 }
 
-u64 ll_div3by2_pi1(u64 *r, u64 n[3], u64 d[2], u64 v)
+u64 ll_div3by2_pi1(u64 *r, const u64 n[3], const u64 d[2], u64 v)
 {
     u64 q1, q0, r1, r0, t1, t0, n2, n1, n0, d1, d0;
 

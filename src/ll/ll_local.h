@@ -134,10 +134,10 @@ u64 ll_lehmer_exgcd11(u64 mat[4], u64 a0, u64 b0);
 
 u64 ll_reciprocal1(u64 d);
 u64 ll_reciprocal2(u64 d1, u64 d0);
-u64 ll_div2by1_pi1(u64 *r, u64 n[2], u64 d, u64 v);
-u64 ll_div3by2_pi1(u64 *r, u64 n[3], u64 d[2], u64 v);
+u64 ll_div2by1_pi1(u64 *r, const u64 n[2], u64 d, u64 v);
+u64 ll_div3by2_pi1(u64 *r, const u64 n[3], const u64 d[2], u64 v);
 
-void ll_u256_select(u64 r[4], u64 *table, size_t table_size, size_t index);
+void ll_u256_select(u64 r[4], const u64 *table, size_t table_size, size_t index);
 
 typedef struct cpu_flags_st {
     int initialized;
