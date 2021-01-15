@@ -237,3 +237,16 @@ int ll_to_bytes(unsigned char *bytes, size_t *blen, const u64 *rd, size_t rl)
 
     return FP256_OK;
 }
+
+u64 ll_invert_limb(u64 a)
+{
+    u64 inv;
+
+    inv = (((a + 2u) & 4u) << 1) + a;
+    inv *= (2 - inv * a);
+    inv *= (2 - inv * a);
+    inv *= (2 - inv * a);
+    inv *= (2 - inv * a);
+    inv = -inv;
+    return inv;
+}

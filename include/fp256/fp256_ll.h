@@ -329,6 +329,14 @@ FP256_EXPORT int ll_to_bytes(u8 *bytes, size_t *blen, const u64 *rd, size_t rl);
 FP256_EXPORT int ll_to_hex(u8 *hex, size_t *hlen, const u64 *rd, size_t rl);
 
 /**
+ * fast inversion mod 2^64.
+ * 
+ * @param[in] a           - 64 bit odd integer.
+ * @return a^{-1} mod 2^64.
+ */
+FP256_EXPORT u64 ll_invert_limb(u64 a);
+
+/**
  * add two 256 bit integers, return carry.\n
  * rd = ad + bd.
  * 

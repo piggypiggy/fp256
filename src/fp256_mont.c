@@ -21,7 +21,7 @@
 
 int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
 {
-    u64 RRN[4], tmp[9], k0;
+    u64 RRN[4], tmp[9];
     size_t RRNl;
 
     if (mctx == NULL || N == NULL || w == 0 || w >= 5)
@@ -52,21 +52,8 @@ int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
     }
     mctx->k0 = k0;
 #else
-    /* faster inversion mod 2^64 
-     * k*N = 1 mod 2^n
-     * => (k*N - 1)^2 = 0 mod 2^(2n)
-     * => k * (2 - k*N) * N = 1 mod 2^(2n)
-     */
-    u64 N0;
-    N0 = N->d[0];
-    k0 = (((N0 + 2u) & 4u) << 1) + N0; /* k0 * N = 1 mod 2^4 */
-    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^8 */
-    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^16 */
-    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^32 */
-    k0 *= (2 - k0 * N0); /* k0 * N = 1 mod 2^64 */
-    k0 = (~k0) + 1; /* -k0 mod 2^64 */
-    mctx->k0 = k0;
-
+    /* inversion mod 2^64 */
+    mctx->k0 = ll_invert_limb(N->d[0]);
 #endif
 
     return FP256_OK;
