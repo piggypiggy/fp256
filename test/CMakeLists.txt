@@ -65,4 +65,5 @@ fp256_add_test(SHIFT_TEST         shift_test         shift_test.c)
 
 if(ARCH_X86_64)
     fp256_add_test(NAIVEDIV_TEST      naivediv_test      naivediv_test.c div_test_local.h)
+    fp256_add_test(LLMONT_TEST        llmont_test        llmont_test.c)
 endif()
