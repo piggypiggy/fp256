@@ -138,6 +138,7 @@ u64 ll_div2by1_pi1(u64 *r, const u64 n[2], u64 d, u64 v);
 u64 ll_div3by2_pi1(u64 *r, const u64 n[3], const u64 d[2], u64 v);
 
 void ll_u256_select(u64 r[4], const u64 *table, size_t table_size, size_t index);
+void ll_mont_cond_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l);
 
 typedef struct cpu_flags_st {
     int initialized;

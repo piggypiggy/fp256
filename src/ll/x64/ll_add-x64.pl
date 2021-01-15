@@ -150,6 +150,43 @@ ll_sub_limbs:
     adc \$0, %rax
     ret
 .size	ll_sub_limbs,.-ll_sub_limbs
+
+
+# void ll_mont_cond_sub_limbs(u64 *rd, u64 *ad, u64 *bd, size_t l);
+.globl	ll_mont_cond_sub_limbs
+.type	ll_mont_cond_sub_limbs,\@function,4
+.align	32
+ll_mont_cond_sub_limbs:
+    mov $l, %r8
+    test $l, $l
+    jz .ll_mont_cond_sub_limbs_done
+.ll_mont_cond_sub_limbs_loop:
+    mov 0($a_ptr), $t1
+    mov 0($b_ptr), $t2
+    sbb $t2, $t1                   # ad[i] - bd[i]
+    lea 8($a_ptr), $a_ptr
+    lea 8($b_ptr), $b_ptr
+    mov $t1, 0($r_ptr)
+    lea 8($r_ptr), $r_ptr
+    dec $l
+    jnz .ll_mont_cond_sub_limbs_loop
+
+    mov 0($a_ptr), $t1
+    sbb \$0, $t1                   # ad[l] - borrow
+    lea -8($a_ptr), $a_ptr
+    lea -8($r_ptr), $r_ptr
+    cmovnc $r_ptr, $a_ptr
+.ll_mont_cond_sub_limbs_move_loop: # conditional move
+    mov 0($a_ptr), $t1
+    lea -8($a_ptr), $a_ptr
+    mov $t1, 0($r_ptr)
+    lea -8($r_ptr), $r_ptr
+    dec %r8
+    jnz .ll_mont_cond_sub_limbs_move_loop
+
+.ll_mont_cond_sub_limbs_done:
+    ret
+.size	ll_mont_cond_sub_limbs,.-ll_mont_cond_sub_limbs
 ___
 }
 
