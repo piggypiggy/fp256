@@ -125,6 +125,7 @@ set(FP256_C_SRC
     ${LL_DIR}/ll_div.c
     ${LL_DIR}/ll_naive_div.c
     ${LL_DIR}/ll_lehmer.c
+    ${LL_DIR}/ll_mont.c
     ${LL_DIR}/ll_mul.c
     ${LL_DIR}/ll_print.c
     ${LL_DIR}/ll_rand.c

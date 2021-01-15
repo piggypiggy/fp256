@@ -437,6 +437,58 @@ FP256_EXPORT u64 ll_mulsub_limb(u64 *rd, const u64 *ad, u64 b, size_t rl, size_t
 FP256_EXPORT u64 ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
 
 /**
+ * montgomery multiplication of two integers in montgomery representation.\n
+ * rd = ad * bd * R^{-1} mod Nd, R = 2^(64*l).
+ * 
+ * @param[out] rd         - result.
+ * @param[in] Ad          - the first u64 array to multiply.
+ * @param[in] Bd          - the second u64 array to multiply.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
+ * @param[in] l           - length of Ad, Bd array.
+ * @param[in] td          - temporary space to hold intermediary result.
+ */
+FP256_EXPORT void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, size_t l, u64 *td);
+
+/**
+ * montgomery square of an integer in montgomery representation.\n
+ * rd = ad^2 * R^{-1} mod Nd, R = 2^(64*l).
+ * 
+ * @param[out] rd         - result.
+ * @param[in] Ad          - the u64 array to square.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
+ * @param[in] l           - length of Ad, Bd array.
+ * @param[in] td          - temporary space to hold intermediary result.
+ */
+FP256_EXPORT void ll_mont_sqr(u64 *rd, const u64 *Ad, const u64 *Nd, u64 k0, size_t l, u64 *td);
+
+/**
+ * transform integer ad to montgomery representation.
+ * 
+ * @param[out] Ad         - result.
+ * @param[in] ad          - the u64 array to transform.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] RR          - precomputed value, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
+ * @param[in] l           - length of Ad, Bd array.
+ * @param[in] td          - temporary space to hold intermediary result.
+ */
+FP256_EXPORT void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *RR, u64 k0, size_t l, u64 *td);
+
+/**
+ * transform integer Ad from montgomery representation.
+ * 
+ * @param[out] ad         - result.
+ * @param[in] Ad          - the u64 array to transform.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
+ * @param[in] l           - length of Ad, Bd array.
+ * @param[in] td          - temporary space to hold intermediary result.
+ */
+FP256_EXPORT void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l, u64 *td);
+
+/**
  * multiply two integer represented by u64 array.\n
  * rd = ad * bd.
  * 
