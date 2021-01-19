@@ -129,6 +129,44 @@ ll_sub_limbs:
 ___
 }
 
+{
+my ($rd,$ad,$bd,$l)=("x0","x1","x2","x3");
+my ($t1,$t2)=("x5","x6");
+
+$code.=<<___;
+# void ll_mont_cond_sub_limbs(u64 *rd, u64 *ad, u64 *bd, size_t l);
+.globl	ll_mont_cond_sub_limbs
+.type	ll_mont_cond_sub_limbs,%function
+.align	5
+ll_mont_cond_sub_limbs:
+    subs x4,$l,xzr
+    cbz $l,.ll_mont_cond_sub_limbs_done
+
+.ll_mont_cond_sub_limbs_loop:
+    ldr $t1,[$ad],#8
+    ldr $t2,[$bd],#8
+    sub $l,$l,#1
+    sbcs $t1,$t1,$t2        // ad[i] - bd[i]
+    str $t1,[$rd],#8
+    cbnz $l,.ll_mont_cond_sub_limbs_loop
+
+    ldr $t1,[$ad]
+    sbcs $t1,$t1,xzr        // ad[l] - borrow
+    sub $ad,$ad,#8
+    sub $rd,$rd,#8
+    csel $ad,$rd,$ad,cs
+.ll_mont_cond_sub_limbs_move_loop:   // conditional move
+    ldr $t1,[$ad],#-8 
+    sub x4,x4,#1
+    str $t1,[$rd],#-8
+    cbnz x4,.ll_mont_cond_sub_limbs_move_loop
+
+.ll_mont_cond_sub_limbs_done:
+    ret
+.size	ll_mont_cond_sub_limbs,.-ll_mont_cond_sub_limbs
+___
+}
+
 print $code;
 
 close STDOUT;
