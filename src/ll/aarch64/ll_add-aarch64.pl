@@ -33,7 +33,7 @@ ___
 
 {
 my ($rd,$ad,$b,$bd,$l)=("x4","x1","x2","x2","x3");
-my ($borrow,$carry,$t1,$t2)=("x0","x0","x5","x6");
+my ($t1,$t2)=("x5","x6");
 
 $code.=<<___;
 # u64 ll_add_limb(u64 *rd, u64 *ad, u64 b, size_t al);
@@ -43,15 +43,15 @@ $code.=<<___;
 ll_add_limb:
     mov $rd,x0
     adds x0,$b,xzr   // x0=b, C=0
+    cbz $l,.ll_add_limb_done
 
 .ll_add_limb_loop:
-    cbz $l,.ll_add_limb_done
     ldr $t1,[$ad],#8
     sub $l,$l,#1
     adcs $t1,$t1,x0
     eor x0,xzr,xzr
     str $t1,[$rd],#8
-    b .ll_add_limb_loop
+    cbnz $l,.ll_add_limb_loop
 
 .ll_add_limb_done:
     adc x0,x0,xzr
@@ -66,15 +66,15 @@ ll_add_limb:
 ll_add_limbs:
     mov $rd,x0
     adds x7,xzr,xzr  // C=0
+    cbz $l,.ll_add_limbs_done
 
 .ll_add_limbs_loop:
-    cbz $l,.ll_add_limbs_done
     ldr $t1,[$ad],#8
     ldr $t2,[$bd],#8
     sub $l,$l,#1
     adcs $t1,$t1,$t2
     str $t1,[$rd],#8
-    b .ll_add_limbs_loop
+    cbnz $l,.ll_add_limbs_loop
 
 .ll_add_limbs_done:
     adc x0,xzr,xzr
@@ -89,15 +89,15 @@ ll_add_limbs:
 ll_sub_limb:
     mov $rd,x0
     subs x0,$b,xzr  // x0=b, C=1
+    cbz $l,.ll_sub_limb_done
 
 .ll_sub_limb_loop:
-    cbz $l,.ll_sub_limb_done
     ldr $t1,[$ad],#8
     sub $l,$l,#1
     sbcs $t1,$t1,x0
     eor x0,xzr,xzr
     str $t1,[$rd],#8
-    b .ll_sub_limb_loop
+    cbnz $l,.ll_sub_limb_loop
 
 .ll_sub_limb_done:
     csinc x0,x0,x0,cs
@@ -112,15 +112,15 @@ ll_sub_limb:
 ll_sub_limbs:
     mov $rd,x0
     subs x0,xzr,xzr  // C=1
+    cbz $l,.ll_sub_limbs_done
 
 .ll_sub_limbs_loop:
-    cbz $l,.ll_sub_limbs_done
     ldr $t1,[$ad],#8
     ldr $t2,[$bd],#8
     sub $l,$l,#1
     sbcs $t1,$t1,$t2
     str $t1,[$rd],#8
-    b .ll_sub_limbs_loop
+    cbnz $l,.ll_sub_limbs_loop
 
 .ll_sub_limbs_done:
     csinc x0,xzr,xzr,cs
