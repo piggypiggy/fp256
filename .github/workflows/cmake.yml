@@ -1,33 +1,50 @@
-# This is a basic workflow to help you get started with Actions
-
 name: cmake-CI
 
-# Controls when the action will run. 
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+  build_test:
+
+    name: ${{matrix.toolchain}}
+    runs-on: ${{matrix.os}}
+
+    strategy:
+      matrix:
+        toolchain:
+          - linux-gcc
+          - linux-clang
+          - macos-clang
+
+        configuration:
+          - -DCMAKE_BUILD_TYPE=Release -DUSE_ASAN=ON
+          - -DCMAKE_BUILD_TYPE=Debug   -DUSE_ASAN=ON
+
+        include:
+          - toolchain: linux-gcc
+            os: ubuntu-latest
+            compiler: gcc
+
+          - toolchain: linux-clang
+            os: ubuntu-latest
+            compiler: clang
+
+          - toolchain: macos-clang
+            os: macos-10.15
+            compiler: clang
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: configure
-        run: mkdir build && cd build && cmake ..
+        run: mkdir build && cd build && cmake .. ${{matrix.configuration}}
 
       - name: build
-        run: make -j
+        run: cd build && make -j
       
       - name: test
-        run: make test
-        
+        run: cd build && make test
