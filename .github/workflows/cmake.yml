@@ -1,4 +1,4 @@
-name: cmake-CI
+name: ci
 
 on:
   push:
@@ -9,9 +9,7 @@ on:
 jobs:
   build-and-test:
     name: ${{matrix.config.name}}
-    runs-on: [${{matrix.config.arch}}, ${{matrix.config.os}}]
-    env:
-      test_option: 
+    runs-on: ${{matrix.config.arch}}, ${{matrix.config.os}}
     strategy:
       matrix:
         config:
@@ -51,22 +49,22 @@ jobs:
             build_type: Release
           }
         - {
-            name: "arm64-ubuntu18.04-gcc release",
-            arch: arm64,
+            name: "ARM64-ubuntu18.04-gcc release",
+            arch: ARM64,
             os: ubuntu-18.04,
             cc: gcc,
             build_type: Release
           }
         - {
-            name: "arm64-ubuntu18.04-clang release",
-            arch: arm64,
+            name: "ARM64-ubuntu18.04-clang release",
+            arch: ARM64,
             os: ubuntu-18.04,
             cc: clang,
             build_type: Release
           }
         - {
-            name: "arm64-macos10.15-clang release",
-            arch: arm64,
+            name: "ARM64-macos10.15-clang release",
+            arch: ARM64,
             os: macos10.15,
             cc: clang,
             build_type: Release
