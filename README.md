@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/piggypiggy/fp256.svg?branch=master)](https://travis-ci.com/piggypiggy/fp256)
+![Actions status](https://github.com/piggypiggy/fp256/workflows/cmake-CI/badge.svg?branch=master)
 
 # introduction
 fp256 is a simple and efficient library implemented in C and assembly for 256 bit integer arithmetic.  

@@ -7,44 +7,83 @@ on:
     branches: [ master ]
 
 jobs:
-
-  build_test:
-
-    name: ${{matrix.toolchain}}
-    runs-on: ${{matrix.os}}
-
+  build-and-test:
+    name: ${{matrix.config.name}}
+    runs-on: [${{matrix.config.arch}}, ${{matrix.config.os}}]
+    env:
+      test_option: 
     strategy:
       matrix:
-        toolchain:
-          - linux-gcc
-          - linux-clang
-          - macos-clang
-
-        configuration:
-          - -DCMAKE_BUILD_TYPE=Release -DUSE_ASAN=ON
-          - -DCMAKE_BUILD_TYPE=Debug   -DUSE_ASAN=ON
-
-        include:
-          - toolchain: linux-gcc
-            os: ubuntu-latest
-            compiler: gcc
-
-          - toolchain: linux-clang
-            os: ubuntu-latest
-            compiler: clang
-
-          - toolchain: macos-clang
-            os: macos-10.15
-            compiler: clang
+        config:
+        - {
+            name: "x64-ubuntu18.04-gcc debug",
+            arch: x64,
+            os: ubuntu-18.04,
+            cc: gcc,
+            build_type: Debug
+          }
+        - {
+            name: "x64-ubuntu18.04-gcc release",
+            arch: x64,
+            os: ubuntu-18.04,
+            cc: gcc,
+            build_type: Release
+          }
+        - {
+            name: "x64-ubuntu18.04-clang release",
+            arch: x64,
+            os: ubuntu-18.04,
+            cc: clang,
+            build_type: Release
+          }
+        - {
+            name: "x64-macos10.15-gcc release",
+            arch: x64,
+            os: macos10.15,
+            cc: gcc,
+            build_type: Release
+          }
+        - {
+            name: "x64-macos10.15-clang release",
+            arch: x64,
+            os: macos10.15,
+            cc: clang,
+            build_type: Release
+          }
+        - {
+            name: "arm64-ubuntu18.04-gcc release",
+            arch: arm64,
+            os: ubuntu-18.04,
+            cc: gcc,
+            build_type: Release
+          }
+        - {
+            name: "arm64-ubuntu18.04-clang release",
+            arch: arm64,
+            os: ubuntu-18.04,
+            cc: clang,
+            build_type: Release
+          }
+        - {
+            name: "arm64-macos10.15-clang release",
+            arch: arm64,
+            os: macos10.15,
+            cc: clang,
+            build_type: Release
+          }
 
     steps:
       - uses: actions/checkout@v2
 
       - name: configure
-        run: mkdir build && cd build && cmake .. ${{matrix.configuration}}
+        run: |
+          set(ENV{CC} ${{matrix.config.cc}})
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=${{matrix.config.build_type}} -DUSE_ASAN=ON
 
       - name: build
-        run: cd build && make -j
+        run: cd build && make -j VERBOSE=1
       
       - name: test
         run: cd build && make test
