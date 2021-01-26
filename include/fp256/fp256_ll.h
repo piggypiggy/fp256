@@ -625,20 +625,20 @@ FP256_EXPORT void ll_naive_div_4_limbs(u64 *rd, u64 *qd, const u64 *nd, const u6
 FP256_EXPORT size_t ll_lehmer_exgcd(u64 *gcd, u64 *sd, u64 *td, ssize_t *sl, ssize_t *tl, 
                     const u64 *ad, const u64 *bd, size_t al, size_t bl, int extended);
 
-/* left shift a by n bits : r = a << n.
- * r can be equal to a, n can be larger than 63.
+/* left shift ad by n bits : rd = ad << n.
+ * rd can be equal to ad, n can be larger than 63.
  * caller should prepare enough space for the result, 
- * r must have at least (al + n/64 + 1) limbs.
- * return most significant limb of r.
+ * rd must have at least (al + n/64 + 1) limbs.
+ * return most significant limb of rd.
  */
-FP256_EXPORT u64 ll_lshift(u64 *r, const u64 *a, size_t al, size_t n);
+FP256_EXPORT u64 ll_lshift(u64 *rd, const u64 *ad, size_t al, size_t n);
 
-/* right shift a by n bits : r = a >> n.
- * r can be equal to a, n can be larger than 63.
+/* right shift ad by n bits : rd = ad >> n.
+ * rd can be equal to ad, n can be larger than 63.
  * caller should prepare enough space for the result, 
- * return most significant limb of r.
+ * return most significant limb of rd.
  */
-FP256_EXPORT u64 ll_rshift(u64 *r, const u64 *a, size_t al, size_t n);
+FP256_EXPORT u64 ll_rshift(u64 *rd, const u64 *ad, size_t al, size_t n);
 
 /**
  * left shift a 256 bit integer.\n

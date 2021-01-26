@@ -4,7 +4,7 @@
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
- * You may obtain a copy of the License at                                    *
+ * You may obtain ad copy of the License at                                    *
  *                                                                            *
  *    http://www.apache.org/licenses/LICENSE-2.0                              *
  *                                                                            *
@@ -20,7 +20,7 @@
 #include "ll_local.h"
 
 #ifndef USE_ASM_SHIFT
-u64 ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
+u64 ll_lshift(u64 *rd, const u64 *ad, size_t al, size_t n)
 {
     u64 tmp;
     u64 *tr;
@@ -31,46 +31,46 @@ u64 ll_lshift(u64 *r, const u64 *a, size_t al, size_t n)
 
     b = n & 0x3f;
     l = n >> 6;
-    tr = r + al + l;
+    tr = rd + al + l;
 
     tmp = 0;
 
     if (b == 0) {
-        a += (al - 1);
-        r += (al - 1 + l);
-        r[1] = 0;
+        ad += (al - 1);
+        rd += (al - 1 + l);
+        rd[1] = 0;
         /* copy */
         for (i = 0; i < al; i++) {
-            r[0] = a[0];
-            r--;
-            a--;
+            rd[0] = ad[0];
+            rd--;
+            ad--;
         }
     }
     else {
         /* start shifting from the most significant limb */
-        a += (al - 1);
-        r += (al + l);
+        ad += (al - 1);
+        rd += (al + l);
         /* lshift */
         for (i = 0; i < al; i++) {
-            r[0] = (tmp << b) | (a[0] >> (64 - b));
-            tmp = a[0];
-            r--;
-            a--;
+            rd[0] = (tmp << b) | (ad[0] >> (64 - b));
+            tmp = ad[0];
+            rd--;
+            ad--;
         }
-        r[0] = tmp << b;
-        r--;
+        rd[0] = tmp << b;
+        rd--;
     }
 
     /* set (shift / 64) lower limbs to 0 */
     for(i = 0; i < l; i++) {
-        r[0] = 0;
-        r--;
+        rd[0] = 0;
+        rd--;
     }
 
     return tr[0];
 }
 
-u64 ll_rshift(u64 *r, const u64 *a, size_t al, size_t n)
+u64 ll_rshift(u64 *rd, const u64 *ad, size_t al, size_t n)
 {
     u64 tmp;
     u64 *tr;
@@ -81,43 +81,43 @@ u64 ll_rshift(u64 *r, const u64 *a, size_t al, size_t n)
 
     b = n & 0x3f;
     l = n >> 6;
-    tr = r + al - l;
+    tr = rd + al - l;
 
     if (l >= al) {
-        tr = r;
+        tr = rd;
         goto set_zero;
     }
 
     /* start shifting from the (l + 1)'s limb */
-    a += l;
-    tmp = a[0];
+    ad += l;
+    tmp = ad[0];
 
     if (b == 0) {
         /* copy */
         for (i = 0; i < (al - l); i++) {
-            r[0] = a[0];
-            a++;
-            r++;
+            rd[0] = ad[0];
+            ad++;
+            rd++;
         }
     }
     else {
         /* rshift */
-        a++;
+        ad++;
         for (i = 0; i < (al - l - 1); i++) {
-            r[0] = (a[0] << (64 - b)) | (tmp >> b);
-            tmp = a[0];
-            a++;
-            r++;
+            rd[0] = (ad[0] << (64 - b)) | (tmp >> b);
+            tmp = ad[0];
+            ad++;
+            rd++;
         }
-        r[0] = tmp >> b;
-        r++;
+        rd[0] = tmp >> b;
+        rd++;
     }
 
 set_zero:
     /* set (shift / 64) higher limbs to 0 */
     for(i = 0; i < l; i++) {
-        r[0] = 0;
-        r++;
+        rd[0] = 0;
+        rd++;
     }
 
     return tr[0];
