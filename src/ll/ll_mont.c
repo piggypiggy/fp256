@@ -31,7 +31,7 @@ void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, s
     td++;
 
     for (i = 1; i < l; i++) {
-        ll_muladd_limb(td, Ad, Bd[0], l + 2, l);
+        ll_muladd_limb(td, Ad, Bd[0], l + 1, l);
         y = td[0] * k0;
         ll_muladd_limb(td, Nd, y, l + 2, l);
         Bd++;
