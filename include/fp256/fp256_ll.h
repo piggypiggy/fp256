@@ -775,7 +775,7 @@ FP256_EXPORT void ll_u256_fmod_sub_limb(u64 rd[4], const u64 ad[4], const u64 b,
  * @param[in] ad          - length of buf.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
-FP256_EXPORT int ll_rand_buf(unsigned char *buf, size_t len);
+FP256_EXPORT int ll_rand_buf(u8 *buf, size_t len);
 
 /**
  * fill u64 array with random data so that the integer it represents is in range [0, 2^(64*nlimbs)). \n
@@ -830,7 +830,7 @@ FP256_EXPORT int ll_print_hex(const u64 *ad, size_t rl);
  * @param[in] s           - the u8 array to print.
  * @param[in] slen        - length of s array.
  */
-FP256_EXPORT void print_hex(const char *name, const unsigned char *s, size_t slen);
+FP256_EXPORT void print_hex(const char *name, const u8 *s, size_t slen);
 
 #ifdef __cplusplus
 }
