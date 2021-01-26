@@ -1,4 +1,4 @@
-name: ci
+name: x64
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-test:
     name: ${{matrix.config.name}}
-    runs-on: ${{matrix.config.arch}}, ${{matrix.config.os}}
+    runs-on: ${{matrix.config.os}}
     strategy:
       matrix:
         config:
@@ -44,27 +44,6 @@ jobs:
         - {
             name: "x64-macos10.15-clang release",
             arch: x64,
-            os: macos10.15,
-            cc: clang,
-            build_type: Release
-          }
-        - {
-            name: "ARM64-ubuntu18.04-gcc release",
-            arch: ARM64,
-            os: ubuntu-18.04,
-            cc: gcc,
-            build_type: Release
-          }
-        - {
-            name: "ARM64-ubuntu18.04-clang release",
-            arch: ARM64,
-            os: ubuntu-18.04,
-            cc: clang,
-            build_type: Release
-          }
-        - {
-            name: "ARM64-macos10.15-clang release",
-            arch: ARM64,
             os: macos10.15,
             cc: clang,
             build_type: Release
