@@ -35,14 +35,14 @@ int ll_print_hex(const u64 *ad, size_t rl)
     return FP256_OK;
 }
 
-void print_hex(const char *desp, const unsigned char *s, size_t slen)
+void print_hex(const char *desp, const u8 *s, size_t slen)
 {
     size_t i;
 
     for(i = 0; i < strlen(desp); i++)
         printf("%c", desp[i]);
 
-    unsigned char *hex = (unsigned char*)malloc(2*slen);
+    u8 *hex = (u8*)malloc(2*slen);
     u8_to_hex(hex, s, slen);
     for(i = 0; i < 2*slen; i++)
         printf("%c", hex[i]);

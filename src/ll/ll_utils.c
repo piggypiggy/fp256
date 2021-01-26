@@ -148,7 +148,7 @@ void ll_clear_set_bit(u64 *ad, size_t idx, size_t max)
     ad[l] = (1ULL << b);
 }
 
-int ll_from_hex(u64 *rd, size_t *rl, const unsigned char *hex, size_t hexlen)
+int ll_from_hex(u64 *rd, size_t *rl, const u8 *hex, size_t hexlen)
 {
     u64 *trd;
     size_t trl;
@@ -175,7 +175,7 @@ int ll_from_hex(u64 *rd, size_t *rl, const unsigned char *hex, size_t hexlen)
     return FP256_OK;
 }
 
-int ll_to_hex(unsigned char *hex, size_t *hlen, const u64 *rd, size_t rl)
+int ll_to_hex(u8 *hex, size_t *hlen, const u64 *rd, size_t rl)
 {
     size_t len;
 
@@ -194,7 +194,7 @@ int ll_to_hex(unsigned char *hex, size_t *hlen, const u64 *rd, size_t rl)
     return FP256_OK;
 }
 
-int ll_from_bytes(u64 *rd, size_t *rl, const unsigned char *bytes, size_t blen)
+int ll_from_bytes(u64 *rd, size_t *rl, const u8 *bytes, size_t blen)
 {
     u64 *trd;
     size_t trl;
@@ -219,7 +219,7 @@ int ll_from_bytes(u64 *rd, size_t *rl, const unsigned char *bytes, size_t blen)
     return FP256_OK;
 }
 
-int ll_to_bytes(unsigned char *bytes, size_t *blen, const u64 *rd, size_t rl)
+int ll_to_bytes(u8 *bytes, size_t *blen, const u64 *rd, size_t rl)
 {
     size_t len;
 

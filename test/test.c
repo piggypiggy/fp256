@@ -19,7 +19,7 @@
 #include "test.h"
 
 /* 0->'0', 1->'1', ... , 15->'F' */
-static const unsigned char ascii_table[16] = {
+static const u8 ascii_table[16] = {
     '0', '1', '2', '3', '4', '5', '6', '7',
     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
 };
@@ -31,17 +31,17 @@ static const unsigned char ascii_table[16] = {
 void test_rand_init(void)
 {
     unsigned int seed;
-    ll_rand_buf((unsigned char*)&seed, sizeof(unsigned int));
+    ll_rand_buf((u8*)&seed, sizeof(unsigned int));
     srand(seed);
 }
 
-void test_random_string(unsigned char *s, int len)
+void test_random_string(u8 *s, int len)
 {
     while (len--)
         s[len] = rand() % 256;
 }
 
-void test_random_hex_string(unsigned char *s, int len)
+void test_random_hex_string(u8 *s, int len)
 {
     while (len--)
         s[len] = ascii_table[rand() % 16];

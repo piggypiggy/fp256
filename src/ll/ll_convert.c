@@ -20,12 +20,12 @@
 #include "ll_local.h"
 
 /* 0->'0', 1->'1', ... , 15->'F' */
-static const unsigned char ascii_table[16] = {
+static const u8 ascii_table[16] = {
     '0', '1', '2', '3', '4', '5', '6', '7',
     '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
 };
 
-static const unsigned char inv_ascii_table[128] = {
+static const u8 inv_ascii_table[128] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -70,9 +70,9 @@ u32 to_le32(const u32 in)
     return ret;
 }
 
-int u8_to_u32(unsigned int *out, const unsigned char *in, size_t inlen, int order)
+int u8_to_u32(unsigned int *out, const u8 *in, size_t inlen, int order)
 {
-    unsigned char t[8];
+    u8 t[8];
     unsigned int z;
 
     if (in == NULL || inlen > 4 || out == NULL)
@@ -93,7 +93,7 @@ int u8_to_u32(unsigned int *out, const unsigned char *in, size_t inlen, int orde
     return FP256_OK;
 }
 
-int u32_to_u8(unsigned char out[4], const unsigned int in, int order)
+int u32_to_u8(u8 out[4], const unsigned int in, int order)
 {
     if (out == NULL)
         return FP256_ERR;
@@ -106,9 +106,9 @@ int u32_to_u8(unsigned char out[4], const unsigned int in, int order)
     return FP256_OK;
 }
 
-int u8_to_u64(u64 *out, const unsigned char *in, size_t inlen, int order)
+int u8_to_u64(u64 *out, const u8 *in, size_t inlen, int order)
 {
-    unsigned char t[16];
+    u8 t[16];
     u64 z;
 
     if (in == NULL || inlen > 8 || out == NULL)
@@ -129,7 +129,7 @@ int u8_to_u64(u64 *out, const unsigned char *in, size_t inlen, int order)
     return FP256_OK;
 }
 
-int u64_to_u8(unsigned char out[8], const u64 in, int order)
+int u64_to_u8(u8 out[8], const u64 in, int order)
 {
     if (out == NULL)
         return FP256_ERR;
@@ -142,7 +142,7 @@ int u64_to_u8(unsigned char out[8], const u64 in, int order)
     return FP256_OK;
 }
 
-int u32_to_hex(unsigned char out[8], const unsigned int in, int order)
+int u32_to_hex(u8 out[8], const unsigned int in, int order)
 {
     if (out == NULL)
         return FP256_ERR;
@@ -172,9 +172,9 @@ int u32_to_hex(unsigned char out[8], const unsigned int in, int order)
     return FP256_OK;
 }
 
-int hex_to_u64(u64 *out, const unsigned char *in, size_t inlen, int order)
+int hex_to_u64(u64 *out, const u8 *in, size_t inlen, int order)
 {
-    unsigned char tmp[8];
+    u8 tmp[8];
 
     if (out == NULL || inlen > 16)
         return FP256_ERR;
@@ -188,9 +188,9 @@ int hex_to_u64(u64 *out, const unsigned char *in, size_t inlen, int order)
     return FP256_OK;
 }
 
-int u64_to_hex(unsigned char out[16], const u64 in, int order)
+int u64_to_hex(u8 out[16], const u64 in, int order)
 {
-    unsigned char tmp[8];
+    u8 tmp[8];
 
     if (out == NULL)
         return FP256_ERR;
@@ -202,7 +202,7 @@ int u64_to_hex(unsigned char out[16], const u64 in, int order)
 }
 
 
-int u8_to_hex(unsigned char *out, const unsigned char *in, size_t inlen)
+int u8_to_hex(u8 *out, const u8 *in, size_t inlen)
 {
     size_t i;
 
@@ -218,7 +218,7 @@ int u8_to_hex(unsigned char *out, const unsigned char *in, size_t inlen)
     return FP256_OK;
 }
 
-int hex_to_u8(unsigned char *out, const unsigned char *in, size_t inlen)
+int hex_to_u8(u8 *out, const u8 *in, size_t inlen)
 {
     size_t i;
 

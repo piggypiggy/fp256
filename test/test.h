@@ -78,8 +78,8 @@ typedef struct {
 int test_start_n_thread(void* (*func)(void*), TEST_THREAD_DATA *thread_data);
 
 void test_rand_init(void);
-void test_random_string(unsigned char *s, int len);
-void test_random_hex_string(unsigned char *s, int len);
+void test_random_string(u8 *s, int len);
+void test_random_hex_string(u8 *s, int len);
 int test_random_number(void);
 
 void get_test_args(int argc, char **argv, TEST_ARGS *args);

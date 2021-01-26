@@ -83,7 +83,7 @@ extern "C" {
     ((num) + ((num) % (align) == 0 ? 0 : ((align) - (num) % (align))))
 
 # define LL_ALIGN_PTR(ptr, align) \
-    ((unsigned char*)(ptr) + ((size_t)(ptr) % (align) == 0 ? 0 : ((align) - (size_t)(ptr) % (align))))
+    ((u8*)(ptr) + ((size_t)(ptr) % (align) == 0 ? 0 : ((align) - (size_t)(ptr) % (align))))
 
 # define LL_EXP_WINDOW_SIZE(b) \
     ((b) > 937 ? 6 : \

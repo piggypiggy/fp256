@@ -35,7 +35,7 @@
 #   define RANDOM_FLAG GRND_NONBLOCK
 #  endif
 
-int ll_rand_buf(unsigned char *buf, size_t buflen)
+int ll_rand_buf(u8 *buf, size_t buflen)
 {
     ssize_t len;
 
@@ -67,7 +67,7 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 # endif
 BOOLEAN NTAPI RtlGenRandom(PVOID RandomBuffer, ULONG RandomBufferLength);
 
-int ll_rand_buf(unsigned char *buf, size_t buflen)
+int ll_rand_buf(u8 *buf, size_t buflen)
 {
     BOOLEAN ret;
 
@@ -78,7 +78,7 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 
 #if defined(OS_OPENBSD)
 # define HAVE_RANDOM
-int ll_rand_buf(unsigned char *buf, size_t buflen)
+int ll_rand_buf(u8 *buf, size_t buflen)
 {
     arc4random_buf(buf, buflen);
     return FP256_OK;
@@ -89,7 +89,7 @@ int ll_rand_buf(unsigned char *buf, size_t buflen)
 # if defined(HAVE_SYS_RANDOM_H) && defined(HAVE_GETENTROPY)
 #  define HAVE_RANDOM
 #  include <sys/random.h>
-int ll_rand_buf(unsigned char *buf, size_t buflen)
+int ll_rand_buf(u8 *buf, size_t buflen)
 {
     int ret;
 
@@ -116,7 +116,7 @@ static int fd;
 static int initialized = 0;
 
 /* use /dev/(u)random directly */
-int ll_rand_buf(unsigned char *buf, size_t buflen)
+int ll_rand_buf(u8 *buf, size_t buflen)
 {
     ssize_t n;
     ssize_t readn;

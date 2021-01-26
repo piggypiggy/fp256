@@ -35,7 +35,7 @@ int ll_rand_bits(u64 *rd, size_t nbits)
     if (b == 0)
         mask = (u64)-1;
 
-    ret = ll_rand_buf((unsigned char*)rd, sizeof(u64) * l);
+    ret = ll_rand_buf((u8*)rd, sizeof(u64) * l);
     rd[l - 1] &= mask;
 
     return ret;
