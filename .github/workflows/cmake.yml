@@ -37,14 +37,14 @@ jobs:
         - {
             name: "x64-macos10.15-gcc release",
             arch: x64,
-            os: macos10.15,
+            os: macos-10.15,
             cc: gcc,
             build_type: Release
           }
         - {
             name: "x64-macos10.15-clang release",
             arch: x64,
-            os: macos10.15,
+            os: macos-10.15,
             cc: clang,
             build_type: Release
           }
