@@ -134,7 +134,7 @@ ll_rshift:
     b .ll_rshift_clear_upper_limbs
 
 .ll_rshift_copy:
-    cbz $al,.ll_rshift_copy
+    cbz $al,.ll_rshift_done
     ldr $t0,[$ad],#8
     sub $al,$al,#1
     str $t0,[$rd],#8

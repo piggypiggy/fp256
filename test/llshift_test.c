@@ -181,6 +181,7 @@ static SHIFT_TEST_VECTOR shift_test_vector[] = {
     },
 };
 
+/* TODO : test ll_rshift for shift = 0 */
 int ll_shift_test_vector(void)
 {
     unsigned int i;
