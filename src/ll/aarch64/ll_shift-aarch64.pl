@@ -105,6 +105,7 @@ ll_rshift:
     bls .ll_rshift_r_is_zero
     neg $c,$b
     add $ad,$ad,$l,lsl #3            // ad += l
+    mov $al,$t0
     add $c,$c,#64                    // c = 64 - b
     ldr $t0,[$ad],#8
     cbnz $b,.ll_rshift_loop          // b ?!= 0
@@ -118,7 +119,7 @@ ll_rshift:
 
 .ll_rshift_loop:
     subs $al,$al,#1
-    blo .ll_rshift_last_limb
+    bls .ll_rshift_last_limb
     ldr $t1,[$ad]
     lsr $t0,$t0,$b                   // t0 >>= b
     lsl $t2,$t1,$c                   // t2 = t1 << (64 - b)
