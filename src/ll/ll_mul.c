@@ -111,7 +111,7 @@ u64 ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
 {
     size_t i;
 
-    /* ll_muladd_limb requires rd[0]~rd[rl-1] be prepared, 
+    /* ll_muladd_limb requires rd[0]~rd[rl-1] be prepared 
      * and rd[0]~rd[rl-1] should be 0 here.
      */
     ll_set_zero(rd, al);
