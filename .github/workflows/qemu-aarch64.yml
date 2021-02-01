@@ -45,7 +45,7 @@ jobs:
       run: |
         mkdir build
         cd build
-        cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_ASAN=ON
+        cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gcc.cmake .. -DCMAKE_BUILD_TYPE=Release -DUSE_ASAN=ON
 
     - name: build
       run: cd build && make -j VERBOSE=1
