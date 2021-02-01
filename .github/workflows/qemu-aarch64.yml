@@ -25,6 +25,7 @@ jobs:
       with:
         repository: qemu/qemu
         path: qemu
+        ref: 5.1.0
 
     - name: qemu
       if: steps.cache-qemu.outputs.cache-hit != 'true'
