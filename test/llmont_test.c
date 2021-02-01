@@ -252,7 +252,6 @@ int ll_mont_mul_test_vector(void)
         ll_set_zero(r, 8);
         ll_set_zero(A, 8);
         ll_set_zero(B, 8);
-        ll_set_zero(N, 8);
 
         ll_from_hex(r, &rl, (u8*)mont_mul_test_vector[i].r, strlen(mont_mul_test_vector[i].r));
         ll_from_hex(A, &al, (u8*)mont_mul_test_vector[i].A, strlen(mont_mul_test_vector[i].A));

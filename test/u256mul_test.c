@@ -133,8 +133,7 @@ int ll_u256_mul_test_vector(void)
     size_t rl, al, bl;
 
     for (i = 0; i < sizeof(u256_mul_test_vector) / sizeof(U256_MUL_TEST_VECTOR); i++) {
-        /* clear tr, r, a, b first */
-        ll_set_zero(tr, 8);
+        /* clear r, a, b first */
         ll_set_zero(r, 8);
         ll_set_zero(a, 4);
         ll_set_zero(b, 4);

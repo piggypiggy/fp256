@@ -217,11 +217,11 @@ int ll_mul_test_vector(void)
     size_t trl, rl, al, bl, max;
 
     for (i = 0; i < sizeof(mul_test_vector) / sizeof(MUL_TEST_VECTOR); i++) {
-        /* clear */
-        ll_set_zero(tr, 12);
-        ll_set_zero(r, 12);
-        ll_set_zero(a, 6);
-        ll_set_zero(b, 6);
+        // /* clear */
+        // ll_set_zero(tr, 12);
+        // ll_set_zero(r, 12);
+        // ll_set_zero(a, 6);
+        // ll_set_zero(b, 6);
 
         ll_from_hex(r, &rl, (u8*)mul_test_vector[i].r, strlen(mul_test_vector[i].r));
         ll_from_hex(a, &al, (u8*)mul_test_vector[i].a, strlen(mul_test_vector[i].a));

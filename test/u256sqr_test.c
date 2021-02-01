@@ -115,8 +115,7 @@ int ll_u256_sqr_test_vector(void)
     size_t rl, al;
 
     for (i = 0; i < sizeof(u256_sqr_test_vector) / sizeof(U256_SQR_TEST_VECTOR); i++) {
-        /* clear tr, r, a first */
-        ll_set_zero(tr, 8);
+        /* clear r, a first */
         ll_set_zero(r, 8);
         ll_set_zero(a, 4);
 

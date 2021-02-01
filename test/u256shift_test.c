@@ -156,11 +156,10 @@ int ll_u256_shift_test_vector(void)
     unsigned int i;
     int n;
     u64 tr[5], r[5], a[4];
-    size_t rl, al;
+    size_t rl, al, trl;
 
     for (i = 0; i < sizeof(u256_shift_test_vector) / sizeof(U256_SHIFT_TEST_VECTOR); i++) {
         /* clear tr, r, a first */
-        ll_set_zero(tr, 5);
         ll_set_zero(r, 5);
         ll_set_zero(a, 4);
 
@@ -169,18 +168,22 @@ int ll_u256_shift_test_vector(void)
 
         /* r = a << n */
         n = u256_shift_test_vector[i].n;
-        if (n >= 0)
+        if (n >= 0) {
             ll_u256_lshift(tr, a, (size_t)n);
-        else
+            trl = 5;
+        }
+        else {
             ll_u256_rshift(tr, a, (size_t)-n);
+            trl = 4;
+        }
 
-        if (ll_cmp_limbs(tr, r, 5, 5) != 0) {
+        if (ll_cmp_limbs(tr, r, trl, trl) != 0) {
             printf("ll_u256_shift_test_vector %d failed\n", i + 1);
-            test_print_hex("r = ", tr, 5);
+            test_print_hex("r = ", tr, trl);
             test_print_hex("a = ", a, 4);
             printf("n = %d\n", n);
             printf("a << n should be :\n");
-            test_print_hex("r = ", r, 5);
+            test_print_hex("r = ", r, trl);
             return FP256_ERR;
         }
     }

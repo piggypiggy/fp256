@@ -179,10 +179,6 @@ int ll_muladd_limb_test_vector(void)
     for (i = 0; i < sizeof(muladd_limb_test_vector) / sizeof(MULADD_LIMB_TEST_VECTOR); i++) {
         /* clear */
         ll_set_zero(tr, 12);
-        ll_set_zero(r, 12);
-        ll_set_zero(z, 12);
-        ll_set_zero(a, 12);
-        ll_set_zero(b, 1);
 
         ll_from_hex(r, &rl, (u8*)muladd_limb_test_vector[i].r, strlen(muladd_limb_test_vector[i].r));
         ll_from_hex(tr, &trl, (u8*)muladd_limb_test_vector[i].z, strlen(muladd_limb_test_vector[i].z));
@@ -197,11 +193,11 @@ int ll_muladd_limb_test_vector(void)
         if (ll_cmp_limbs(tr, r, trl, rl) != 0) {
             printf("ll_muladd_limb_test_vector %d failed\n", i + 1);
             test_print_hex("r+ab = ", tr, max);
-            test_print_hex("r    = ", z, max);
-            test_print_hex("a    = ", a, max);
-            test_print_hex("b    = ", b, 1);
+            test_print_hex("r    = ", z, zl);
+            test_print_hex("a    = ", a, al);
+            test_print_hex("b    = ", b, bl);
             printf("r+ab should be :\n");
-            test_print_hex("r+ab = ", r, max);
+            test_print_hex("r+ab = ", r, rl);
             return FP256_ERR;
         }
 
