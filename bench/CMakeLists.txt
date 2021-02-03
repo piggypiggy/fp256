@@ -33,10 +33,10 @@ else()
     message(FATAL_ERROR "no library compiled")
 endif()
 
-set(speed_DEP ${dep_lib})
+set(bench_dep_lib ${dep_lib})
 if(HAVE_PTHREAD)
-    list(APPEND speed_DEP pthread)
+    list(APPEND bench_dep_lib pthread)
 endif()
 
-target_link_libraries(bench ${speed_DEP} ${SANITIZER_FLAG})
+target_link_libraries(bench ${bench_dep_lib} ${SANITIZER_FLAG})
 target_compile_options(bench PRIVATE ${EXTRA_C_FLAGS})
