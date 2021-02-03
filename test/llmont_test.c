@@ -243,7 +243,7 @@ static MONT_MUL_TEST_VECTOR mont_mul_test_vector[] = {
 int ll_mont_mul_test_vector(void)
 {
     unsigned int i;
-    u64 tr[8], r[8], A[8], B[8], N[8], k0, td[20];
+    u64 tr[8], r[8], A[8], B[8], N[8], k0;
     size_t rl, al, bl, nl;
 
     for (i = 0; i < sizeof(mont_mul_test_vector) / sizeof(MONT_MUL_TEST_VECTOR); i++) {
@@ -260,8 +260,7 @@ int ll_mont_mul_test_vector(void)
 
         /* tr = A * B */
         k0 = ll_invert_limb(N[0]);
-        memset(td, 0, 20*8);
-        ll_mont_mul(tr, A, B, N, k0, nl, td);
+        ll_mont_mul(tr, A, B, N, k0, nl);
         if (ll_cmp_limbs(tr, r, nl, nl) != 0) {
             printf("ll_mont_mul_test_vector %d failed\n", i + 1);
             test_print_hex("r = ", tr, nl);

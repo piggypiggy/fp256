@@ -446,9 +446,8 @@ FP256_EXPORT u64 ll_mul(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t
  * @param[in] Nd          - odd modulus, see mont_ctx.
  * @param[in] k0          - precomputed value, see mont_ctx.
  * @param[in] l           - length of Ad, Bd array.
- * @param[in] td          - temporary space to hold intermediary result.
  */
-FP256_EXPORT void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, size_t l, u64 *td);
+FP256_EXPORT void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, size_t l);
 
 /**
  * montgomery square of an integer in montgomery representation.\n
@@ -459,9 +458,8 @@ FP256_EXPORT void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *
  * @param[in] Nd          - odd modulus, see mont_ctx.
  * @param[in] k0          - precomputed value, see mont_ctx.
  * @param[in] l           - length of Ad, Bd array.
- * @param[in] td          - temporary space to hold intermediary result.
  */
-FP256_EXPORT void ll_mont_sqr(u64 *rd, const u64 *Ad, const u64 *Nd, u64 k0, size_t l, u64 *td);
+FP256_EXPORT void ll_mont_sqr(u64 *rd, const u64 *Ad, const u64 *Nd, u64 k0, size_t l);
 
 /**
  * transform integer ad to montgomery representation.
@@ -472,9 +470,8 @@ FP256_EXPORT void ll_mont_sqr(u64 *rd, const u64 *Ad, const u64 *Nd, u64 k0, siz
  * @param[in] RR          - precomputed value, see mont_ctx.
  * @param[in] k0          - precomputed value, see mont_ctx.
  * @param[in] l           - length of Ad, Bd array.
- * @param[in] td          - temporary space to hold intermediary result.
  */
-FP256_EXPORT void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *RR, u64 k0, size_t l, u64 *td);
+FP256_EXPORT void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *RR, u64 k0, size_t l);
 
 /**
  * transform integer Ad from montgomery representation.
@@ -484,9 +481,8 @@ FP256_EXPORT void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *R
  * @param[in] Nd          - odd modulus, see mont_ctx.
  * @param[in] k0          - precomputed value, see mont_ctx.
  * @param[in] l           - length of Ad, Bd array.
- * @param[in] td          - temporary space to hold intermediary result.
  */
-FP256_EXPORT void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l, u64 *td);
+FP256_EXPORT void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l);
 
 /**
  * multiply two integer represented by u64 array.\n

@@ -19,33 +19,33 @@
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
 
-void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, size_t l, u64 *td)
+void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, size_t l)
 {
     size_t i;
     u64 y;
+    u64 td[2*l+2];
 
     ll_mul_limb(td, Ad, Bd[0], l);
     y = td[0] * k0;
     ll_muladd_limb(td, Nd, y, l + 1, l);
     Bd++;
-    td++;
 
     for (i = 1; i < l; i++) {
-        ll_muladd_limb(td, Ad, Bd[0], l + 1, l);
-        y = td[0] * k0;
-        ll_muladd_limb(td, Nd, y, l + 2, l);
+        ll_muladd_limb(&td[i], Ad, Bd[0], l + 1, l);
+        y = td[i] * k0;
+        ll_muladd_limb(&td[i], Nd, y, l + 2, l);
         Bd++;
-        td++;
     }
 
-    ll_mont_cond_sub_limbs(rd, td, Nd, l);
+    ll_mont_cond_sub_limbs(rd, td + l, Nd, l);
     return;
 }
 
-void ll_mont_reduce(u64 *rd, const u64 *Ad2, const u64 *Nd, u64 k0, size_t l, u64 *td)
+void ll_mont_reduce(u64 *rd, const u64 *Ad2, const u64 *Nd, u64 k0, size_t l)
 {
     size_t i;
     u64 y;
+    u64 td[2*l+2];
 
     /* copy lower l limbs */
     ll_copy_limbs(td, Ad2, l);
@@ -54,30 +54,29 @@ void ll_mont_reduce(u64 *rd, const u64 *Ad2, const u64 *Nd, u64 k0, size_t l, u6
 
     /* reduce */
     for (i = 0; i < l; i++) {
-        y = td[0] * k0;
-        ll_muladd_limb(td, Nd, y, l, l);
-        td++;
+        y = td[i] * k0;
+        ll_muladd_limb(&td[i], Nd, y, l, l);
     }
 
-    td[l] = ll_add_limbs(td, td, rd, l);
-    ll_mont_cond_sub_limbs(rd, td, Nd, l);
+    td[2*l] = ll_add_limbs(td + l, td + l, rd, l);
+    ll_mont_cond_sub_limbs(rd, td + l, Nd, l);
     return;
 }
 
-void ll_mont_sqr(u64 *rd, const u64 *Ad, const u64 *Nd, u64 k0, size_t l, u64 *td)
+void ll_mont_sqr(u64 *rd, const u64 *Ad, const u64 *Nd, u64 k0, size_t l)
 {
-    ll_mont_mul(rd, Ad, Ad, Nd, k0, l, td);
+    ll_mont_mul(rd, Ad, Ad, Nd, k0, l);
     return;
 }
 
-void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *RR, u64 k0, size_t l, u64 *td)
+void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *RR, u64 k0, size_t l)
 {
-    ll_mont_mul(Ad, ad, RR, Nd, k0, l, td);
+    ll_mont_mul(Ad, ad, RR, Nd, k0, l);
     return;
 }
 
-void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l, u64 *td)
+void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l)
 {
-    ll_mont_reduce(ad, Ad, Nd, k0, l, td);
+    ll_mont_reduce(ad, Ad, Nd, k0, l);
     return;
 }
