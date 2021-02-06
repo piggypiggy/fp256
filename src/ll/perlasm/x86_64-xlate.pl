@@ -116,40 +116,6 @@ elsif (`$ENV{CC} --version 2>/dev/null`
     $gnuas=1;
 }
 
-my $cet_property;
-if ($flavour =~ /elf/) {
-    # Always generate .note.gnu.property section for ELF outputs to
-    # mark Intel CET support since all input files must be marked
-    # with Intel CET support in order for linker to mark output with
-    # Intel CET support.
-    my $p2align=3; $p2align=2 if ($flavour eq "elf32");
-    my $section='.note.gnu.property, #alloc';
-    $section='".note.gnu.property", "a"' if $gnuas;
-    $cet_property = <<_____;
-    .section $section
-    .p2align $p2align
-    .long 1f - 0f
-    .long 4f - 1f
-    .long 5
-0:
-    # "GNU" encoded with .byte, since .asciz isn't supported
-    # on Solaris.
-    .byte 0x47
-    .byte 0x4e
-    .byte 0x55
-    .byte 0
-1:
-    .p2align $p2align
-    .long 0xc0000002
-    .long 3f - 2f
-2:
-    .long 3
-3:
-    .p2align $p2align
-4:
-_____
-}
-
 my $current_segment;
 my $current_function;
 my %globals;
@@ -1261,9 +1227,23 @@ while(defined(my $line=<>)) {
 
     print $line,"\n";
 }
+# platform-specific epilogue
+if ($masm) {
+    print "\n$current_segment\tENDS\n"	if ($current_segment);
+    print "END\n";
+} elsif ($elf) {
+    # -fcf-protection segment, snatched from compiler -S output
+    my $align = ($flavour =~ /elf32/) ? 4 : 8;
+    print <<___;
 
-print "$cet_property"			if ($cet_property);
-print "\n$current_segment\tENDS\n"	if ($current_segment && $masm);
-print "END\n"				if ($masm);
+.section	.note.GNU-stack,"",\@progbits
+.section	.note.gnu.property,"a",\@note
+	.long	4,2f-1f,5
+	.byte	0x47,0x4E,0x55,0
+1:	.long	0xc0000002,4,3
+.align	$align
+2:
+___
+}
 
 close STDOUT or die "error closing STDOUT: $!;"
