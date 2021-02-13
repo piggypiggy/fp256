@@ -8,6 +8,8 @@ if(USE_ASM)
         include(${CMAKE_MODULE_DIR}/fp256_generate_x64_asm.cmake)
     elseif(ARCH_AARCH64)
         include(${CMAKE_MODULE_DIR}/fp256_generate_aarch64_asm.cmake)
+    elseif(ARCH_RISCV64)
+        include(${CMAKE_MODULE_DIR}/fp256_generate_riscv64_asm.cmake)
     endif()
 endif()
 
