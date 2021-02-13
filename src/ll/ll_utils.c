@@ -26,13 +26,16 @@
 # define ROTL64(a, n) (((a) << n) | ((a) >> (64-n)))
 # define ROTR64(a, n) (((a) >> n) | ((a) << (64-n)))
 
+// TODO
 size_t ll_leading_zeros(const u64 a)
 {
+    (void) a;
     return 0;
 }
 
 size_t ll_num_bits(const u64 a)
 {
+    (void) a;
     return 0;
 }
 
@@ -249,4 +252,12 @@ u64 ll_invert_limb(u64 a)
     inv *= (2 - inv * a);
     inv = -inv;
     return inv;
+}
+
+void ll_u256_select(u64 r[4], const u64 *table, size_t table_size, size_t index)
+{
+    (void) r;
+    (void) table;
+    (void) table_size;
+    (void) index;
 }

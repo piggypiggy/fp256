@@ -146,3 +146,11 @@ u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
     assert(borrow == 0);
     return borrow;
 }
+
+void ll_mont_cond_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l)
+{
+    (void) rd;
+    (void) ad;
+    (void) bd;
+    (void) l;
+}

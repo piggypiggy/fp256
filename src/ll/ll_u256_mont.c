@@ -22,11 +22,20 @@
 #ifndef USE_ASM_U256_MONT
 void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 Nd[4], u64 k0)
 {
+    (void) rd;
+    (void) ad;
+    (void) bd;
+    (void) Nd;
+    (void) k0;
     return;
 }
 
 void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0)
 {
+    (void) rd;
+    (void) ad;
+    (void) Nd;
+    (void) k0;
     return;
 }
 #endif
