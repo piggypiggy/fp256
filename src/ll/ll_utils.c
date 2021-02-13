@@ -57,6 +57,14 @@ inline u64 ll_bswap8(const u64 in)
           (ROTR64(in,  8) & 0xff000000ff000000);
     return ret;
 }
+
+void ll_u256_select(u64 r[4], const u64 *table, size_t table_size, size_t index)
+{
+    (void) r;
+    (void) table;
+    (void) table_size;
+    (void) index;
+}
 #endif
 
 int ll_cmp_limbs(const u64 *ad, const u64 *bd, size_t al, size_t bl)
@@ -252,12 +260,4 @@ u64 ll_invert_limb(u64 a)
     inv *= (2 - inv * a);
     inv = -inv;
     return inv;
-}
-
-void ll_u256_select(u64 r[4], const u64 *table, size_t table_size, size_t index)
-{
-    (void) r;
-    (void) table;
-    (void) table_size;
-    (void) index;
 }
