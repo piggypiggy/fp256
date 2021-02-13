@@ -6,13 +6,13 @@
 *.exe
 *.lib
 *.o
-*.s
 *.so
-*.S
 *~
 /bin/
 /build/
 /doc/Doxyfile
+/src/ll/*.s
+/src/ll/*.S
 /.vscode/
 
 # generated header
