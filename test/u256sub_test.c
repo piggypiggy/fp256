@@ -35,9 +35,9 @@ static U256_SUB_TEST_VECTOR u256_sub_test_vector[] = {
     },
     /* 2 */
     {
-        "1",
-        "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
-        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffe",
+        "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
     },
     /* 3 */
     {

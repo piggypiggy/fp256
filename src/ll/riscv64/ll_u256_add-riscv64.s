@@ -55,7 +55,7 @@ ll_u256_sub:
     ld t1, 16(a2)
     sltu a5, t5, t6       # borrow2
     sd t6, 8(a0)          # rd[1]
-    sub a6, a4, a5        # borrow2
+    add a6, a4, a5        # borrow2
     sub t5, t0, t1        # ad[2] - bd[2]
     ld t2, 24(a1)
     sltu a4, t0, t5       # borrow3
@@ -63,12 +63,12 @@ ll_u256_sub:
     ld t3, 24(a2)
     sltu a5, t5, t6       # borrow3
     sd t6, 16(a0)         # rd[2]
-    sub a6, a4, a5        # borrow3
+    add a6, a4, a5        # borrow3
     sub t5, t2, t3        # ad[3] - bd[3]
     sltu a4, t2, t5       # borrow4
     sub t6, t5, a6        # ad[3] - bd[3] - borrow3
     sltu a5, t5, t6       # borrow4
     sd t6, 24(a0)         # rd[3]
-    sub a0, a4, a5        # borrow4
+    add a0, a4, a5        # borrow4
     ret
 .size ll_u256_sub, .-ll_u256_sub
