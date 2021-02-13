@@ -39,7 +39,7 @@ size_t ll_num_bits(const u64 a)
     return 0;
 }
 
-u32 inline ll_bswap4(const u32 in)
+inline u32 ll_bswap4(const u32 in)
 {
     u32 ret;
 
@@ -47,7 +47,7 @@ u32 inline ll_bswap4(const u32 in)
     return ret;
 }
 
-u64 inline ll_bswap8(const u64 in)
+inline u64 ll_bswap8(const u64 in)
 {
     u64 ret;
 
