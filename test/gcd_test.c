@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -226,8 +226,8 @@ void* fp256_gcd_test(void *p)
         do {
             al = rand() % 5;
             bl = rand() % 5;
-            fp256_rand_limbs(&a, al, 0);
-            fp256_rand_limbs(&b, bl, 0);
+            fp256_rand_limbs(&a, al);
+            fp256_rand_limbs(&b, bl);
         } while (fp256_is_zero(&a) || fp256_is_zero(&b));
 
         /* r = gcd(a, b) */

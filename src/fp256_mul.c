@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -21,8 +21,8 @@
 
 /* r = a * b
  * Because a*b might be larger than 2^256 which does not fit into fp256, 
- * r only stores lower 256 bit result. Call ll_u256_mul or ll_u256_mul_limbs
- * if you need higher 256 bit.
+ * r only stores lower 256 bit result. Call ll_u256_mul if you need 
+ * higher 256 bit.
  */ 
 int fp256_mul(fp256 *r, const fp256 *a, const fp256 *b)
 {
@@ -32,14 +32,14 @@ int fp256_mul(fp256 *r, const fp256 *a, const fp256 *b)
         return FP256_ERR;
 
     /* clear rd */
-    rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
-    rd[4] = 0ULL; rd[5] = 0ULL; rd[6] = 0ULL; rd[7] = 0ULL;
+    // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
+    // rd[4] = 0ULL; rd[5] = 0ULL; rd[6] = 0ULL; rd[7] = 0ULL;
 
-    if (a->nlimbs != 0 && b->nlimbs != 0)
+    // if (a->nlimbs != 0 && b->nlimbs != 0)
         // ll_u256_mul_limbs(rd, a->d, b->d, a->nlimbs, b->nlimbs);
-        ll_u256_mul(rd, a->d, b->d);
+    ll_u256_mul(rd, a->d, b->d);
 
-    fp256_set_limbs(r, rd, FP256_LIMBS, a->neg ^ b->neg);
+    fp256_set_limbs(r, rd, FP256_LIMBS);
     return FP256_OK;
 }
 
@@ -51,11 +51,11 @@ int fp256_sqr(fp256 *r, const fp256 *a)
         return FP256_ERR;
 
     /* clear rd */
-    rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
-    rd[4] = 0ULL; rd[5] = 0ULL; rd[6] = 0ULL; rd[7] = 0ULL;
+    // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
+    // rd[4] = 0ULL; rd[5] = 0ULL; rd[6] = 0ULL; rd[7] = 0ULL;
 
     ll_u256_sqr(rd, a->d);
 
-    fp256_set_limbs(r, rd, FP256_LIMBS, 0);
+    fp256_set_limbs(r, rd, FP256_LIMBS);
     return FP256_OK;
 }

@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -24,24 +24,9 @@ int fp256_add(fp256 *r, const fp256 *a, const fp256 *b)
     if (r == NULL || a == NULL || b == NULL)
         return FP256_ERR;
 
-    if (a->neg == b->neg) {
-        /* the 257's bit of r is discarded */
-        ll_u256_add(r->d, a->d, b->d);
-        r->neg = a->neg;
-        r->nlimbs = fp256_num_limbs(r);
-    }
-    else {
-        if (fp256_cmp_abs(a, b) >= 0) {
-            ll_u256_sub(r->d, a->d, b->d);
-            r->neg = a->neg;
-            r->nlimbs = fp256_num_limbs(r);
-        }
-        else {
-            ll_u256_sub(r->d, b->d, a->d);
-            r->neg = b->neg;
-            r->nlimbs = fp256_num_limbs(r);
-        }
-    }
+    /* the 257's bit of r is discarded */
+    ll_u256_add(r->d, a->d, b->d);
+    r->nlimbs = fp256_num_limbs(r);
 
     return FP256_OK;
 }
@@ -51,23 +36,13 @@ int fp256_sub(fp256 *r, const fp256 *a, const fp256 *b)
     if (r == NULL || a == NULL || b == NULL)
         return FP256_ERR;
 
-    if (a->neg != b->neg) {
-        /* the 257's bit of r is discarded */
-        ll_u256_add(r->d, a->d, b->d);
-        r->neg = a->neg;
+    if (fp256_cmp(a, b) >= 0) {
+        ll_u256_sub(r->d, a->d, b->d);
         r->nlimbs = fp256_num_limbs(r);
     }
     else {
-        if (fp256_cmp_abs(a, b) >= 0) {
-            ll_u256_sub(r->d, a->d, b->d);
-            r->neg = a->neg;
-            r->nlimbs = fp256_num_limbs(r);
-        }
-        else {
-            ll_u256_sub(r->d, b->d, a->d);
-            r->neg = a->neg ^ 1;
-            r->nlimbs = fp256_num_limbs(r);
-        }
+        ll_u256_sub(r->d, b->d, a->d);
+        r->nlimbs = fp256_num_limbs(r);
     }
 
     return FP256_OK;

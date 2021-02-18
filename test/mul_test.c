@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -42,8 +42,8 @@ void* fp256_mul_test(void *p)
     N = td->N;
 
     for (i = 0; i < N; i++) {
-        fp256_rand_limbs(&a, 4, 0);
-        fp256_rand_limbs(&b, 4, 0);
+        fp256_rand_limbs(&a, 4);
+        fp256_rand_limbs(&b, 4);
         fp256_mul(&r1, &a, &b);
         fp256_mul(&r2, &b, &a);
         if (fp256_cmp(&r1, &r2) != 0) {
@@ -68,7 +68,7 @@ void* fp256_sqr_test(void *p)
     N = td->N;
 
     for (i = 0; i < N; i++) {
-        fp256_rand_limbs(&a, 4, 0);
+        fp256_rand_limbs(&a, 4);
         fp256_mul(&r1, &a, &a);
         fp256_sqr(&r2, &a);
         if (fp256_cmp(&r1, &r2) != 0) {

@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -61,7 +61,6 @@ int fp256_copy(fp256 *r, const fp256 *a)
     r->d[2] = a->d[2];
     r->d[3] = a->d[3];
     r->nlimbs = a->nlimbs;
-    r->neg = a->neg;
     return FP256_OK;
 }
 
@@ -75,7 +74,6 @@ int fp256_set_zero(fp256 *r)
     r->d[2] = 0ULL;
     r->d[3] = 0ULL;
     r->nlimbs = 0;
-    r->neg = 0;
     return FP256_OK;
 }
 
@@ -89,7 +87,6 @@ int fp256_set_one(fp256 *r)
     r->d[2] = 0ULL;
     r->d[3] = 0ULL;
     r->nlimbs = 1;
-    r->neg = 0;
     return FP256_OK;
 }
 
@@ -103,11 +100,10 @@ int fp256_set_limb(fp256 *r, const u64 limb)
     r->d[2] = 0ULL;
     r->d[3] = 0ULL;
     r->nlimbs = 1;
-    r->neg = 0;
     return FP256_OK;
 }
 
-int fp256_set_limbs(fp256 *r, const u64 *limbs, size_t l, int neg)
+int fp256_set_limbs(fp256 *r, const u64 *limbs, size_t l)
 {
     size_t i;
 
@@ -120,7 +116,6 @@ int fp256_set_limbs(fp256 *r, const u64 *limbs, size_t l, int neg)
         r->d[i] = 0ULL;
 
     r->nlimbs = fp256_num_limbs(r);
-    r->neg = neg;
     return FP256_OK;
 }
 
@@ -183,7 +178,6 @@ int fp256_from_hex(fp256 *r, const u8 *hex, size_t hlen)
     ll_set_zero(r->d, 4);
     ll_from_hex(r->d, &rl, hex, hlen);
     r->nlimbs = rl;
-    r->neg = 0;
     return FP256_OK;
 }
 
@@ -208,7 +202,6 @@ int fp256_from_bytes(fp256 *r, const u8 *bytes, size_t blen)
     ll_set_zero(r->d, 4);
     ll_from_bytes(r->d, &rl, bytes, blen);
     r->nlimbs = rl;
-    r->neg = 0;
     return FP256_OK;
 }
 

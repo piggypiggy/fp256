@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -34,71 +34,43 @@ int fp256_mod_neg(fp256 *r, const fp256 *a, const fp256 *m)
 
 int fp256_mod_add(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
 {
-    int rem_neg;
     u64 rd[5], remd[4];
     size_t rl, reml;
 
     // memory sanitizer...
     // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
-    if (a->neg == b->neg) {
-        rem_neg = a->neg;
-        rd[4] = ll_u256_add(rd, a->d, b->d);
-        rl = ll_num_limbs(rd, 5);
-    }
-    else {
-        if (fp256_cmp_abs(a, b) >= 0) {
-            /* |a| >= |b| */
-            rem_neg = a->neg;
-            ll_u256_sub(rd, a->d, b->d);
-        }
-        else {
-            /* |a| < |b| */
-            rem_neg = b->neg;
-            ll_u256_sub(rd, b->d, a->d);
-        }
-
-        rl = ll_num_limbs(rd, 4);
-    }
+    rd[4] = ll_u256_add(rd, a->d, b->d);
+    rl = ll_num_limbs(rd, 5);
 
     ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs);
-    fp256_set_limbs(r, remd, reml, 0);
-    if (rem_neg && reml)
-        fp256_sub(r, m, r);
+    fp256_set_limbs(r, remd, reml);
 
     return FP256_OK;
 }
 
 int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
 {
-    int rem_neg;
+    int neg;
     u64 rd[5], remd[4];
     size_t rl, reml;
 
     // memory sanitizer...
     // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL; rd[4] = 0ULL;
-    if (a->neg == b->neg) {
-        if (fp256_cmp_abs(a, b) >= 0) {
-            /* |a| >= |b| */
-            rem_neg = a->neg;
-            ll_u256_sub(rd, a->d, b->d);
-        }
-        else {
-            /* |a| < |b| */
-            rem_neg = 1 - b->neg;
-            ll_u256_sub(rd, b->d, a->d);
-        }
-
-        rl = ll_num_limbs(rd, 4);
+    if (fp256_cmp(a, b) >= 0) {
+        /* a >= b */
+        neg = 0;
+        ll_u256_sub(rd, a->d, b->d);
     }
     else {
-        rem_neg = a->neg;
-        rd[4] = ll_u256_add(rd, a->d, b->d);
-        rl = ll_num_limbs(rd, 5);
+        /* a < b */
+        neg = 1;
+        ll_u256_sub(rd, b->d, a->d);
     }
+    rl = ll_num_limbs(rd, 4);
 
     ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs);
-    fp256_set_limbs(r, remd, reml, 0);
-    if (rem_neg && reml)
+    fp256_set_limbs(r, remd, reml);
+    if (neg && reml)
         fp256_sub(r, m, r);
 
     return FP256_OK;
@@ -120,9 +92,7 @@ int fp256_mod_mul(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     if (ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs) != FP256_OK)
         return FP256_ERR;
 
-    fp256_set_limbs(r, remd, reml, a->neg ^ b->neg);
-    if (r->neg)
-        fp256_add(r, r, m);
+    fp256_set_limbs(r, remd, reml);
 
     return FP256_OK;
 }
@@ -143,7 +113,7 @@ int fp256_mod_sqr(fp256 *r, const fp256 *a, const fp256 *m)
     if (ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs) != FP256_OK)
         return FP256_ERR;
 
-    fp256_set_limbs(r, remd, reml, 0);
+    fp256_set_limbs(r, remd, reml);
     return FP256_OK;
 }
 
@@ -158,11 +128,11 @@ int fp256_mod_inv(fp256 *r, const fp256 *a, const fp256 *m)
     ll_lehmer_exgcd(NULL, sd, NULL, &sl, NULL, a->d, m->d, a->nlimbs, m->nlimbs, 1);
 
     if (sl < 0) {
-        fp256_set_limbs(r, sd, -sl, 0);
+        fp256_set_limbs(r, sd, -sl);
         fp256_sub(r, m, r);
     }
     else
-        fp256_set_limbs(r, sd, sl, 0);
+        fp256_set_limbs(r, sd, sl);
 
     return FP256_OK;
 }

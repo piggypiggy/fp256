@@ -360,9 +360,9 @@ void* fp256_mod_exp_test(void *p)
         do { 
             al = rand() % 4 + 1;
             el = rand() % 4 + 1;
-            fp256_rand_limbs(&a, al, 0);
-            fp256_rand_limbs(&e, el, 0);
-            fp256_rand_limbs(&m, 4, 0);
+            fp256_rand_limbs(&a, al);
+            fp256_rand_limbs(&e, el);
+            fp256_rand_limbs(&m, 4);
         } while (fp256_is_zero(&a) || fp256_is_zero(&e) || fp256_is_zero(&m) || fp256_is_even(&m));
 
         /* r = a^e mod m */

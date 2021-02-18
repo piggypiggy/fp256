@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -19,7 +19,7 @@
 #include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
 
-int fp256_rand_limbs(fp256 *r, size_t nlimbs, int neg)
+int fp256_rand_limbs(fp256 *r, size_t nlimbs)
 {
     int ret;
 
@@ -29,12 +29,11 @@ int fp256_rand_limbs(fp256 *r, size_t nlimbs, int neg)
     ll_set_zero(r->d, 4);
     ret = ll_rand_limbs(r->d, nlimbs);
     r->nlimbs = ll_num_limbs(r->d, 4);
-    r->neg = neg;
 
     return ret;
 }
 
-int fp256_rand_bytes(fp256 *r, size_t nbytes, int neg)
+int fp256_rand_bytes(fp256 *r, size_t nbytes)
 {
     int ret;
 
@@ -44,12 +43,11 @@ int fp256_rand_bytes(fp256 *r, size_t nbytes, int neg)
     ll_set_zero(r->d, 4);
     ret = ll_rand_bytes(r->d, nbytes);
     r->nlimbs = ll_num_limbs(r->d, 4);
-    r->neg = neg;
 
     return ret;
 }
 
-int fp256_rand_bits(fp256 *r, size_t nbits, int neg)
+int fp256_rand_bits(fp256 *r, size_t nbits)
 {
     int ret;
 
@@ -59,7 +57,6 @@ int fp256_rand_bits(fp256 *r, size_t nbits, int neg)
     ll_set_zero(r->d, 4);
     ret = ll_rand_bits(r->d, nbits);
     r->nlimbs = ll_num_limbs(r->d, 4);
-    r->neg = neg;
 
     return ret;
 }
@@ -74,7 +71,7 @@ int fp256_rand_range(fp256 *r, const fp256 *range)
 
     ll_set_zero(td, 4);
     ret = ll_rand_range(td, range->d, range->nlimbs);
-    fp256_set_limbs(r, td, 4, range->neg);
+    fp256_set_limbs(r, td, 4);
     return ret;
 }
 

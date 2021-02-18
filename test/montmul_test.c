@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -238,11 +238,11 @@ void* fp256_mont_mul_test(void *p)
         /* random odd modulo and corresponding R */
         do {
             al = rand() % 4 + 1;
-            fp256_rand_limbs(&a, al, 0);
+            fp256_rand_limbs(&a, al);
             bl = rand() % 4 + 1;
-            fp256_rand_limbs(&b, bl, 0);
+            fp256_rand_limbs(&b, bl);
             ol = 4;
-            fp256_rand_limbs(&odd, ol, 0);
+            fp256_rand_limbs(&odd, ol);
             w = ol;
         } while (fp256_is_odd(&odd) != 1);
         fp256_mont_ctx_init(&mctx, w, &odd);

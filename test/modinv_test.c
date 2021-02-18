@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -320,8 +320,8 @@ void* fp256_mod_inv_test(void *p)
             ml = rand();
             al %= 5;
             ml %= 5;
-            fp256_rand_limbs(&a, al, 0);
-            fp256_rand_limbs(&m, ml, 0);
+            fp256_rand_limbs(&a, al);
+            fp256_rand_limbs(&m, ml);
         } while (fp256_is_zero(&a) || fp256_is_zero(&m));
 
         /* inv = a^{-1} mod m */

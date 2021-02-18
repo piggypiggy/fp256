@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -87,8 +87,6 @@ struct fp256 {
     u64 d[4];
     /** number of limbs used */
     unsigned int nlimbs;
-    /** sign */
-    int neg;
 };
 
 /**
@@ -189,10 +187,9 @@ FP256_EXPORT int fp256_set_limb(fp256 *r, const u64 limb);
  * @param[out] r          - result.
  * @param[in] limbs       - 64 bit integer array.
  * @param[in] l           - array length.
- * @param[in] neg         - sign of r.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
-FP256_EXPORT int fp256_set_limbs(fp256 *r, const u64 *limbs, size_t l, int neg);
+FP256_EXPORT int fp256_set_limbs(fp256 *r, const u64 *limbs, size_t l);
 
 /**
  * compare a with 0.
@@ -239,7 +236,7 @@ FP256_EXPORT int fp256_is_odd(const fp256 *a);
 FP256_EXPORT int fp256_is_even(const fp256 *a);
 
 /**
- * compare two 256 bit integers.
+ * compare two unsigned 256 bit integers
  * 
  * @param[in] a           - 256 bit integer.
  * @param[in] b           - 256 bit integer.
@@ -249,18 +246,6 @@ FP256_EXPORT int fp256_is_even(const fp256 *a);
  * - -1 if a < b.
  */ 
 FP256_EXPORT int fp256_cmp(const fp256 *a, const fp256 *b);
-
-/**
- * compare absolute value of two 256 bit integers
- * 
- * @param[in] a           - 256 bit integer.
- * @param[in] b           - 256 bit integer.
- * @return 
- * - 1  if abs(a) > abs(b)
- * - 0  if abs(a) = abs(b)
- * - -1 if abs(a) < abs(b).
- */ 
-FP256_EXPORT int fp256_cmp_abs(const fp256 *a, const fp256 *b);
 
 /**
  * test if idx's bit of a is 1.
@@ -375,30 +360,27 @@ FP256_EXPORT int fp256_rshift(fp256 *r, const fp256 *a, size_t n);
  * 
  * @param[out] r          - result.
  * @param[in] nlimbs      - number of limbs of result.
- * @param[in] neg         - sign of result.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  * */
-FP256_EXPORT int fp256_rand_limbs(fp256 *r, size_t nlimbs, int neg);
+FP256_EXPORT int fp256_rand_limbs(fp256 *r, size_t nlimbs);
 
 /**
  * generate random integer in range [0, 2^(8*nbytes)).
  * 
  * @param[out] r          - result.
  * @param[in] nlimbs      - number of bytes of result.
- * @param[in] neg         - sign of result.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  * */
-FP256_EXPORT int fp256_rand_bytes(fp256 *r, size_t nbytes, int neg);
+FP256_EXPORT int fp256_rand_bytes(fp256 *r, size_t nbytes);
 
 /**
  * generate random integer in range [0, 2^(nbits)).
  * 
  * @param[out] r          - result.
  * @param[in] nlimbs      - number of bits of result.
- * @param[in] neg         - sign of result.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  * */
-FP256_EXPORT int fp256_rand_bits(fp256 *r, size_t nbits, int neg);
+FP256_EXPORT int fp256_rand_bits(fp256 *r, size_t nbits);
 
 /**
  * generate random integer in range [0, range).

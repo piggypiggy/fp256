@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -48,7 +48,7 @@ int fp256_lshift(fp256 *r, const fp256 *a, size_t n)
 
     /* set r->d according to l */
     /* TODO : a is negative */
-    fp256_set_limbs(r, rd + 3 - l, 4, a->neg);
+    fp256_set_limbs(r, rd + 3 - l, 4);
     return FP256_OK;
 }
 
@@ -78,6 +78,6 @@ int fp256_rshift(fp256 *r, const fp256 *a, size_t n)
 
     /* set r->d according to l */
     /* TODO : a is negative */
-    fp256_set_limbs(r, rd + l, 4, a->neg);
+    fp256_set_limbs(r, rd + l, 4);
     return FP256_OK;
 }

@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -64,7 +64,7 @@ int fp256_gcd(fp256 *r, const fp256 *a, const fp256 *b)
     }
 
     gl = ll_lehmer_exgcd(gcd, NULL, NULL, NULL, NULL, a->d, b->d, a->nlimbs, b->nlimbs, 0);
-    fp256_set_limbs(r, gcd, gl, 0);
+    fp256_set_limbs(r, gcd, gl);
     return FP256_OK;
 }
 #endif

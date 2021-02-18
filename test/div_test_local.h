@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -251,8 +251,8 @@ void* fp256_div_test(void *p)
         do {
             nl = rand() % 5;
             dl = rand() % 5;
-            fp256_rand_limbs(&num, nl, 0);
-            fp256_rand_limbs(&div, dl, 0);
+            fp256_rand_limbs(&num, nl);
+            fp256_rand_limbs(&div, dl);
         } while (fp256_is_zero(&div) == 1);
 
         /* rem = num mod div, quo = num / div */
@@ -332,8 +332,8 @@ void* fp256_naive_div_test(void *p)
         do {
             nl = rand() % 5;
             dl = rand() % 5;
-            fp256_rand_limbs(&num, nl, 0);
-            fp256_rand_limbs(&div, dl, 0);
+            fp256_rand_limbs(&num, nl);
+            fp256_rand_limbs(&div, dl);
         } while (fp256_is_zero(&div) == 1);
 
         /* rem = num mod div, quo = num / div */

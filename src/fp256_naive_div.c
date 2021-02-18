@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -34,10 +34,10 @@ int fp256_naive_div(fp256 *rem, fp256 *quo, const fp256 *num, const fp256 *div)
         return FP256_ERR;
 
     if (rem != NULL)
-        fp256_set_limbs(rem, rd, rl, num->neg);
+        fp256_set_limbs(rem, rd, rl);
 
     if (quo != NULL)
-        fp256_set_limbs(quo, qd, ql, num->neg ^ div->neg);
+        fp256_set_limbs(quo, qd, ql);
 
     return FP256_OK;
 }

@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -37,7 +37,7 @@ int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
     ll_clear_set_bit(tmp, 2 * 64 * w, 9);
     /* RRm = tmp mod N */
     ll_div(RRN, NULL, &RRNl, NULL, tmp, N->d, 9, N->nlimbs);
-    fp256_set_limbs(&mctx->RR, RRN, RRNl, 0);
+    fp256_set_limbs(&mctx->RR, RRN, RRNl);
 
 #if 0
     ssize_t kl;
@@ -68,7 +68,7 @@ int fp256_mont_mul(fp256 *r, const fp256 *A, const fp256 *B, const mont_ctx *mct
 
     rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
     ll_u256_mont_mul(rd, A->d, B->d, mctx->N.d, mctx->k0);
-    fp256_set_limbs(r, rd, 4, 0);
+    fp256_set_limbs(r, rd, 4);
 
     return FP256_OK;
 }
@@ -82,7 +82,7 @@ int fp256_mont_sqr(fp256 *r, const fp256 *A, const mont_ctx *mctx)
 
     rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
     ll_u256_mont_sqr(rd, A->d, mctx->N.d, mctx->k0);
-    fp256_set_limbs(r, rd, 4, 0);
+    fp256_set_limbs(r, rd, 4);
 
     return FP256_OK;
 }
@@ -95,7 +95,7 @@ int fp256_mont_exp(fp256 *r ,const fp256 *A, const fp256 *e, const mont_ctx *mct
         return FP256_ERR;
 
     ll_u256_mont_exp(rd, A->d, e->d, e->nlimbs, mctx->RR.d, mctx->N.d, mctx->k0);
-    fp256_set_limbs(r, rd, 4, 0);
+    fp256_set_limbs(r, rd, 4);
 
     return FP256_OK;
 }

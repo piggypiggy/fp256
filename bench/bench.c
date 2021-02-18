@@ -1,6 +1,6 @@
 /******************************************************************************
  *                                                                            *
- * Copyright 2020-2021 Meng-Shan Jiang                                        *
+ * Copyright 2020-2021 Jiang Mengshan                                         *
  *                                                                            *
  * Licensed under the Apache License, Version 2.0 (the "License");            *
  * you may not use this file except in compliance with the License.           *
@@ -37,8 +37,8 @@ static void* bench_fp256_add_setup(void)
     data = malloc(NUM * sizeof(FP256_ADD_DATA));
     /* random a, b */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].b, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].b, 4);
     }
 
     return data;
@@ -118,7 +118,7 @@ static void* bench_fp256_shift_setup(void)
     data = malloc(NUM * sizeof(FP256_SHIFT_DATA));
     /* random a */
     for (k = 0; k < NUM; k++)
-        fp256_rand_limbs(&data[k].a, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
 
     return data;
 }
@@ -202,8 +202,8 @@ static void* bench_fp256_div_setup(void)
         do {
             nl = 4;
             dl = test_random_number() % 5;
-            fp256_rand_limbs(&data[k].num, nl, 0);
-            fp256_rand_limbs(&data[k].div, dl, 0);
+            fp256_rand_limbs(&data[k].num, nl);
+            fp256_rand_limbs(&data[k].div, dl);
         } while (fp256_is_zero(&data[k].num) == 1 ||
                  fp256_is_zero(&data[k].div) == 1 ||
                  fp256_cmp(&data[k].num, &data[k].div) < 0);
@@ -260,8 +260,8 @@ static void* bench_fp256_gcd_setup(void)
     data = malloc(NUM * sizeof(FP256_GCD_DATA));
     /* random a, b */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].b, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].b, 4);
     }
 
     return data;
@@ -301,8 +301,8 @@ static void* bench_fp256_mod_inv_setup(void)
     data = malloc(NUM * sizeof(FP256_MODINV_DATA));
     /* random a, m */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].m, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].m, 4);
     }
 
     return data;
@@ -342,8 +342,8 @@ static void* bench_fp256_mul_setup(void)
     data = malloc(NUM * sizeof(FP256_MUL_DATA));
     /* random a, b */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].b, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].b, 4);
     }
 
     return data;
@@ -423,7 +423,7 @@ static void* bench_fp256_sqr_setup(void)
     data = malloc(NUM * sizeof(FP256_SQR_DATA));
     /* random num */
     for (k = 0; k < NUM; k++)
-        fp256_rand_limbs(&data[k].a, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
 
     return data;
 }
@@ -503,10 +503,10 @@ static void* bench_fp256_mod_add_setup(void)
     data = malloc(NUM * sizeof(FP256_MOD_ADD_DATA));
     /* random a, b, m */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].b, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].b, 4);
         do {
-            fp256_rand_limbs(&data[k].m, 4, 0);
+            fp256_rand_limbs(&data[k].m, 4);
         } while (fp256_is_zero(&data[k].m));
     }
 
@@ -548,10 +548,10 @@ static void* bench_fp256_mod_mul_setup(void)
     data = malloc(NUM * sizeof(FP256_MOD_MUL_DATA));
     /* random num */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].b, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].b, 4);
         do {
-            fp256_rand_limbs(&data[k].m, 4, 0);
+            fp256_rand_limbs(&data[k].m, 4);
         } while (fp256_is_zero(&data[k].m));
     }
 
@@ -592,9 +592,9 @@ static void* bench_fp256_mod_sqr_setup(void)
     data = malloc(NUM * sizeof(FP256_MOD_SQR_DATA));
     /* random num */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
         do {
-            fp256_rand_limbs(&data[k].m, 4, 0);
+            fp256_rand_limbs(&data[k].m, 4);
         } while (fp256_is_zero(&data[k].m));
     }
 
@@ -636,10 +636,10 @@ static void* bench_fp256_mod_exp_setup(void)
     data = malloc(NUM * sizeof(FP256_MOD_EXP_DATA));
     /* random num */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].e, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].e, 4);
         do {
-            fp256_rand_limbs(&data[k].m, 4, 0);
+            fp256_rand_limbs(&data[k].m, 4);
         } while (fp256_is_zero(&data[k].m) || fp256_is_even(&data[k].m));
     }
 
@@ -682,10 +682,10 @@ static void* bench_fp256_mont_mul_setup(void)
     data = malloc(NUM * sizeof(FP256_MONT_MUL_DATA));
     /* random a, b, modulo */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
-        fp256_rand_limbs(&data[k].b, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
+        fp256_rand_limbs(&data[k].b, 4);
         do {
-            fp256_rand_limbs(&N, 4, 0);
+            fp256_rand_limbs(&N, 4);
         } while (fp256_is_zero(&N));
         fp256_mont_ctx_init(&data[k].mctx, 4, &N);
     }
@@ -728,9 +728,9 @@ static void* bench_fp256_mont_sqr_setup(void)
     data = malloc(NUM * sizeof(FP256_MONT_SQR_DATA));
     /* random a, b, modulo */
     for (k = 0; k < NUM; k++) {
-        fp256_rand_limbs(&data[k].a, 4, 0);
+        fp256_rand_limbs(&data[k].a, 4);
         do {
-            fp256_rand_limbs(&N, 4, 0);
+            fp256_rand_limbs(&N, 4);
         } while (fp256_is_zero(&N));
         fp256_mont_ctx_init(&data[k].mctx, 4, &N);
     }
