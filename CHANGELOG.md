@@ -1,3 +1,18 @@
+## v0.5.0
+- implement faster division algorithm(ll_div) in x64 and aarch64 assembly.
+- implement modular exponentiation(ll_u256_mont_exp) for odd modulus.
+- implement conditional select(ll_u256_select).
+- implement montgomery multiplication for arbitrary integer size(mainly for size about 256 bit).
+- implement shift in aarch64 assembly.
+- add modular exponentiation benchmark.
+- add test for shift, mont mul and u256 sub.
+- add benchmark code for riscv64.
+- improve test vectors.
+- migrate ci to github actions, add riscv64 build.
+- improve cmake scripts.
+- implement ll_u256_add and ll_u256_sub in riscv64 assembly.
+- drop support for negative 256 bit integer.
+
 ## v0.4.0
 - use doxygen to generate document.
 - fix bugs in ll_add-aarch64.pl, ll_mul-aarch64.pl, ll_mulsub_limb-aarch64.pl etc.
