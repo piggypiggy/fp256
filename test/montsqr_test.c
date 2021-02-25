@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 #include "test.h"
-#include "test_local.h"
 
 /* r = a^2 * 2^{-256} mod N */
 typedef struct {
@@ -259,7 +258,7 @@ int main(int argc, char **argv)
     if (fp256_init() != FP256_OK)
         return -1;
 
-    get_test_args(argc, argv, &args);
+    RETURN_IF_ERROR(get_test_args(argc, argv, &args));
     test_rand_init();
 
     RETURN_IF_ERROR(run_test("fp256_mont_sqr", fp256_mont_sqr_test_vector, fp256_mont_sqr_test, args.N, args.T));

@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 #include "test.h"
-#include "test_local.h"
 
 typedef struct {
     char *r;
@@ -93,7 +92,7 @@ int main(int argc, char **argv)
     if (fp256_init() != FP256_OK)
         return -1;
 
-    get_test_args(argc, argv, &args);
+    RETURN_IF_ERROR(get_test_args(argc, argv, &args));
     test_rand_init();
 
     RETURN_IF_ERROR(run_test("fp256_mul", NULL, fp256_mul_test, args.N, args.T));

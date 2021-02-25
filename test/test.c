@@ -18,6 +18,20 @@
 
 #include "test.h"
 
+static const char *bench_help_string = "\
+usage : bench [arithmetic] -n [num_test] -t [num_thread] \n\
+\n\
+arithmetic : add u256add modadd \n\
+             mul sqr u256mul u256sqr modmul modsqr \n\
+             shift u256shift \n\
+             div naivediv \n\
+             gcd modinv \n\
+             montmul montsqr \n\
+             modexp \n\
+-n         : number of tests, default is 200000. \n\
+-t         : number of threads, default is 0, single thread. \n\
+";
+
 /* 0->'0', 1->'1', ... , 15->'F' */
 static const u8 ascii_table[16] = {
     '0', '1', '2', '3', '4', '5', '6', '7',
@@ -83,7 +97,7 @@ static size_t arg_cmp(const char *arg1, const char *arg2)
     return len1;
 }
 
-void get_test_args(int argc, char **argv, TEST_ARGS *args)
+int get_test_args(int argc, char **argv, TEST_ARGS *args)
 {
     int do_all = 1;
     // size_t len;
@@ -95,151 +109,174 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
         /* do all speed test */
         memset(do_which, 1, sizeof(DO_WHICH));
     }
+    else {
+        for (int i = 1; i < argc; i++) {
+            if (memcmp(argv[i], "-n", 2) == 0 || memcmp(argv[i], "-N", 2) == 0) {
+                i++;
+                if (i < argc) {
+                    args->N = atoi(argv[i]);
+                    if (args->N <= 0)
+                        goto err;
+                }
+                else
+                    goto err;
+                continue;
+            }
 
-    for (int i = 1; i < argc; i++) {
-        if (memcmp(argv[i], "t=", 2) == 0 || memcmp(argv[i], "T=", 2) == 0) {
-            args->T = atoi(argv[i] + 2);
-            continue;
+            if (memcmp(argv[i], "-t", 2) == 0 || memcmp(argv[i], "-T", 2) == 0) {
+                i++;
+                if (i < argc) {
+                    args->T = atoi(argv[i]);
+                    if (args->T < 0)
+                        goto err;
+                }
+                else
+                    goto err;
+                continue;
+            }
+
+            /* for benchmark */
+            if (arg_cmp(argv[i], "add") > 0) {
+                do_which->do_add = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "lladd") > 0 || arg_cmp(argv[i], "ll_add") > 0) {
+                do_which->do_lladd = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "u256add") > 0 || arg_cmp(argv[i], "u256_add") > 0) {
+                do_which->do_u256add = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "convert") > 0) {
+                do_which->do_convert = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "mul") > 0) {
+                do_which->do_mul = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "llmul") > 0 || arg_cmp(argv[i], "ll_mul") > 0) {
+                do_which->do_llmul = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "u256mul") > 0 || arg_cmp(argv[i], "u256_mul") > 0) {
+                do_which->do_u256mul = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "sqr") > 0) {
+                do_which->do_sqr = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "mul") > 0) {
+                do_which->do_mul = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "div") > 0) {
+                do_which->do_div = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "naivediv") > 0 || arg_cmp(argv[i], "naive_div") > 0) {
+                do_which->do_naive_div = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "gcd") > 0) {
+                do_which->do_gcd = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "rand") > 0) {
+                do_which->do_rand = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "shift") > 0) {
+                do_which->do_shift = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "modadd") > 0 || arg_cmp(argv[i], "mod_add") > 0) {
+                do_which->do_mod_add = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "modmul") > 0 || arg_cmp(argv[i], "mod_mul") > 0) {
+                do_which->do_mod_mul = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "modsqr") > 0 || arg_cmp(argv[i], "mod_sqr") > 0) {
+                do_which->do_mod_sqr = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "modinv") > 0 || arg_cmp(argv[i], "mod_inv") > 0) {
+                do_which->do_mod_inv = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "modexp") > 0 || arg_cmp(argv[i], "mod_exp") > 0) {
+                do_which->do_mod_exp = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "fmodadd") > 0 || arg_cmp(argv[i], "fmod_add") > 0) {
+                do_which->do_fmod_add = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "montmul") > 0 || arg_cmp(argv[i], "mont_mul") > 0) {
+                do_which->do_mont_mul = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "montsqr") > 0 || arg_cmp(argv[i], "mont_sqr") > 0) {
+                do_which->do_mont_sqr = 1;
+                do_all = 0;
+                continue;
+            }
+
+            /* TODO : add help */
+            if (arg_cmp(argv[i], "-h") > 0 || arg_cmp(argv[i], "-help") > 0) {
+                printf("%s \n", bench_help_string);
+                do_all = 0;
+                continue;
+            }
+
+            goto err;
         }
-
-        if (memcmp(argv[i], "n=", 2) == 0 || memcmp(argv[i], "N=", 2) == 0) {
-            args->N = atoi(argv[i] + 2);
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "add") > 0) {
-            do_which->do_add = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "lladd") > 0 || arg_cmp(argv[i], "ll_add") > 0) {
-            do_which->do_lladd = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "u256add") > 0 || arg_cmp(argv[i], "u256_add") > 0) {
-            do_which->do_u256add = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "convert") > 0) {
-            do_which->do_convert = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "mul") > 0) {
-            do_which->do_mul = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "llmul") > 0 || arg_cmp(argv[i], "ll_mul") > 0) {
-            do_which->do_llmul = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "u256mul") > 0 || arg_cmp(argv[i], "u256_mul") > 0) {
-            do_which->do_u256mul = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "sqr") > 0) {
-            do_which->do_sqr = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "mul") > 0) {
-            do_which->do_mul = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "div") > 0) {
-            do_which->do_div = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "naivediv") > 0 || arg_cmp(argv[i], "naive_div") > 0) {
-            do_which->do_naive_div = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "gcd") > 0) {
-            do_which->do_gcd = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "rand") > 0) {
-            do_which->do_rand = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "shift") > 0) {
-            do_which->do_shift = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "modadd") > 0 || arg_cmp(argv[i], "mod_add") > 0) {
-            do_which->do_mod_add = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "modmul") > 0 || arg_cmp(argv[i], "mod_mul") > 0) {
-            do_which->do_mod_mul = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "modsqr") > 0 || arg_cmp(argv[i], "mod_sqr") > 0) {
-            do_which->do_mod_sqr = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "modinv") > 0 || arg_cmp(argv[i], "mod_inv") > 0) {
-            do_which->do_mod_inv = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "modexp") > 0 || arg_cmp(argv[i], "mod_exp") > 0) {
-            do_which->do_mod_exp = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "fmodadd") > 0 || arg_cmp(argv[i], "fmod_add") > 0) {
-            do_which->do_fmod_add = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "montmul") > 0 || arg_cmp(argv[i], "mont_mul") > 0) {
-            do_which->do_mont_mul = 1;
-            do_all = 0;
-            continue;
-        }
-
-        if (arg_cmp(argv[i], "montsqr") > 0 || arg_cmp(argv[i], "mont_sqr") > 0) {
-            do_which->do_mont_sqr = 1;
-            do_all = 0;
-            continue;
-        }
-
-        /* TODO : add help */
     }
 
     /* default thread = 0 */
@@ -251,6 +288,11 @@ void get_test_args(int argc, char **argv, TEST_ARGS *args)
         /* do all speed test */
         memset(do_which, 1, sizeof(DO_WHICH));
     }
+    return 0;
+err:
+    printf("invalid argument\n");
+    printf("%s \n", bench_help_string);
+    return -1;
 }
 
 void set_test_args(TEST_ARGS *args, int64_t N, int64_t T)

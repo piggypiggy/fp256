@@ -1,5 +1,4 @@
 #include "test.h"
-#include "test_local.h"
 
 /* r = (a ^ e) mod N */
 typedef struct {
@@ -403,8 +402,7 @@ int main(int argc, char **argv)
     if (fp256_init() != FP256_OK)
         return -1;
 
-    get_test_args(argc, argv, &args);
-    args.N = 20000;
+    RETURN_IF_ERROR(get_test_args(argc, argv, &args));
     test_rand_init();
 
     RETURN_IF_ERROR(run_test("fp256_mod_exp", fp256_mod_exp_test_vector, fp256_mod_exp_test, args.N, args.T));

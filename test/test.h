@@ -28,6 +28,14 @@
 extern "C" {
 #endif
 
+#define RETURN_IF_ERROR(TEST)    \
+    do {                         \
+        if (TEST != FP256_OK) {  \
+            fp256_deinit();      \
+            return -1;           \
+        }                        \
+    } while(0);
+
 typedef struct do_which_st {
     /* do which test */
     int do_u256add;
@@ -82,7 +90,7 @@ void test_random_string(u8 *s, int len);
 void test_random_hex_string(u8 *s, int len);
 int test_random_number(void);
 
-void get_test_args(int argc, char **argv, TEST_ARGS *args);
+int get_test_args(int argc, char **argv, TEST_ARGS *args);
 void set_test_args(TEST_ARGS *args, int64_t N, int64_t t);
 
 void test_print_hex(const char *desp, const u64 *ad, size_t al);

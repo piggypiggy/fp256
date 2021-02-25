@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 #include "test.h"
-#include "test_local.h"
 
 /* r = a << n
  * when n is negative, r = a >> (-n)
@@ -199,7 +198,7 @@ int main(int argc, char **argv)
     if (fp256_init() != FP256_OK)
         return -1;
 
-    get_test_args(argc, argv, &args);
+    RETURN_IF_ERROR(get_test_args(argc, argv, &args));
     test_rand_init();
 
     RETURN_IF_ERROR(run_test("ll_u256_shift", ll_u256_shift_test_vector, NULL, args.N, args.T));
