@@ -6,7 +6,6 @@ include_directories(${FP256_INCLUDE_DIR}/)
 
 SET(FP256_TEST_HEADER
     ${FP256_DIR}/test/test.h
-    ${FP256_DIR}/test/test_local.h
 )
 
 set(FP256_TEST_SRC
@@ -35,7 +34,6 @@ endif()
 
 macro(fp256_add_test test_name test_exe test_src)
     add_executable(${test_exe} ${test_src} ${ARGN} ${FP256_TEST_SRC})
-    target_compile_definitions(${test_exe} PRIVATE fp256_test_compile_definitions)
     target_compile_options(${test_exe} PRIVATE ${EXTRA_C_FLAGS})
     target_link_libraries(${test_exe} ${fp256_test_dep_lib} ${SANITIZER_FLAG})
     add_test(NAME ${test_name} COMMAND ${CMAKE_COMMAND} -DTEST_EXECUTABLE=$<TARGET_FILE:${test_exe}> -P ${CMAKE_MODULE_DIR}/run_test.cmake)
