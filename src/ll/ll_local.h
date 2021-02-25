@@ -91,22 +91,6 @@ extern "C" {
     (b) >  89 ? 4 : \
     (b) >  22 ? 3 : 1)
 
-/* rd = ad + b,
- * return carry */
-u64 ll_add_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
-
-/* rd = ad + bd, ad and bd both have l limbs,
- * return carry */
-u64 ll_add_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l);
-
-/* rd = ad - b,
- * return borrow */
-u64 ll_sub_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
-
-/* rd = ad - bd, ad and bd both have l limbs,
- * return borrow */
-u64 ll_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l);
-
 /* reduce a1:a0, b1:b0 until they don't satisfy approximative condition,
  * mat is the product of matrices during reduction of a1:a0, b1:b0,
  * it will later be used to reduce a, b.

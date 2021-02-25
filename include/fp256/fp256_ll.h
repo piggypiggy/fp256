@@ -358,18 +358,66 @@ FP256_EXPORT u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4]);
  */
 FP256_EXPORT u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 
-/**
- * add two integers represented by u64 array, return the most significant limb of the result(carry).\n
+/** 
+ * add an integer represented by u64 array and a 64 bit integer, return carry.\n
+ * rd = ad + b.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] b           - 64 bit integer.
+ * @param[in] al          - length of ad array.
+ * @return carry
+ */
+FP256_EXPORT u64 ll_add_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
+
+/** 
+ * add two integers represented by u64 array(same size), return carry.\n
  * rd = ad + bd.
  * 
  * @param[out] rd         - result.
- * @param[in] ad          - the first u64 array to add.
- * @param[in] bd          - the second u64 array to add.
+ * @param[in] ad          - u64 array.
+ * @param[in] bd          - u64 array.
+ * @param[in] l           - length of ad and bd array.
+ * @return carry.
+ */
+FP256_EXPORT u64 ll_add_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l);
+
+/**
+ * add two integers represented by u64 array, return carry.\n
+ * rd = ad + bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] bd          - u64 array.
  * @param[in] al          - length of ad array.
  * @param[in] bl          - length of bd array.
  * @return carry.
  */
 FP256_EXPORT u64 ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl);
+
+/** 
+ * substract a 64 bit integer from an integer represented by u64 array, return borrow.\n
+ * rd = ad - b.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] b           - 64 bit integer.
+ * @param[in] al          - length of ad array.
+ * @return carry.
+ */
+FP256_EXPORT u64 ll_sub_limb(u64 *rd, const u64 *ad, u64 b, size_t al);
+
+/** 
+ * substract two integers represented by u64 array(same size), return borrow.\n
+ * rd = ad - bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - u64 array.
+ * @param[in] bd          - u64 array.
+ * @param[in] l           - length of ad and bd array.
+ * @return carry.
+ */
+FP256_EXPORT u64 ll_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l);
 
 /**
  * subtract two integers represented by u64 array, assume ad >= bd.\n
@@ -377,8 +425,8 @@ FP256_EXPORT u64 ll_add(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t
  * rd = ad - bd.
  * 
  * @param[out] rd         - result.
- * @param[in] ad          - the first u64 array to add.
- * @param[in] bd          - the second u64 array to sub.
+ * @param[in] ad          - u64 array.
+ * @param[in] bd          - u64 array.
  * @param[in] al          - length of ad array.
  * @param[in] bl          - length of bd array.
  * @return 0.
