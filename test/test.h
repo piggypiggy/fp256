@@ -43,8 +43,8 @@ typedef struct do_which_st {
     int do_add;
     int do_u256mul;
     int do_llmul;
-    int do_mul;
-    int do_sqr;
+    int do_mullo;
+    int do_sqrlo;
     int do_u256sqr;
     int do_div;
     int do_naive_div;

@@ -264,7 +264,7 @@ void* fp256_div_test(void *p)
         /* rem = num mod div
          * quo = num / div
          */
-        if (fp256_mul(&tmp, &quo, &div) != FP256_OK)
+        if (fp256_mullo(&tmp, &quo, &div) != FP256_OK)
             goto end;
         if (fp256_add(&tmp, &tmp, &rem) != FP256_OK)
             goto end;
@@ -345,7 +345,7 @@ void* fp256_naive_div_test(void *p)
         /* rem = num mod div
          * quo = num / div
          */
-        if (fp256_mul(&tmp, &quo, &div) != FP256_OK)
+        if (fp256_mullo(&tmp, &quo, &div) != FP256_OK)
             goto end;
         if (fp256_add(&tmp, &tmp, &rem) != FP256_OK)
             goto end;

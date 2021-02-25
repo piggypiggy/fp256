@@ -327,7 +327,7 @@ static void bench_fp256_mod_inv_clear(void *data)
     free(data);
 }
 
-/*************************** fp256_mul ***************************/
+/*************************** fp256_mullo ***************************/
 typedef struct {
     fp256 r;
     fp256 a;
@@ -349,7 +349,7 @@ static void* bench_fp256_mul_setup(void)
     return data;
 }
 
-static void bench_fp256_mul_run(void *_data, int64_t N)
+static void bench_fp256_mullo_run(void *_data, int64_t N)
 {
     int k;
     int64_t i;
@@ -358,7 +358,7 @@ static void bench_fp256_mul_run(void *_data, int64_t N)
     k = 0;
     data = (FP256_MUL_DATA*)_data;
     for (i = 0; i < N; i++) {
-        fp256_mul(&data[k].r, &data[k].a, &data[k].b);
+        fp256_mullo(&data[k].r, &data[k].a, &data[k].b);
         k = (k + 1) % NUM;
     }
 }
@@ -409,7 +409,7 @@ static void bench_ll_u256_mul_clear(void *data)
     free(data);
 }
 
-/*************************** fp256_sqr ***************************/
+/*************************** fp256_sqrlo ***************************/
 typedef struct {
     fp256 r;
     fp256 a;
@@ -428,7 +428,7 @@ static void* bench_fp256_sqr_setup(void)
     return data;
 }
 
-static void bench_fp256_sqr_run(void *_data, int64_t N)
+static void bench_fp256_sqrlo_run(void *_data, int64_t N)
 {
     int k;
     int64_t i;
@@ -438,7 +438,7 @@ static void bench_fp256_sqr_run(void *_data, int64_t N)
     data = (FP256_SQR_DATA*)_data;
 
     for (i = 0; i < N; i++) {
-        fp256_sqr(&data[k].r, &data[k].a);
+        fp256_sqrlo(&data[k].r, &data[k].a);
         k = (k + 1) % NUM;
     }
 }
@@ -843,8 +843,8 @@ int main(int argc, char **argv)
     if (args.do_which.do_mod_inv)
         run_bench("fp256_mod_inv", bench_fp256_mod_inv_setup, bench_fp256_mod_inv_run, bench_fp256_mod_inv_clear, args.N, args.T);
 
-    if (args.do_which.do_mul)
-        run_bench("fp256_mul", bench_fp256_mul_setup, bench_fp256_mul_run, bench_fp256_mul_clear, args.N, args.T);
+    if (args.do_which.do_mullo)
+        run_bench("fp256_mullo", bench_fp256_mul_setup, bench_fp256_mullo_run, bench_fp256_mul_clear, args.N, args.T);
 
     if (args.do_which.do_u256mul)
         run_bench("ll_u256_mul", bench_ll_u256_mul_setup, bench_ll_u256_mul_run, bench_ll_u256_mul_clear, args.N, args.T);
@@ -852,8 +852,8 @@ int main(int argc, char **argv)
     if (args.do_which.do_shift)
         run_bench("fp256_shift", bench_fp256_shift_setup, bench_fp256_shift_run, bench_fp256_shift_clear, args.N, args.T);
 
-    if (args.do_which.do_sqr)
-        run_bench("fp256_sqr", bench_fp256_sqr_setup, bench_fp256_sqr_run, bench_fp256_sqr_clear, args.N, args.T);
+    if (args.do_which.do_sqrlo)
+        run_bench("fp256_sqrlo", bench_fp256_sqr_setup, bench_fp256_sqrlo_run, bench_fp256_sqr_clear, args.N, args.T);
 
     if (args.do_which.do_u256sqr)
         run_bench("ll_u256_sqr", bench_ll_u256_sqr_setup, bench_ll_u256_sqr_run, bench_ll_u256_sqr_clear, args.N, args.T);

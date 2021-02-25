@@ -22,7 +22,7 @@ static const char *bench_help_string = "\
 usage : bench [arithmetic] -n [num_test] -t [num_thread] \n\
 \n\
 arithmetic : add u256add modadd \n\
-             mul sqr u256mul u256sqr modmul modsqr \n\
+             mullo sqrlo u256mul u256sqr modmul modsqr \n\
              shift u256shift \n\
              div naivediv \n\
              gcd modinv \n\
@@ -160,8 +160,14 @@ int get_test_args(int argc, char **argv, TEST_ARGS *args)
                 continue;
             }
 
-            if (arg_cmp(argv[i], "mul") > 0) {
-                do_which->do_mul = 1;
+            if (arg_cmp(argv[i], "mullo") > 0) {
+                do_which->do_mullo = 1;
+                do_all = 0;
+                continue;
+            }
+
+            if (arg_cmp(argv[i], "sqrlo") > 0) {
+                do_which->do_sqrlo = 1;
                 do_all = 0;
                 continue;
             }
@@ -178,17 +184,6 @@ int get_test_args(int argc, char **argv, TEST_ARGS *args)
                 continue;
             }
 
-            if (arg_cmp(argv[i], "sqr") > 0) {
-                do_which->do_sqr = 1;
-                do_all = 0;
-                continue;
-            }
-
-            if (arg_cmp(argv[i], "mul") > 0) {
-                do_which->do_mul = 1;
-                do_all = 0;
-                continue;
-            }
 
             if (arg_cmp(argv[i], "div") > 0) {
                 do_which->do_div = 1;

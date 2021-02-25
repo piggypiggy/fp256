@@ -439,7 +439,28 @@ FP256_EXPORT int fp256_sub_limb(fp256 *r, const fp256 *a, const u64 b);
  * @param[in] b           - 256 bit integer.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
-FP256_EXPORT int fp256_mul(fp256 *r, const fp256 *a, const fp256 *b);
+FP256_EXPORT int fp256_mullo(fp256 *r, const fp256 *a, const fp256 *b);
+
+/**
+ * compute r = a * b, r stores upper 256 bit result.
+ * 
+ * @param[out] r          - result.
+ * @param[in] a           - 256 bit integer.
+ * @param[in] b           - 256 bit integer.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int fp256_mulhi(fp256 *r, const fp256 *a, const fp256 *b);
+
+/**
+ * compute a * b, rhi stores upper 256 bit result, rlo stores lower 256 bit result.
+ * 
+ * @param[out] rhi        - result.
+ * @param[out] rlo        - result.
+ * @param[in] a           - 256 bit integer.
+ * @param[in] b           - 256 bit integer.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int fp256_mul(fp256 *rhi, fp256 *rlo, const fp256 *a, const fp256 *b);
 
 /**
  * compute r = a * a, r stores lower 256 bit result.
@@ -449,7 +470,26 @@ FP256_EXPORT int fp256_mul(fp256 *r, const fp256 *a, const fp256 *b);
  * @param[in] b           - 256 bit integer.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
-FP256_EXPORT int fp256_sqr(fp256 *r, const fp256 *a);
+FP256_EXPORT int fp256_sqrlo(fp256 *r, const fp256 *a);
+
+/**
+ * compute r = a * a, r stores upper 256 bit result.
+ * 
+ * @param[out] r          - result.
+ * @param[in] a           - 256 bit integer.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int fp256_sqrhi(fp256 *r, const fp256 *a);
+
+/**
+ * compute a * a, rhi stores upper 256 bit result, rlo stores lower 256 bit result.
+ * 
+ * @param[out] rhi        - result.
+ * @param[out] rlo        - result.
+ * @param[in] a           - 256 bit integer.
+ * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
+ */
+FP256_EXPORT int fp256_sqr(fp256 *rhi, fp256 *rlo, const fp256 *a);
 
 /**
  * compute rem = num % div, quo = floor(num / div). \n

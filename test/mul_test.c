@@ -26,12 +26,12 @@ typedef struct {
 
 
 
-void fp256_mul_test_vector(void)
+void fp256_mullo_test_vector(void)
 {
 
 }
 
-void* fp256_mul_test(void *p)
+void* fp256_mullo_test(void *p)
 {
     int64_t i, N;
     fp256 r1, r2, a, b;
@@ -43,21 +43,21 @@ void* fp256_mul_test(void *p)
     for (i = 0; i < N; i++) {
         fp256_rand_limbs(&a, 4);
         fp256_rand_limbs(&b, 4);
-        fp256_mul(&r1, &a, &b);
-        fp256_mul(&r2, &b, &a);
+        fp256_mullo(&r1, &a, &b);
+        fp256_mullo(&r2, &b, &a);
         if (fp256_cmp(&r1, &r2) != 0) {
-            printf("fp256_mul a*b != b*a %" PRId64 "\n", i+1);
+            printf("fp256_mullo a*b != b*a %" PRId64 "\n", i+1);
             goto end;
         }
     }
 
-    printf("fp256_mul test passed \n");
+    printf("fp256_mullo test passed \n");
     td->ok = FP256_OK;
 end:
     return NULL;
 }
 
-void* fp256_sqr_test(void *p)
+void* fp256_sqrlo_test(void *p)
 {
     int64_t i, N;
     fp256 r1, r2, a;
@@ -68,18 +68,18 @@ void* fp256_sqr_test(void *p)
 
     for (i = 0; i < N; i++) {
         fp256_rand_limbs(&a, 4);
-        fp256_mul(&r1, &a, &a);
-        fp256_sqr(&r2, &a);
+        fp256_mullo(&r1, &a, &a);
+        fp256_sqrlo(&r2, &a);
         if (fp256_cmp(&r1, &r2) != 0) {
             test_fp256_print_hex("a   = ", &a);
             test_fp256_print_hex("a^2 = ", &r2);
             test_fp256_print_hex("a*a = ", &r1);
-            printf("fp256_sqr a^2 != a*a %" PRId64 "\n", i+1);
+            printf("fp256_sqrlo a^2 != a*a %" PRId64 "\n", i+1);
             goto end;
         }
     }
 
-    printf("fp256_sqr test passed \n");
+    printf("fp256_sqrlo test passed \n");
     td->ok = FP256_OK;
 end:
     return NULL;
@@ -95,8 +95,8 @@ int main(int argc, char **argv)
     RETURN_IF_ERROR(get_test_args(argc, argv, &args));
     test_rand_init();
 
-    RETURN_IF_ERROR(run_test("fp256_mul", NULL, fp256_mul_test, args.N, args.T));
-    RETURN_IF_ERROR(run_test("fp256_sqr", NULL, fp256_sqr_test, args.N, args.T));
+    RETURN_IF_ERROR(run_test("fp256_mullo", NULL, fp256_mullo_test, args.N, args.T));
+    RETURN_IF_ERROR(run_test("fp256_sqrlo", NULL, fp256_sqrlo_test, args.N, args.T));
 
     fp256_deinit();
     return 0;

@@ -19,43 +19,88 @@
 #include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
 
-/* r = a * b
- * Because a*b might be larger than 2^256 which does not fit into fp256, 
- * r only stores lower 256 bit result. Call ll_u256_mul if you need 
- * higher 256 bit.
- */ 
-int fp256_mul(fp256 *r, const fp256 *a, const fp256 *b)
+/* r = a * b (lower 256 bits), TODO : optimize mullo */ 
+int fp256_mullo(fp256 *r, const fp256 *a, const fp256 *b)
 {
     u64 rd[8];
 
     if (r == NULL || a == NULL || b == NULL)
         return FP256_ERR;
 
-    /* clear rd */
-    // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
-    // rd[4] = 0ULL; rd[5] = 0ULL; rd[6] = 0ULL; rd[7] = 0ULL;
-
-    // if (a->nlimbs != 0 && b->nlimbs != 0)
-        // ll_u256_mul_limbs(rd, a->d, b->d, a->nlimbs, b->nlimbs);
     ll_u256_mul(rd, a->d, b->d);
 
     fp256_set_limbs(r, rd, FP256_LIMBS);
     return FP256_OK;
 }
 
-int fp256_sqr(fp256 *r, const fp256 *a)
+/* r = a * b (upper 256 bits) */ 
+int fp256_mulhi(fp256 *r, const fp256 *a, const fp256 *b)
+{
+    u64 rd[8];
+
+    if (r == NULL || a == NULL || b == NULL)
+        return FP256_ERR;
+
+    ll_u256_mul(rd, a->d, b->d);
+
+    fp256_set_limbs(r, rd + 4, FP256_LIMBS);
+    return FP256_OK;
+}
+
+/* rhi:rlo = a * b */ 
+int fp256_mul(fp256 *rhi, fp256 *rlo, const fp256 *a, const fp256 *b)
+{
+    u64 rd[8];
+
+    if (rhi == NULL || rlo == NULL || a == NULL || b == NULL)
+        return FP256_ERR;
+
+    ll_u256_mul(rd, a->d, b->d);
+
+    fp256_set_limbs(rlo, rd, FP256_LIMBS);
+    fp256_set_limbs(rhi, rd + 4, FP256_LIMBS);
+    return FP256_OK;
+}
+
+/* r = a * a (lower 256 bits), TODO : optimize sqrlo  */ 
+int fp256_sqrlo(fp256 *r, const fp256 *a)
 {
     u64 rd[8];
 
     if (r == NULL || a == NULL)
         return FP256_ERR;
 
-    /* clear rd */
-    // rd[0] = 0ULL; rd[1] = 0ULL; rd[2] = 0ULL; rd[3] = 0ULL;
-    // rd[4] = 0ULL; rd[5] = 0ULL; rd[6] = 0ULL; rd[7] = 0ULL;
-
     ll_u256_sqr(rd, a->d);
 
     fp256_set_limbs(r, rd, FP256_LIMBS);
+    return FP256_OK;
+}
+
+/* r = a * a (upper 256 bits) */ 
+int fp256_sqrhi(fp256 *r, const fp256 *a)
+{
+    u64 rd[8];
+
+    if (r == NULL || a == NULL)
+        return FP256_ERR;
+
+    ll_u256_sqr(rd, a->d);
+
+    fp256_set_limbs(r, rd + 4, FP256_LIMBS);
+    return FP256_OK;
+}
+
+/* rhi:rlo = a * a */ 
+int fp256_sqr(fp256 *rhi, fp256 *rlo, const fp256 *a)
+{
+    u64 rd[8];
+
+    if (rhi == NULL || rlo == NULL || a == NULL)
+        return FP256_ERR;
+
+    ll_u256_sqr(rd, a->d);
+
+    fp256_set_limbs(rlo, rd, FP256_LIMBS);
+    fp256_set_limbs(rhi, rd + 4, FP256_LIMBS);
     return FP256_OK;
 }
