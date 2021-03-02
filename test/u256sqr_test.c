@@ -131,6 +131,17 @@ int ll_u256_sqr_test_vector(void)
             test_print_hex("r = ", r, 8);
             return FP256_ERR;
         }
+
+        ll_set_zero(tr, 8);
+        ll_u256_sqrlo(tr, a);
+        if (ll_cmp_limbs(tr, r, 4, 4) != 0) {
+            printf("ll_u256_sqrlo_test_vector %d failed\n", i + 1);
+            test_print_hex("r = ", tr, 4);
+            test_print_hex("a = ", a, 4);
+            printf("a * a should be :\n");
+            test_print_hex("r = ", r, 4);
+            return FP256_ERR;
+        }
     }
 
     printf("ll_u256_sqr_test_vector passed\n");

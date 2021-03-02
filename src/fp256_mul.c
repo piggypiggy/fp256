@@ -27,7 +27,7 @@ int fp256_mullo(fp256 *r, const fp256 *a, const fp256 *b)
     if (r == NULL || a == NULL || b == NULL)
         return FP256_ERR;
 
-    ll_u256_mul(rd, a->d, b->d);
+    ll_u256_mullo(rd, a->d, b->d);
 
     fp256_set_limbs(r, rd, FP256_LIMBS);
     return FP256_OK;
@@ -70,7 +70,7 @@ int fp256_sqrlo(fp256 *r, const fp256 *a)
     if (r == NULL || a == NULL)
         return FP256_ERR;
 
-    ll_u256_sqr(rd, a->d);
+    ll_u256_sqrlo(rd, a->d);
 
     fp256_set_limbs(r, rd, FP256_LIMBS);
     return FP256_OK;

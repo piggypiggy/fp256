@@ -20,7 +20,7 @@
 #include "ll_local.h"
 
 #ifndef USE_ASM_U256_MUL
-void ll_u256_mul_limbs(u64 rd[4*2], const u64 ad[4], const u64 bd[4], size_t al, size_t bl)
+void ll_u256_mul_limbs(u64 rd[8], const u64 ad[4], const u64 bd[4], size_t al, size_t bl)
 {
     (void) rd;
     (void) ad;
@@ -30,7 +30,7 @@ void ll_u256_mul_limbs(u64 rd[4*2], const u64 ad[4], const u64 bd[4], size_t al,
     return;
 }
 
-void ll_u256_mul(u64 rd[4*2], const u64 ad[4], const u64 bd[4])
+void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4])
 {
     (void) rd;
     (void) ad;
@@ -38,7 +38,22 @@ void ll_u256_mul(u64 rd[4*2], const u64 ad[4], const u64 bd[4])
     return;
 }
 
-void ll_u256_sqr(u64 rd[4*2], const u64 ad[4])
+void ll_u256_mullo(u64 rd[4], const u64 ad[4], const u64 bd[4])
+{
+    (void) rd;
+    (void) ad;
+    (void) bd;
+    return;
+}
+
+void ll_u256_sqr(u64 rd[8], const u64 ad[4])
+{
+    (void) rd;
+    (void) ad;
+    return;
+}
+
+void ll_u256_sqrlo(u64 rd[4], const u64 ad[4])
 {
     (void) rd;
     (void) ad;

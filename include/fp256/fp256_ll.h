@@ -533,18 +533,6 @@ FP256_EXPORT void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *R
 FP256_EXPORT void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l);
 
 /**
- * multiply two integer represented by u64 array.\n
- * rd = ad * bd.
- * 
- * @param[out] rd         - result.
- * @param[in] ad          - the first u64 array to multiply.
- * @param[in] bd          - the second u64 array to multiply.
- * @param[in] al          - length of ad array, al <= 4.
- * @param[in] bl          - length of bd array, bl <= 4.
- */
-FP256_EXPORT void ll_u256_mul_limbs(u64 rd[8], const u64 ad[4], const u64 bd[4], size_t al, size_t bl);
-
-/**
  * multiply two 256 bit integer represented by u64 array.\n
  * rd = ad * bd.
  * 
@@ -555,6 +543,16 @@ FP256_EXPORT void ll_u256_mul_limbs(u64 rd[8], const u64 ad[4], const u64 bd[4],
 FP256_EXPORT void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4]);
 
 /**
+ * multiply two 256 bit integer represented by u64 array, reserve lower 256 bit result.\n
+ * rd = ad * bd.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] bd          - the second u64 array to multiply.
+ */
+FP256_EXPORT void ll_u256_mullo(u64 rd[4], const u64 ad[4], const u64 bd[4]);
+
+/**
  * square a 256 bit integer represented by u64 array.\n
  * rd = ad ^ 2.
  * 
@@ -562,6 +560,15 @@ FP256_EXPORT void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4]);
  * @param[in] ad          - the u64 array to square.
  */
 FP256_EXPORT void ll_u256_sqr(u64 rd[8], const u64 ad[4]);
+
+/**
+ * square a 256 bit integer represented by u64 array, reserve lower 256 bit result.\n
+ * rd = ad ^ 2.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to square.
+ */
+FP256_EXPORT void ll_u256_sqrlo(u64 rd[4], const u64 ad[4]);
 
 /**
  * montgomery multiplication of two integers in montgomery representation.\n
