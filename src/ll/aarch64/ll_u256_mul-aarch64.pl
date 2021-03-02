@@ -152,6 +152,71 @@ ll_u256_mul:
     ret
 .size	ll_u256_mul,.-ll_u256_mul
 
+
+// void ll_u256_mullo(u64 r[4], u64 a[4], u64 b[4]);
+.globl	ll_u256_mullo
+.type	ll_u256_mullo,%function
+.align	5
+ll_u256_mullo:
+    ldp $a0,$a1,[$ad]
+    ldp $b0,$b1,[$bd]
+    ldp $a2,$a3,[$ad,#16]
+    ldp $b2,$b3,[$bd,#16]
+    // a0 * b0
+    mul   $acc0,$a0,$b0
+    umulh $acc1,$a0,$b0
+    // a1 * b0
+    mul     $t0,$a1,$b0
+    umulh $acc2,$a1,$b0
+    adds $acc1,$acc1,$t0
+     mul    $t1,$a2,$b0
+    adc $acc2,$acc2,xzr
+    // a2 * b0
+    umulh $acc3,$a2,$b0
+    adds $acc2,$acc2,$t1
+     mul    $t0,$a3,$b0
+    adc $acc3,$acc3,xzr
+    // a3 * b0
+    add $acc3,$acc3,$t0
+     mul  $t1,$a0,$b1
+
+    // a0 * b1
+    umulh $t2,$a0,$b1
+    adds $acc1,$acc1,$t1
+    // a1 * b1
+    umulh $t0,$a1,$b1
+     adcs $acc2,$acc2,$t2
+    mul   $t1,$a1,$b1
+    adc $t0,$t0,xzr
+    adds $acc2,$acc2,$t1
+    // a2 * b1
+     adc $acc3,$acc3,$t0
+    mul   $t1,$a2,$b1
+    add $acc3,$acc3,$t1
+    // rd[0] = $acc0, rd[1] = $acc1
+    stp $acc0,$acc1,[$rd]
+
+    // a0 * b2
+    mul   $t1,$a0,$b2
+    umulh $t2,$a0,$b2
+    adds $acc2,$acc2,$t1
+    // a1 * b2
+    umulh $t0,$a1,$b2
+     adc $acc3,$acc3,$t2
+    mul   $t1,$a1,$b2
+    adc $t0,$t0,xzr
+    add $acc3,$acc3,$t1
+
+    // a0 * b3
+    mul  $t1,$a0,$b3
+    add $acc3,$acc3,$t1
+
+    // rd[2] = $acc2, rd[3] = $acc3
+    stp $acc2,$acc3,[$rd,#16]
+    ret
+.size	ll_u256_mullo,.-ll_u256_mullo
+
+
 // void ll_u256_sqr(u64 r[8], u64 a[4]);
 .globl	ll_u256_sqr
 .type	ll_u256_sqr,%function
@@ -225,6 +290,50 @@ ll_u256_sqr:
     stp $acc6,$acc7,[$rd,#48]
     ret
 .size	ll_u256_sqr,.-ll_u256_sqr
+
+
+// void ll_u256_sqrlo(u64 r[4], u64 a[4]);
+.globl	ll_u256_sqrlo
+.type	ll_u256_sqrlo,%function
+.align	5
+ll_u256_sqrlo:
+    ldp $a0,$a1,[$ad]
+    ldp $a2,$a3,[$ad,#16]
+    // a1 * a0
+    mul   $acc1,$a1,$a0
+    umulh $acc2,$a1,$a0
+    // a2 * a0
+    mul     $t1,$a2,$a0
+    umulh $acc3,$a2,$a0
+    adds $acc2,$acc2,$t1
+     mul    $t0,$a3,$a0
+    adc $acc3,$acc3,xzr
+    // a3 * a0
+    add $acc3,$acc3,$t0
+     mul  $t1,$a2,$a1
+
+    // a2 * a1
+    add $acc3,$acc3,$t1
+
+    // (acc3 ~ acc1) << 1 + a0^2 + a1^2
+    mul $acc0,$a0,$a0
+    umulh $t1,$a0,$a0
+    extr $acc3,$acc3,$acc2,#63
+    extr $acc2,$acc2,$acc1,#63
+    lsl $acc1,$acc1,#1
+    mul $t2,$a1,$a1
+    umulh $t3,$a1,$a1
+
+    adds $acc1,$acc1,$t1
+    adcs $acc2,$acc2,$t2
+    adc $acc3,$acc3,$t3
+
+    // rd[0] = $acc0, rd[1] = $acc1
+    stp $acc0,$acc1,[$rd]
+    // rd[2] = $acc2, rd[3] = $acc3
+    stp $acc2,$acc3,[$rd,#16]
+    ret
+.size	ll_u256_sqrlo,.-ll_u256_sqrlo
 ___
 }
 
