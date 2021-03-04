@@ -165,7 +165,7 @@ int fp256_mod_sqr_test_vector(void)
             test_fp256_print_hex("r = ", &tr);
             test_fp256_print_hex("a = ", &a);
             test_fp256_print_hex("m = ", &m);
-            printf("a*b mod m should be :\n");
+            printf("a^2 mod m should be :\n");
             test_fp256_print_hex("r = ", &r);
             return FP256_ERR;
         }
