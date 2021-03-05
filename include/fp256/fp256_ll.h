@@ -93,7 +93,7 @@ FP256_EXPORT void ll_normalize(u64 *ad, size_t al, size_t max);
  * @param[in] a           - 64 bit integer.
  * @return number of leading zero bits.
  */
-FP256_EXPORT size_t ll_leading_zeros(const u64 a);
+FP256_EXPORT size_t ll_leading_zeros(u64 a);
 
 /**
  * index of the most significant bit of a.
@@ -101,7 +101,7 @@ FP256_EXPORT size_t ll_leading_zeros(const u64 a);
  * @param[in] a           - 64 bit integer.
  * @return index of the most significant bit.
  */
-FP256_EXPORT size_t ll_num_bits(const u64 a);
+FP256_EXPORT size_t ll_num_bits(u64 a);
 
 /**
  * test if idx's bit of an integer represented by an u64 array is 1.
@@ -165,7 +165,7 @@ FP256_EXPORT int ll_cmp_limbs(const u64 *ad, const u64 *bd, size_t al, size_t bl
  * @param[in] in          - 32 bit integer.
  * @return result.
  */
-FP256_EXPORT u32 ll_bswap4(const u32 in);
+FP256_EXPORT u32 ll_bswap4(u32 in);
 
 /**
  * reverse byte order of a 64 bit integer 
@@ -173,7 +173,7 @@ FP256_EXPORT u32 ll_bswap4(const u32 in);
  * @param[in] in          - 64 bit integer.
  * @return result.
  */
-FP256_EXPORT u64 ll_bswap8(const u64 in);
+FP256_EXPORT u64 ll_bswap8(u64 in);
 
 /**
  * change byte order of a 32 bit integer from native order to big endian order.

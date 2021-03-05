@@ -27,19 +27,19 @@
 # define ROTR64(a, n) (((a) >> n) | ((a) << (64-n)))
 
 // TODO
-size_t ll_leading_zeros(const u64 a)
+size_t ll_leading_zeros(u64 a)
 {
     (void) a;
     return 0;
 }
 
-size_t ll_num_bits(const u64 a)
+size_t ll_num_bits(u64 a)
 {
     (void) a;
     return 0;
 }
 
-inline u32 ll_bswap4(const u32 in)
+inline u32 ll_bswap4(u32 in)
 {
     u32 ret;
 
@@ -47,7 +47,7 @@ inline u32 ll_bswap4(const u32 in)
     return ret;
 }
 
-inline u64 ll_bswap8(const u64 in)
+inline u64 ll_bswap8(u64 in)
 {
     u64 ret;
 
