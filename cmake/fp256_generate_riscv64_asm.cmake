@@ -8,7 +8,7 @@ if(USE_ASM)
     # set(USE_ASM_SHIFT      1)    # ll_shift-riscv64.S
     set(USE_ASM_U256_ADD   1)    # ll_u256_add-riscv64.S
     # set(USE_ASM_U256_FMOD  1)    # ll_u256_fmod-riscv64.S
-    # set(USE_ASM_U256_MONT  1)    # ll_u256_mont-riscv64.S
+    set(USE_ASM_U256_MONT  1)    # ll_u256_mont-riscv64.S
     set(USE_ASM_U256_MUL   1)    # ll_u256_mul-riscv64.S
     # set(USE_ASM_U256_SHIFT 1)    # ll_u256_shift-riscv64.S
     # set(USE_ASM_UTILS      1)    # ll_utils-riscv64.S
@@ -29,7 +29,7 @@ if(USE_ASM)
     # ll_add_asm(${LL_ASM_DIR}/ll_shift-riscv64.S       USE_ASM_SHIFT)
     # ll_add_asm(${LL_ASM_DIR}/ll_lehmer-riscv64.S      USE_ASM_LEHMER)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_add-riscv64.S     USE_ASM_U256_ADD)
-    # ll_add_asm(${LL_ASM_DIR}/ll_u256_mont-riscv64.S   USE_ASM_U256_MONT)
+    ll_add_asm(${LL_ASM_DIR}/ll_u256_mont-riscv64.S   USE_ASM_U256_MONT)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_mul-riscv64.S    USE_ASM_U256_MUL)
     # ll_add_asm(${LL_ASM_DIR}/ll_u256_shift-riscv64.S  USE_ASM_U256_SHIFT)
     # ll_add_asm(${LL_ASM_DIR}/ll_utils-riscv64.S       USE_ASM_UTILS)
