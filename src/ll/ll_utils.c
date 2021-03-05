@@ -26,17 +26,48 @@
 # define ROTL64(a, n) (((a) << n) | ((a) >> (64-n)))
 # define ROTR64(a, n) (((a) >> n) | ((a) << (64-n)))
 
-// TODO
+/* there is no byte-swap nor count_leading_zeros instruction in risc-v spec 2.2. */
 size_t ll_leading_zeros(u64 a)
 {
-    (void) a;
-    return 0;
+    return (64 - ll_num_bits(a));
 }
 
+/* constant-time from openssl. */
 size_t ll_num_bits(u64 a)
 {
-    (void) a;
-    return 0;
+    u64 x, mask;
+    size_t bits = (a != 0);
+
+    x = a >> 32;
+    mask = (0 - ((-x) >> 63));
+    bits += 32 & mask;
+    a ^= (x ^ a) & mask;
+
+    x = a >> 16;
+    mask = (0 - ((-x) >> 63));
+    bits += 16 & mask;
+    a ^= (x ^ a) & mask;
+
+    x = a >> 8;
+    mask = (0 - ((-x) >> 63));
+    bits += 8 & mask;
+    a ^= (x ^ a) & mask;
+
+    x = a >> 4;
+    mask = (0 - ((-x) >> 63));
+    bits += 4 & mask;
+    a ^= (x ^ a) & mask;
+
+    x = a >> 2;
+    mask = (0 - ((-x) >> 63));
+    bits += 2 & mask;
+    a ^= (x ^ a) & mask;
+
+    x = a >> 1;
+    mask = (0 - ((-x) >> 63));
+    bits += 1 & mask;
+
+    return bits;
 }
 
 inline u32 ll_bswap4(u32 in)
