@@ -1,6 +1,6 @@
 # it doesn't 'generate' anything...
 if(USE_ASM)
-    # set(USE_ASM_ADD        1)    # ll_add-riscv64.S
+    set(USE_ASM_ADD        1)    # ll_add-riscv64.S
     # set(USE_ASM_CPUID      1)    # ll_cpuid-x86.S
     # set(USE_ASM_DIV        1)    # ll_div-riscv64.S
     # set(USE_ASM_LEHMER     1)    # ll_lehmer-riscv64.S
@@ -23,7 +23,7 @@ if(USE_ASM)
         endif()
     endmacro()
 
-    # ll_add_asm(${LL_ASM_DIR}/ll_add-riscv64.S         USE_ASM_ADD)
+    ll_add_asm(${LL_ASM_DIR}/ll_add-riscv64.S         USE_ASM_ADD)
     # ll_add_asm(${LL_ASM_DIR}/ll_div-riscv64.S         USE_ASM_DIV)
     # ll_add_asm(${LL_ASM_DIR}/ll_mul-riscv64.S         USE_ASM_MUL)
     # ll_add_asm(${LL_ASM_DIR}/ll_shift-riscv64.S       USE_ASM_SHIFT)
