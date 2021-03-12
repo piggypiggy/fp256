@@ -206,7 +206,18 @@ static MUL_TEST_VECTOR mul_test_vector[] = {
         "3de3e25d1165176e909b546f619a531fdcb536242fe7f5f09e4",
         "a8f70852751a87580eadd963329036967a81fb3454a4b2f9",
     },
-
+    /* 31 */
+    {
+        "",
+        "12345678abcdeffedcba9876543210",
+        "",
+    },
+    /* 32 */
+    {
+        "",
+        "",
+        "12345678abcdeffedcba987654321012345678abcdeffedcba9876543210",
+    }
 };
 
 int ll_mul_test_vector(void)

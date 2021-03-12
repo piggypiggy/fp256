@@ -174,9 +174,9 @@ static SHIFT_TEST_VECTOR shift_test_vector[] = {
     },
     /* 25 */
     {
+        "",
         "0",
-        "0",
-        0,
+        -64,
     },
 };
 
