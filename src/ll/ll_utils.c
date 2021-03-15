@@ -21,10 +21,10 @@
 
 #ifndef USE_ASM_UTILS
 
-# define ROTL32(a, n) (((a) << n) | ((a) >> (32-n)))
-# define ROTR32(a, n) (((a) >> n) | ((a) << (32-n)))
-# define ROTL64(a, n) (((a) << n) | ((a) >> (64-n)))
-# define ROTR64(a, n) (((a) >> n) | ((a) << (64-n)))
+# define ROTL32(a, n) (((a) << (n)) | ((a) >> (32-(n))))
+# define ROTR32(a, n) (((a) >> (n)) | ((a) << (32-(n))))
+# define ROTL64(a, n) (((a) << (n)) | ((a) >> (64-(n))))
+# define ROTR64(a, n) (((a) >> (n)) | ((a) << (64-(n))))
 
 /* there is no byte-swap nor count_leading_zeros instruction in risc-v spec 2.2. */
 size_t ll_leading_zeros(u64 a)

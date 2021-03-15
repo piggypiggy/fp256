@@ -159,7 +159,7 @@ FP256_EXPORT int fp256_copy(fp256 *r, const fp256 *a);
 /** 
  * set r = 0.
  * 
- * @param[in,out] a       - 256 bit integer.
+ * @param[in,out] r       - result.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
 FP256_EXPORT int fp256_set_zero(fp256 *r);
@@ -561,8 +561,8 @@ FP256_EXPORT int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const f
  * compute r = (a * b) % m.
  * 
  * @param[out] r          - remainder.
- * @param[in] a           - the first 256 bit integer to mul.
- * @param[in] b           - the second 256 bit integer to mul.
+ * @param[in] a           - the first 256 bit integer to multiply.
+ * @param[in] b           - the second 256 bit integer to multiply.
  * @param[in] m           - modulus.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
@@ -638,8 +638,8 @@ FP256_EXPORT int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N);
  * montgomery multiplication, r = A * B * R^{-1} mod N 
  * 
  * @param[out] r          - result.
- * @param[in] A           - the first integer(in montgomery representation) to mul.
- * @param[in] B           - the second integer(in montgomery representation) to mul.
+ * @param[in] A           - the first integer(in montgomery representation) to multiply.
+ * @param[in] B           - the second integer(in montgomery representation) to multiply.
  * @param[in] mctx        - montgomery context.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
@@ -649,7 +649,7 @@ FP256_EXPORT int fp256_mont_mul(fp256 *r, const fp256 *A, const fp256 *B, const 
  * montgomery multiplication, r = A * A * R^{-1} mod N 
  * 
  * @param[out] r          - result.
- * @param[in] A           - the integer(in montgomery representation) to mul.
+ * @param[in] A           - the integer(in montgomery representation) to multiply.
  * @param[in] mctx        - montgomery context.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
