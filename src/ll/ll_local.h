@@ -91,6 +91,11 @@ extern "C" {
     (b) >  89 ? 4 : \
     (b) >  22 ? 3 : 1)
 
+void ll_naive_div_1_limb(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
+void ll_naive_div_2_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
+void ll_naive_div_3_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
+void ll_naive_div_4_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
+
 /* reduce a1:a0, b1:b0 until they don't satisfy approximative condition,
  * mat is the product of matrices during reduction of a1:a0, b1:b0,
  * it will later be used to reduce a, b.

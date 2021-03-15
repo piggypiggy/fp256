@@ -647,10 +647,6 @@ FP256_EXPORT int ll_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd,
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
 FP256_EXPORT int ll_naive_div(u64 *rd, u64 *qd, size_t *rl, size_t *ql, const u64 *nd, const u64 *dd, size_t nl, size_t dl);
-FP256_EXPORT void ll_naive_div_1_limb(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
-FP256_EXPORT void ll_naive_div_2_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
-FP256_EXPORT void ll_naive_div_3_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
-FP256_EXPORT void ll_naive_div_4_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
 
 /** 
  * lehmer gcd algorithm.\n
