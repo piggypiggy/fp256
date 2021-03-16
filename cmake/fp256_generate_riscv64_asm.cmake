@@ -4,7 +4,7 @@ if(USE_ASM)
     # set(USE_ASM_CPUID      1)    # ll_cpuid-x86.S
     # set(USE_ASM_DIV        1)    # ll_div-riscv64.S
     # set(USE_ASM_LEHMER     1)    # ll_lehmer-riscv64.S
-    # set(USE_ASM_MUL        1)    # ll_mul-riscv64.S
+    set(USE_ASM_MUL        1)    # ll_mul-riscv64.S
     # set(USE_ASM_SHIFT      1)    # ll_shift-riscv64.S
     set(USE_ASM_U256_ADD   1)    # ll_u256_add-riscv64.S
     # set(USE_ASM_U256_FMOD  1)    # ll_u256_fmod-riscv64.S
@@ -25,7 +25,7 @@ if(USE_ASM)
 
     ll_add_asm(${LL_ASM_DIR}/ll_add-riscv64.S         USE_ASM_ADD)
     # ll_add_asm(${LL_ASM_DIR}/ll_div-riscv64.S         USE_ASM_DIV)
-    # ll_add_asm(${LL_ASM_DIR}/ll_mul-riscv64.S         USE_ASM_MUL)
+    ll_add_asm(${LL_ASM_DIR}/ll_mul-riscv64.S         USE_ASM_MUL)
     # ll_add_asm(${LL_ASM_DIR}/ll_shift-riscv64.S       USE_ASM_SHIFT)
     # ll_add_asm(${LL_ASM_DIR}/ll_lehmer-riscv64.S      USE_ASM_LEHMER)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_add-riscv64.S     USE_ASM_U256_ADD)
