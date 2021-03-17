@@ -18,7 +18,6 @@
 
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
-#include <stdio.h>
 
 size_t ll_lehmer_update_ab(u64 *t1d, u64 *t2d, const u64 *ad, const u64 *bd, size_t l, const u64 mat[4], u64 nc)
 {
