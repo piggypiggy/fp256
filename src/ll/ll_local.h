@@ -41,6 +41,19 @@ extern "C" {
     (r0) = __c; \
 } while(0);
 
+/* cmp = 1 : a1:a0 > b1:b0
+ * cmp = 0 : a1:a0 = b1:b0
+ * cmp =-1 : a1:a0 < b1:b0
+ */
+# define LL_CMP2(cmp, a1, a0, b1, b0) do { \
+    if ((a1) != (b1)) \
+        (cmp) = ((a1) > (b1) ? 1 : -1); \
+    else if ((a0) != (b0)) \
+        (cmp) = ((a0) > (b0) ? 1 : -1); \
+    else \
+        (cmp) = 0; \
+} while(0);
+
 /* r1,r0 = a1,a0 - b1,b0 and cmp = 1 if a1,a0 >= b1,b0
  * r1,r0 = a1,a0         and cmp = 0 if a1,a0 <  b1,b0
  */
@@ -50,7 +63,7 @@ extern "C" {
     __mask1 = ((a0) < (b0)); \
     __c1 = (a1) - (b1) - __mask1; \
     __c0 = __c; \
-    __mask1 &= ((a0) == (b0)); \
+    __mask1 &= ((a1) == (b1)); \
     __mask1 |= ((a1) < (b1)); \
     (cmp) = __mask1 ^ 1; \
     __mask1 = ~__mask1 + 1; \
@@ -90,6 +103,27 @@ extern "C" {
     (b) > 306 ? 5 : \
     (b) >  89 ? 4 : \
     (b) >  22 ? 3 : 1)
+
+/* conditional swap a and b */
+# define LL_COND_SWAP_LIMB(a, b, cond) do { \
+    u64 __t, __cond; \
+    __cond = ((~(cond) & ((cond) - 1)) >> 63) - 1; \
+    __t = (a) ^ (b) ^ __cond; \
+    (a) ^= __t; \
+    (b) ^= __t; \
+} while(0);
+
+/* swap a and b if a < b */
+# define LL_CONDLO_SWAP_LIMB(a, b) do { \
+    _cond = ((a) - (b)) >> 63; \
+    LL_COND_SWAP_LIMB((a), (b), __cond); \
+} while(0);
+
+/* swap a and b if a > b */
+# define LL_CONDHI_SWAP_LIMB(a, b) do { \
+    _cond = ((b) - (a)) >> 63; \
+    LL_COND_SWAP_LIMB((a), (b), __cond); \
+} while(0); 
 
 void ll_naive_div_1_limb(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
 void ll_naive_div_2_limbs(u64 *rd, u64 *qd, const u64 *nd, const u64 *dd, const size_t nl);
