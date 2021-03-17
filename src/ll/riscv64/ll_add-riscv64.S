@@ -124,6 +124,39 @@ ll_sub_limbs:
 .globl	ll_mont_cond_sub_limbs
 .align	4
 ll_mont_cond_sub_limbs:
+    mv t6, x0        # borrow
+    mv t4, a3        # save l
+    beq a3, x0, .Lcond_sub_done
 
+.Lcond_sub_loop:
+    ld t1, 0(a1)
+    ld t2, 0(a2)
+    addi a1, a1, 8   # ad++
+    addi a2, a2, 8   # bd++
+    sub t3, t1, t6
+    sltu t0, t1, t3
+    sub t1, t3, t2
+    sltu t6, t3, t1
+    addi a3, a3 ,-1  # l--
+    sd t1, 0(a0)
+    add t6, t6, t0   # borrow
+    addi a0, a0, 8   # rd++
+    bne a3, x0, .Lcond_sub_loop
+
+    ld t1, 0(a1)
+    addi a1, a1, -8  # ad--
+    addi a0, a0, -8  # rd--
+    bltu t1, t6, .Lcond_move
+    mv a1, a0
+
+.Lcond_move:
+    ld t1, 0(a1)
+    addi a1, a1, -8
+    addi t4, t4, -1  # l--
+    sd t1, 0(a0)
+    addi a0, a0, -8
+    bne t4, x0, .Lcond_move
+
+.Lcond_sub_done:
     ret
 .size ll_mont_cond_sub_limbs, .-ll_mont_cond_sub_limbs
