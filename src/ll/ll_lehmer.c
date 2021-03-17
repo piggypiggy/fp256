@@ -18,6 +18,7 @@
 
 #include <fp256/fp256_ll.h>
 #include "ll_local.h"
+#include <stdio.h>
 
 size_t ll_lehmer_update_ab(u64 *t1d, u64 *t2d, const u64 *ad, const u64 *bd, size_t l, const u64 mat[4], u64 nc)
 {
@@ -77,22 +78,177 @@ size_t ll_euclid_update(u64 *t1d, u64 *t2d, const u64 *ad, const u64 *bd, u64 *v
 }
 
 #ifndef USE_ASM_LEHMER
+/* q = a1:a0 / b1:b0,
+ * a1:a0 = b1:b0,
+ * b1:b0 = remainder.
+ */
+# define LL_DIV_22(q, a1, a0, b1, b0) do { \
+    size_t __alz, __blz; \
+    u64 __t1, __t0, __cmp; \
+    __alz = ll_leading_zeros(a1); \
+    __blz = ll_leading_zeros(b1); \
+    __t1 = b1, __t0 = b0; \
+    q = 0; \
+    __blz -= __alz; \
+    b1 = (b1 << __blz) | (b0 >> 1 >> (63 - __blz)); \
+    b0 <<= __blz; \
+    do { \
+        q <<= 1; \
+        LL_CMP_SUB2(__cmp, a1, a0, a1, a0, b1, b0); \
+        q += __cmp; \
+        b0 = (b1 << 63) | (b0 >> 1); \
+        b1 >>= 1; \
+    } while (__blz--); \
+    b1 = a1; b0 = a0; \
+    a1 = __t1; a0 = __t0; \
+} while(0);
+
 u64 ll_lehmer_exgcd11(u64 mat[4], u64 a0, u64 b0)
 {
-    (void) mat;
-    (void) a0;
-    (void) b0;
-    return 0;
+    u64 n; // number of matrix multiplication
+    u64 t, q;
+    u64 m00, m01, m10, m11;
+
+    if (a0 >= b0) {
+        m00 = 1; m01 = 0; m10 = 0; m11 = 1;
+        n = 0;
+    }
+    else {
+        /* if a0 < b0, swap a0 and b0 by a matrix multiplication, 
+           i.e. [0, 1;1, 0]*[a0;b0] */
+        m00 = 0; m01 = 1; m10 = 1; m11 = 0;
+        n = 1;
+        t = a0; a0 = b0; b0 = t;
+    }
+
+    while (b0 > 0) {
+        q = a0 / b0;
+        n++;
+        t = b0;
+        b0 = a0 - q * b0;
+        a0 = t;
+        /* mat = [0, 1:1, q] * mat */
+        t = m00 + m10 * q;
+        m00 = m10;
+        m10 = t;
+        t = m01 + m11 * q;
+        m01 = m11;
+        m11 = t;
+    }
+
+    mat[0] = m00;
+    mat[1] = m01;
+    mat[2] = m10;
+    mat[3] = m11;
+    return n;
 }
 
 u64 ll_lehmer_simulate(u64 mat[4], u64 a1, u64 a0, u64 b1, u64 b0)
 {
-    (void) mat;
-    (void) a1;
-    (void) a0;
-    (void) b1;
-    (void) b0;
-    return 0;
+    int cmp;
+    u64 n; // number of matrix multiplication
+    u64 t, q, thres;
+    u64 r1, r0;
+    u64 m00, m01, m10, m11;
+
+    n = 0;
+    thres = 0x100000000ULL;
+    m00 = 1; m01 = 0; m10 = 0; m11 = 1;
+    if (b1 == 0)
+        goto Lehmer_done;
+
+    LL_CMP2(cmp, a1, a0, b1, b0);
+    if (cmp < 0) {
+        /* if a0 < b0, swap a1:a0 and b1:b0 by a matrix multiplication, 
+           i.e. [0, 1;1, 0]*[a1:a0;b1:b0] */
+        m00 = 0; m01 = 1; m10 = 1; m11 = 0;
+        n++;
+        t = a1; a1 = b1; b1 = t;
+        t = a0; a0 = b0; b0 = t;
+    }
+
+    while (a1 >= thres) {
+        LL_SUB2(r1, r0, a1, a0, b1, b0);
+        // a1:a0 > 2 * b1:b0
+        if (r1 > b1) {
+            LL_DIV_22(q, a1, a0, b1, b0);
+            if (b1 == 0)
+                goto Lehmer_done;
+
+            n++;
+            /* mat = [0, 1:1, q] * mat */
+            t = m00 + m10 * q;
+            m00 = m10;
+            m10 = t;
+            t = m01 + m11 * q;
+            m01 = m11;
+            m11 = t;
+        }
+        else {
+            if (r1 == 0)
+                goto Lehmer_done;
+
+            n++;
+            a1 = b1;
+            a0 = b0;
+            b1 = r1;
+            b0 = r0;
+            /* mat = [0, 1;1, 1] * mat */
+            t = m00 + m10;
+            m00 = m10;
+            m10 = t;
+            t = m01 + m11;
+            m01 = m11;
+            m11 = t;
+        }
+    }
+
+    thres = 0x200000000ULL;
+    a0 = (a1 << 32) | (a0 >> 32);
+    b0 = (b1 << 32) | (b0 >> 32);
+
+    while (1) {
+        t = a0 - b0;
+        if (t > b0) {
+            q = a0 / b0;
+            t = b0;
+            b0 = a0 - q * b0;
+            a0 = t;
+            if (thres > b0)
+                goto Lehmer_done;
+
+            n++;
+            /* mat = [0, 1:1, q] * mat */
+            t = m00 + m10 * q;
+            m00 = m10;
+            m10 = t;
+            t = m01 + m11 * q;
+            m01 = m11;
+            m11 = t;
+        }
+        else {
+            if (thres > t)
+                goto Lehmer_done;
+
+            n++;
+            a0 = b0;
+            b0 = t;
+            /* mat = [0, 1;1, 1] * mat */
+            t = m00 + m10;
+            m00 = m10;
+            m10 = t;
+            t = m01 + m11;
+            m01 = m11;
+            m11 = t;
+        }
+    }
+
+Lehmer_done:
+    mat[0] = m00;
+    mat[1] = m01;
+    mat[2] = m10;
+    mat[3] = m11;
+    return n;
 }
 #endif
 
