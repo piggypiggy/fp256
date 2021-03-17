@@ -38,7 +38,7 @@ ll_mul_limb:
     add a0, a0, t0   # MSB
     addi a4, a4, 8   # rd++
     mv t0, a0
-    bgeu a3, x0, .Lmul_limb_loop
+    bltu x0, a3, .Lmul_limb_loop
 
 .Lmul_limb_done:
     sd t0, 0(a4)
