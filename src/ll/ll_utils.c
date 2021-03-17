@@ -91,10 +91,23 @@ inline u64 ll_bswap8(u64 in)
 
 void ll_u256_select(u64 r[4], const u64 *table, size_t table_size, size_t index)
 {
-    (void) r;
-    (void) table;
-    (void) table_size;
-    (void) index;
+    u64 mask, r0, r1, r2, r3;
+    size_t i;
+
+    r0 = r1 = r2 = r3 = 0ULL;
+    for (i = 0; i < table_size; i++) {
+        mask = -(i == index);
+        r0 |= (table[0] & mask);
+        r1 |= (table[1] & mask);
+        r2 |= (table[2] & mask);
+        r3 |= (table[3] & mask);
+        table += 4;
+    }
+
+    r[0] = r0;
+    r[1] = r1;
+    r[2] = r2;
+    r[3] = r3;
 }
 #endif
 
