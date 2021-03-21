@@ -105,7 +105,7 @@ int fp256_mod_sqr(fp256 *r, const fp256 *a, const fp256 *m)
 
     ll_set_zero(rd, 8);
 
-    /* rd = a->d ^ 2 */
+    /* rd = (a->d) ^ 2 */
     ll_u256_sqr(rd, a->d);
     rl = ll_num_limbs(rd, 8);
 

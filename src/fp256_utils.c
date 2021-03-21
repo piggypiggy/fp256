@@ -19,8 +19,6 @@
 #include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
 
-/* TODO : make all function constant-time */
-
 int fp256_num_limbs(const fp256 *a)
 {
     int l;

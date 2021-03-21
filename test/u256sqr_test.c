@@ -121,13 +121,13 @@ int ll_u256_sqr_test_vector(void)
         ll_from_hex(r, &rl, (u8*)u256_sqr_test_vector[i].r, strlen(u256_sqr_test_vector[i].r));
         ll_from_hex(a, &al, (u8*)u256_sqr_test_vector[i].a, strlen(u256_sqr_test_vector[i].a));
 
-        /* r = a * a */
+        /* r = a^2 */
         ll_u256_sqr(tr, a);
         if (ll_cmp_limbs(tr, r, 8, 8) != 0) {
             printf("ll_u256_sqr_test_vector %d failed\n", i + 1);
             test_print_hex("r = ", tr, 8);
             test_print_hex("a = ", a, 4);
-            printf("a * a should be :\n");
+            printf("a^2 should be :\n");
             test_print_hex("r = ", r, 8);
             return FP256_ERR;
         }
@@ -138,7 +138,7 @@ int ll_u256_sqr_test_vector(void)
             printf("ll_u256_sqrlo_test_vector %d failed\n", i + 1);
             test_print_hex("r = ", tr, 4);
             test_print_hex("a = ", a, 4);
-            printf("a * a should be :\n");
+            printf("a^2 should be :\n");
             test_print_hex("r = ", r, 4);
             return FP256_ERR;
         }
