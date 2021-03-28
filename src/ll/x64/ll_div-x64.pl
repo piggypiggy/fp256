@@ -56,7 +56,7 @@ ___
 
 {
 my ($d,$d1,$d0)=("%rdi","%rdi","%rsi");
-my ($t0,$t1,$t2,$t3,$t4)=("%rax","%rcx","%r8","%r9","%rdx");
+my ($t0,$t0d,$t1,$t2,$t3,$t4)=("%rax","%eax","%rcx","%r8","%r9","%rdx");
 $code.=<<___;
 
 # u64 ll_reciprocal1(u64 d)
@@ -75,37 +75,37 @@ ll_reciprocal1:
     movzw ($t2,$t3,2), %eax    # t0
     inc $t1
     mov $t0, $t3
-    imul $t0, $t0
+    imull $t0d, $t0d
     shl \$11, $t3
-    imul $t1, $t0
+    imulq $t1, $t0
     dec $t3
     shr \$40, $t0
     sub $t0, $t3
     # v2 = (v1 << 13) - ((v1 * (2^60 - v1 * d40)) >> 47)
     mov \$0x1000000000000000, $t2
     mov $t3, $t0
-    imul $t3, $t1
+    imulq $t3, $t1
     shl \$13, $t0
     sub $t1, $t2
      mov %rdi, $t4
      mov %rdi, $t1
-    imul $t3, $t2
-     shr $t1
+    imulq $t3, $t2
+     shr \$1, $t1
      and \$1, $t4
     shr \$47, $t2
      add $t4, $t1
     add $t2, $t0
     # e = 2^96 - v2 * d63 + (v2 >> 1) * d0
     neg $t4
-    imul $t0, $t1
+    imulq $t0, $t1
     mov $t0, $t2
-    shr $t0
+    shr \$1, $t0
     and $t4, $t0
     sub $t1, $t0
     # v3 = ((v2 << 31) + ((v2 * e) >> 65)) mod 2^64
     mulq $t2
     shl \$31, $t2
-    shr %rdx
+    shr \$1, %rdx
     mov %rdi, %rax
     add %rdx, $t2
     # v4 = (v3 - (((v3 + 2^64 + 1) * d) >> 64)) mod 2^64
@@ -126,7 +126,7 @@ ll_reciprocal1:
 ll_reciprocal2:
     call ll_reciprocal1
     mov %rax, $t1
-    imul $d1, $t1
+    imulq $d1, $t1
     add $d0, $t1
     jnc .L1
     mov $t1, $t2
@@ -174,7 +174,7 @@ ll_div2by1_pi1:
     adc $t1, %rdx
     xor $t3, $t3
     mov %rdx, %rcx
-    imul $t2, %rdx
+    imulq $t2, %rdx
     sub %rdx, $t0
     cmp %rax, $t0
     cmovae $t2, $t3
@@ -208,7 +208,7 @@ ll_div3by2_pi1:
     mov 8($t0), $t2        # d1
     mov 0($n_ptr), $t0     # n0
     mov %rdx, %rcx         # q1
-    imul $t2, %rdx
+    imulq $t2, %rdx
     mov %rax, %rsi         # q0
     mov $t3, %rax
     sub %rdx, $t1
@@ -221,8 +221,8 @@ ll_div3by2_pi1:
     sbb $t2, $t1
      movq \$0, 16($r_ptr)
     cmp %rsi, $t1
-    cmovb $t0, %rax
-    cmovb $t1, %rdx
+    cmovbq $t0, %rax
+    cmovbq $t1, %rdx
     adc \$1, %rcx
     mov %rax, $t0
     mov %rdx, $t1

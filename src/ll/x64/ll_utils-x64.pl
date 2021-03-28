@@ -114,7 +114,7 @@ ___
 
 $code.=<<___;
     movdqa .LOne(%rip), %xmm5  # 1
-    movd %rcx, %xmm0           # index
+    movq %rcx, %xmm0           # index
     pxor %xmm1, %xmm1
     pxor %xmm2, %xmm2
     pxor %xmm7, %xmm7
