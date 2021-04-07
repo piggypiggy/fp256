@@ -54,7 +54,7 @@ if(USE_ASM)
 
             # nasm or masm
             if (CMAKE_ASM_NASM_COMPILER_ID STREQUAL "NASM" OR 
-                CMAKE_ASM_MASM_COMPILER_ID STREQUAL "MASM")
+                CMAKE_ASM_MASM_COMPILER_ID STREQUAL "MSVC")
                 string(REPLACE ".pl" ".asm" asm_src "${asm_src}")
             else()
                 string(REPLACE ".pl" ".s" asm_src "${asm_src}")
