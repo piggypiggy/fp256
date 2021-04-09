@@ -72,7 +72,7 @@ __ll_reciprocal1:
     movzw ($t2,$t3,2), %eax    # t0
     inc $t1
     mov $t0, $t3
-    imull $t0, $t0
+    imull $t0d, $t0d
     shl \$11, $t3
     imulq $t1, $t0
     dec $t3
