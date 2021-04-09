@@ -45,9 +45,7 @@
 typedef SSIZE_T ssize_t;
 #endif
 
-/** returns FP256_OK when function succeeded */
 #define FP256_OK      0
-/** returns FP256_ERR when function failed */
 #define FP256_ERR    -1
 
 #if defined(BUILD_STATIC)
@@ -463,7 +461,7 @@ FP256_EXPORT int fp256_mulhi(fp256 *r, const fp256 *a, const fp256 *b);
 FP256_EXPORT int fp256_mul(fp256 *rhi, fp256 *rlo, const fp256 *a, const fp256 *b);
 
 /**
- * compute r = a * a, r stores lower 256 bit result.
+ * compute r = a^2, r stores lower 256 bit result.
  * 
  * @param[out] r          - result.
  * @param[in] a           - 256 bit integer.
@@ -473,7 +471,7 @@ FP256_EXPORT int fp256_mul(fp256 *rhi, fp256 *rlo, const fp256 *a, const fp256 *
 FP256_EXPORT int fp256_sqrlo(fp256 *r, const fp256 *a);
 
 /**
- * compute r = a * a, r stores upper 256 bit result.
+ * compute r = a^2, r stores upper 256 bit result.
  * 
  * @param[out] r          - result.
  * @param[in] a           - 256 bit integer.
@@ -482,7 +480,7 @@ FP256_EXPORT int fp256_sqrlo(fp256 *r, const fp256 *a);
 FP256_EXPORT int fp256_sqrhi(fp256 *r, const fp256 *a);
 
 /**
- * compute a * a, rhi stores upper 256 bit result, rlo stores lower 256 bit result.
+ * compute a^2, rhi stores upper 256 bit result, rlo stores lower 256 bit result.
  * 
  * @param[out] rhi        - result.
  * @param[out] rlo        - result.
@@ -569,7 +567,7 @@ FP256_EXPORT int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const f
 FP256_EXPORT int fp256_mod_mul(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m);
 
 /** 
- * compute r = (a * a) % m.
+ * compute r = a^2 % m.
  * 
  * @param[out] r          - remainder.
  * @param[in] a           - the 256 bit integer to square.
@@ -638,8 +636,8 @@ FP256_EXPORT int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N);
  * montgomery multiplication, r = A * B * R^{-1} mod N 
  * 
  * @param[out] r          - result.
- * @param[in] A           - the first integer(in montgomery representation) to multiply.
- * @param[in] B           - the second integer(in montgomery representation) to multiply.
+ * @param[in] A           - the first integer(in montgomery form) to multiply.
+ * @param[in] B           - the second integer(in montgomery form) to multiply.
  * @param[in] mctx        - montgomery context.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
@@ -649,7 +647,7 @@ FP256_EXPORT int fp256_mont_mul(fp256 *r, const fp256 *A, const fp256 *B, const 
  * montgomery multiplication, r = A * A * R^{-1} mod N 
  * 
  * @param[out] r          - result.
- * @param[in] A           - the integer(in montgomery representation) to multiply.
+ * @param[in] A           - the integer(in montgomery form) to multiply.
  * @param[in] mctx        - montgomery context.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
  */
@@ -659,7 +657,7 @@ FP256_EXPORT int fp256_mont_sqr(fp256 *r, const fp256 *A, const mont_ctx *mctx);
  * montgomery exponential, r = A^e * R mod N 
  * 
  * @param[out] r          - result.
- * @param[in] A           - the base(in montgomery representation).
+ * @param[in] A           - the base(in montgomery form).
  * @param[in] e           - the exponent.
  * @param[in] mctx        - montgomery context.
  * @return #FP256_OK if succeeded, #FP256_ERR otherwise.
@@ -667,7 +665,7 @@ FP256_EXPORT int fp256_mont_sqr(fp256 *r, const fp256 *A, const mont_ctx *mctx);
 FP256_EXPORT int fp256_mont_exp(fp256 *r ,const fp256 *A, const fp256 *e, const mont_ctx *mctx);
 
 /**
- * transform integer a to montgomery representation
+ * transform integer a to montgomery form
  * 
  * @param[out] A          - result.
  * @param[in] a           - the 256 bit integer to transform.
@@ -677,7 +675,7 @@ FP256_EXPORT int fp256_mont_exp(fp256 *r ,const fp256 *A, const fp256 *e, const 
 FP256_EXPORT int fp256_to_mont(fp256 *A, const fp256 *a, const mont_ctx *mctx);
 
 /**
- * transform integer A from montgomery representation
+ * transform integer A from montgomery form
  * 
  * @param[out] a          - result.
  * @param[in] A           - the 256 bit integer to transform.
