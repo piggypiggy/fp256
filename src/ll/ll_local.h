@@ -123,7 +123,23 @@ extern "C" {
 # define LL_CONDHI_SWAP_LIMB(a, b) do { \
     _cond = ((b) - (a)) >> 63; \
     LL_COND_SWAP_LIMB((a), (b), __cond); \
-} while(0); 
+} while(0);
+
+/* for _alloca, variable length array. */
+# if defined(_MSC_VER)
+#  include <malloc.h>
+#  define alloca _alloca
+# else
+#  if defined(__GNUC__)
+#   ifndef alloca
+#    define alloca __builtin_alloca
+#   endif
+#  elif defined(HAVE_ALLOCA_H)
+#   include <alloca.h>
+#  else
+#   error alloca not available.
+#  endif
+# endif
 
 # if defined(ARCH_X86_64)
 /* they are only implemented on x86_64 */

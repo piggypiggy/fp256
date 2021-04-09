@@ -17,6 +17,7 @@ else()
     message(FATAL_ERROR "Unsupported OS: ${CMAKE_SYSTEM_NAME}")
 endif()
 
+check_include_files(alloca.h HAVE_ALLOCA_H)
 if(NOT OS_WINDOWS)
     check_include_files(sys/random.h HAVE_SYS_RANDOM_H)
     check_function_exists(getrandom HAVE_GETRANDOM)

@@ -22,9 +22,9 @@
 void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, size_t l)
 {
     size_t i;
-    u64 y;
-    u64 td[2*l+2];
+    u64 y, *td;
 
+    td = (u64*)alloca((2*l+2) * sizeof(u64));
     ll_mul_limb(td, Ad, Bd[0], l);
     y = td[0] * k0;
     ll_muladd_limb(td, Nd, y, l + 1, l);
@@ -44,9 +44,9 @@ void ll_mont_mul(u64 *rd, const u64 *Ad, const u64 *Bd, const u64 *Nd, u64 k0, s
 void ll_mont_reduce(u64 *rd, const u64 *Ad2, const u64 *Nd, u64 k0, size_t l)
 {
     size_t i;
-    u64 y;
-    u64 td[2*l+2];
+    u64 y, *td;
 
+    td = (u64*)alloca((2*l+2) * sizeof(u64));
     /* copy lower l limbs */
     ll_copy_limbs(td, Ad2, l);
     /* clear higher l limbs */
