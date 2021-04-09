@@ -119,6 +119,7 @@ elsif (`$ENV{CC} --version 2>/dev/null`
 my $current_segment;
 my $current_function;
 my %globals;
+my %exports;
 
 { package opcode;	# pick up opcodes
     sub re {
@@ -755,6 +756,11 @@ my %globals;
                     $$line = $globals{$$line} if ($prefix);
                     last;
                   };
+        /\.export/
+                && do { 
+                    $exports{$$line} = $prefix . $$line;
+                    last;
+                  };
         /\.type/    && do { my ($sym,$type,$narg) = split(',',$$line);
                     if ($type eq "\@function") {
                     undef $current_function;
@@ -762,6 +768,7 @@ my %globals;
                     $current_function->{abi}  = "svr4";
                     $current_function->{narg} = $narg;
                     $current_function->{scope} = defined($globals{$sym})?"PUBLIC":"PRIVATE";
+                    $current_function->{scope} = defined($exports{$sym})?"EXPORT":$current_function->{scope};
                     } elsif ($type eq "\@abi-omnipotent") {
                     undef $current_function;
                     $current_function->{name} = $sym;
@@ -787,8 +794,8 @@ my %globals;
         if ($gas) {
         $self->{value} = $dir . "\t" . $$line;
 
-        if ($dir =~ /\.extern/) {
-            $self->{value} = ""; # swallow extern
+        if ($dir =~ /\.extern|\.export/) {
+            $self->{value} = ""; # swallow extern, export
         } elsif (!$elf && $dir =~ /\.type/) {
             $self->{value} = "";
             $self->{value} = ".def\t" . ($globals{$1} or $1) . ";\t" .
@@ -882,6 +889,10 @@ my %globals;
         /\.globl|.global/
                 && do { $self->{value}  = $masm?"PUBLIC":"global";
                     $self->{value} .= "\t".$$line;
+                    last;
+                  };
+        /\.export/ && do {
+                    $self->{value} = "";
                     last;
                   };
         /\.size/    && do { if (defined($current_function)) {
