@@ -1,6 +1,7 @@
-![x64](https://github.com/piggypiggy/fp256/workflows/x64/badge.svg)
-![qemu-aarch64](https://github.com/piggypiggy/fp256/workflows/qemu-aarch64/badge.svg)
-![qemu-riscv64](https://github.com/piggypiggy/fp256/workflows/qemu-riscv64/badge.svg)
+[![windows-x64-vs2017](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2017.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2017.yml)
+[![windows-x64-vs2019](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2019.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2019.yml)
+[![qemu-aarch64](https://github.com/piggypiggy/fp256/actions/workflows/qemu-aarch64.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/qemu-aarch64.yml)
+[![qemu-riscv64](https://github.com/piggypiggy/fp256/actions/workflows/qemu-riscv64.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/qemu-riscv64.yml)
 
 # introduction
 fp256 is an efficient library implemented in C and assembly for 256 bit integer arithmetic.  

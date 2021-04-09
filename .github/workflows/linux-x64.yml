@@ -1,4 +1,4 @@
-name: x64
+name: linux-x64
 
 on:
   push:
@@ -35,30 +35,9 @@ jobs:
             build_type: Release
           }
         - {
-            name: "x64-ubuntu20.04-clang debug",
-            arch: x64,
-            os: ubuntu-20.04,
-            cc: clang,
-            build_type: Debug
-          }
-        - {
             name: "x64-ubuntu20.04-clang release",
             arch: x64,
             os: ubuntu-20.04,
-            cc: clang,
-            build_type: Release
-          }
-        - {
-            name: "x64-macos10.15-gcc release",
-            arch: x64,
-            os: macos-10.15,
-            cc: gcc,
-            build_type: Release
-          }
-        - {
-            name: "x64-macos10.15-clang release",
-            arch: x64,
-            os: macos-10.15,
             cc: clang,
             build_type: Release
           }
@@ -66,16 +45,32 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: configure
+      # static library
+      - name: configure-static
         env:
           CC: ${{matrix.config.cc}}
         run: |
-          mkdir build
-          cd build
-          cmake .. -DCMAKE_BUILD_TYPE=${{matrix.config.build_type}} -DUSE_ASAN=ON
+          mkdir build-static
+          cd build-static
+          cmake .. -DCMAKE_BUILD_TYPE=${{matrix.config.build_type}} -DBUILD_STATIC=ON -DBUILD_SHARED=OFF -DUSE_ASAN=ON
 
-      - name: build
+      - name: build-static
         run: cd build && make -j VERBOSE=1
       
-      - name: test
+      - name: test-static
+        run: cd build-static && make test
+
+      # shared library
+      - name: configure-shared
+        env:
+          CC: ${{matrix.config.cc}}
+        run: |
+          mkdir build-shared
+          cd build-shared
+          cmake .. -DCMAKE_BUILD_TYPE=${{matrix.config.build_type}} -DBUILD_STATIC=OFF -DBUILD_SHARED=ON -DUSE_ASAN=ON
+
+      - name: build-shared
+        run: cd build-shared && make -j VERBOSE=1
+      
+      - name: test-shared
         run: cd build && make test
