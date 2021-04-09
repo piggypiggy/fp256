@@ -1,5 +1,9 @@
+[![linux-x64](https://github.com/piggypiggy/fp256/actions/workflows/linux-x64.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/linux-x64.yml)
+[![macos-x64](https://github.com/piggypiggy/fp256/actions/workflows/macos-x64.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/macos-x64.yml)
+
 [![windows-x64-vs2017](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2017.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2017.yml)
 [![windows-x64-vs2019](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2019.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/windows-x64-vs2019.yml)
+
 [![qemu-aarch64](https://github.com/piggypiggy/fp256/actions/workflows/qemu-aarch64.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/qemu-aarch64.yml)
 [![qemu-riscv64](https://github.com/piggypiggy/fp256/actions/workflows/qemu-riscv64.yml/badge.svg?branch=master)](https://github.com/piggypiggy/fp256/actions/workflows/qemu-riscv64.yml)
 
