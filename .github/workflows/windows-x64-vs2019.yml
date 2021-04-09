@@ -1,0 +1,31 @@
+name: windows-x64-vs2019
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  windows-vs2015:
+    runs-on: windows-2019
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: build-static
+      run: |
+        mkdir build-static
+        cd build-static
+        cmake -T v142,host=x64 -A x64 -DBUILD_STATIC=ON -DBUILD_SHARED=OFF ..
+        cmake --build . --config Release -j
+    - name: test-static
+      run: cd build-static; ctest -C Release --output-on-failure
+
+    - name: build-shared
+      run: |
+        mkdir build-shared
+        cd build-shared
+        cmake -T v142,host=x64 -A x64 -DBUILD_STATIC=OFF -DBUILD_SHARED=ON ..
+        cmake --build . --config Release -j
+    - name: test-shared
+      run: cd build-shared; ctest -C Release --output-on-failure
