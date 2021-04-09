@@ -41,5 +41,8 @@ elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 
 elseif(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
     set(EXTRA_C_FLAGS ${EXTRA_C_FLAGS} /Wall /wd4668 /wd4820 /wd4255)
+    if(USE_ASM)
+        set(USE_MASM ON)
+    endif()
     add_definitions(/D_CRT_SECURE_NO_WARNINGS)
 endif()
