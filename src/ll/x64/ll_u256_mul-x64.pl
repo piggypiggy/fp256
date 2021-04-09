@@ -46,6 +46,7 @@ $code.=<<___;
 
 # void ll_u256_mul(u64 r[8], u64 a[4], u64 b[4]);
 .globl	ll_u256_mul
+.export	ll_u256_mul
 .type	ll_u256_mul,\@function,3
 .align	32
 ll_u256_mul:
@@ -192,6 +193,7 @@ ll_u256_mul:
 
 # void ll_u256_mullo(u64 r[4], u64 a[4], u64 b[4]);
 .globl	ll_u256_mullo
+.export	ll_u256_mullo
 .type	ll_u256_mullo,\@function,3
 .align	32
 ll_u256_mullo:
@@ -285,6 +287,7 @@ $code.=<<___;
 
 # void ll_u256_sqr(u64 r[8], u64 a[4]);
 .globl	ll_u256_sqr
+.export	ll_u256_sqr
 .type	ll_u256_sqr,\@function,2
 .align	32
 ll_u256_sqr:
@@ -390,6 +393,7 @@ ll_u256_sqr:
 
 # void ll_u256_sqrlo(u64 r[4], u64 a[4]);
 .globl	ll_u256_sqrlo
+.export	ll_u256_sqrlo
 .type	ll_u256_sqrlo,\@function,2
 .align	32
 ll_u256_sqrlo:

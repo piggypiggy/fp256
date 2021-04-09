@@ -43,6 +43,7 @@ my ($t0,$t1,$t2)=("%r9","%r10","%r11");
 $code.=<<___;
 # u64 ll_mul_limb(u64 *rd, u64 *ad, u64 b, size_t al);
 .globl	ll_mul_limb
+.export ll_mul_limb
 .type	ll_mul_limb,\@function,4
 .align	32
 ll_mul_limb:
@@ -77,6 +78,7 @@ my ($t1,$t2,$i)=("%r10","%r11","%rbp");
 $code.=<<___;
 # u64 ll_muladd_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
 .globl	ll_muladd_limb
+.export	ll_muladd_limb
 .type	ll_muladd_limb,\@function,5
 .align	32
 ll_muladd_limb:
@@ -123,6 +125,7 @@ ll_muladd_limb:
 
 # u64 ll_mulsub_limb(u64 *rd, u64 *ad, u64 b, size_t rl, size_t al);
 .globl	ll_mulsub_limb
+.export	ll_mulsub_limb
 .type	ll_mulsub_limb,\@function,5
 .align	32
 ll_mulsub_limb:

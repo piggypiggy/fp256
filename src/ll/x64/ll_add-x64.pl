@@ -44,6 +44,7 @@ $code.=<<___;
 
 # u64 ll_add_limb(u64 *rd, u64 *ad, u64 b, size_t al);
 .globl	ll_add_limb
+.export	ll_add_limb
 .type	ll_add_limb,\@function,4
 .align	32
 ll_add_limb:
@@ -75,6 +76,7 @@ ll_add_limb:
 
 # u64 ll_add_limbs(u64 *rd, u64 *ad, u64 *bd, size_t l);
 .globl	ll_add_limbs
+.export	ll_add_limbs
 .type	ll_add_limbs,\@function,4
 .align	32
 ll_add_limbs:
@@ -100,6 +102,7 @@ ll_add_limbs:
 
 # u64 ll_sub_limb(u64 *rd, u64 *ad, u64 b, size_t al);
 .globl	ll_sub_limb
+.export	ll_sub_limb
 .type	ll_sub_limb,\@function,4
 .align	32
 ll_sub_limb:
@@ -131,6 +134,7 @@ ll_sub_limb:
 
 # u64 ll_sub_limbs(u64 *rd, u64 *ad, u64 *bd, size_t l);
 .globl	ll_sub_limbs
+.export	ll_sub_limbs
 .type	ll_sub_limbs,\@function,4
 .align	32
 ll_sub_limbs:

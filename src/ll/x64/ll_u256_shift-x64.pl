@@ -45,6 +45,7 @@ my ($a0,$a1,$a2,$a3,$a4)=("%rax","%r8","%r9","%r10","%r11");
 $code.=<<___;
 # void ll_u256_lshift(u64 r[5], u64 a[4], size_t n);
 .globl	ll_u256_lshift
+.export	ll_u256_lshift
 .type	ll_u256_lshift,\@function,3
 .align	32
 ll_u256_lshift:
@@ -69,6 +70,7 @@ ll_u256_lshift:
 
 # void ll_u256_rshift(u64 r[4], u64 a[4], size_t n);
 .globl	ll_u256_rshift
+.export	ll_u256_rshift
 .type	ll_u256_rshift,\@function,3
 .align	32
 ll_u256_rshift:
@@ -91,6 +93,7 @@ ll_u256_rshift:
 
 # void ll_u512_lshift(u64 r[9], u64 a[8], size_t n);
 .globl	ll_u512_lshift
+.export	ll_u512_lshift
 .type	ll_u512_lshift,\@function,3
 .align	32
 ll_u512_lshift:
@@ -127,6 +130,7 @@ ll_u512_lshift:
 
 # void ll_u512_rshift(u64 r[8], u64 a[8], size_t n);
 .globl	ll_u512_rshift
+.export	ll_u512_rshift
 .type	ll_u512_rshift,\@function,3
 .align	32
 ll_u512_rshift:

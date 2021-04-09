@@ -43,6 +43,7 @@ my ($t0,$t1,$t2)=("%r9","%r10","%r11");
 $code.=<<___;
 # u64 ll_lshift(u64 *r, u64 *a, size_t al, size_t n);
 .globl	ll_lshift
+.export	ll_lshift
 .type	ll_lshift,\@function,4
 .align	32
 ll_lshift:
@@ -112,6 +113,7 @@ ll_lshift:
 
 # u64 ll_rshift(u64 *r, u64 *a, size_t al, size_t n);
 .globl	ll_rshift
+.export	ll_rshift
 .type	ll_rshift,\@function,4
 .align	32
 ll_rshift:

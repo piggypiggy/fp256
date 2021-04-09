@@ -59,12 +59,9 @@ my ($d,$d1,$d0)=("%rdi","%rdi","%rsi");
 my ($t0,$t0d,$t1,$t2,$t3,$t4)=("%rax","%eax","%rcx","%r8","%r9","%rdx");
 $code.=<<___;
 
-# u64 ll_reciprocal1(u64 d)
-.globl	ll_reciprocal1
-.hidden	ll_reciprocal1
-.type	ll_reciprocal1,\@function,1
+.type __ll_reciprocal1,\@abi-omnipotent
 .align	32
-ll_reciprocal1:
+__ll_reciprocal1:
     # v1 = (v0 << 11) - ((v0^2 * d40) >> 40) - 1
     mov %rdi, $t3
     mov %rdi, $t1
@@ -75,7 +72,7 @@ ll_reciprocal1:
     movzw ($t2,$t3,2), %eax    # t0
     inc $t1
     mov $t0, $t3
-    imull $t0d, $t0d
+    imull $t0, $t0
     shl \$11, $t3
     imulq $t1, $t0
     dec $t3
@@ -116,6 +113,15 @@ ll_reciprocal1:
     sub %rdx, %rax
 
     ret
+.size	__ll_reciprocal1,.-__ll_reciprocal1
+
+# u64 ll_reciprocal1(u64 d)
+.globl	ll_reciprocal1
+.type	ll_reciprocal1,\@function,1
+.align	32
+ll_reciprocal1:
+    call __ll_reciprocal1
+    ret
 .size	ll_reciprocal1,.-ll_reciprocal1
 
 
@@ -124,7 +130,7 @@ ll_reciprocal1:
 .type	ll_reciprocal2,\@function,2
 .align	32
 ll_reciprocal2:
-    call ll_reciprocal1
+    call __ll_reciprocal1
     mov %rax, $t1
     imulq $d1, $t1
     add $d0, $t1

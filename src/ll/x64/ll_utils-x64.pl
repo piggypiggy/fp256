@@ -44,6 +44,7 @@ ___
 $code.=<<___;
 # size_t ll_num_bits(u64 a);
 .globl	ll_num_bits
+.export	ll_num_bits
 .type	ll_num_bits,\@function,1
 .align	32
 ll_num_bits:
@@ -60,6 +61,7 @@ ll_num_bits:
 
 # size_t ll_leading_zeros(u64 a);
 .globl	ll_leading_zeros
+.export	ll_leading_zeros
 .type	ll_leading_zeros,\@function,1
 .align	32
 ll_leading_zeros:
@@ -78,6 +80,7 @@ ll_leading_zeros:
 
 # u32 ll_bswap4(u32 a)
 .globl	ll_bswap4
+.export	ll_bswap4
 .type	ll_bswap4,\@function,1
 .align	32
 ll_bswap4:
@@ -89,6 +92,7 @@ ll_bswap4:
 
 # u64 ll_bswap8(u64 a)
 .globl	ll_bswap8
+.export	ll_bswap8
 .type	ll_bswap8,\@function,1
 .align	32
 ll_bswap8:
@@ -99,17 +103,19 @@ ll_bswap8:
 ___
 
 
+# TODO : don't export it because it should require 16 byte alignment.
 # void ll_u256_select(u64 r[4], u64 *table, size_t table_size, size_t index)
 $code.=<<___;
 .globl	ll_u256_select
+.export	ll_u256_select
 .type	ll_u256_select,\@function,4
 .align	32
 ll_u256_select:
 ___
 $code.=<<___	if ($win64);
     sub \$32, %rsp
-    movaps %xmm6, 16*0(%rsp)
-    movaps %xmm7, 16*1(%rsp)
+    movdqu %xmm6, 16*0(%rsp)
+    movdqu %xmm7, 16*1(%rsp)
 ___
 
 $code.=<<___;
@@ -139,8 +145,8 @@ $code.=<<___;
     movdqu %xmm2, 16*1(%rdi)
 ___
 $code.=<<___	if ($win64);
-    movaps 16*0(%rsp), %xmm6
-    movaps 16*1(%rsp), %xmm7
+    movdqu 16*0(%rsp), %xmm6
+    movdqu 16*1(%rsp), %xmm7
     add \$32, %rsp
 ___
 

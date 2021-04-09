@@ -44,6 +44,7 @@ my ($a0,$a1,$a2,$a3)=map("%r$_",(8..11));
 $code.=<<___;
 # u64 ll_u256_add(u64 r[5], u64 a[4], u64 b[4]);
 .globl	ll_u256_add
+.export	ll_u256_add
 .type	ll_u256_add,\@function,3
 .align	32
 ll_u256_add:
@@ -66,6 +67,7 @@ ll_u256_add:
 
 # u64 ll_u256_sub(u64 r[4], u64 a[4], u64 b[4]);
 .globl	ll_u256_sub
+.export	ll_u256_sub
 .type	ll_u256_sub,\@function,3
 .align	32
 ll_u256_sub:
