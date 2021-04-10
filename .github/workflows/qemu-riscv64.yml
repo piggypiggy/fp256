@@ -41,17 +41,32 @@ jobs:
         sudo apt-get update
         sudo apt-get install gcc-riscv64-linux-gnu
 
-    - name: configure
+    - name: configure-static
       run: |
-        mkdir build
-        cd build
-        cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/riscv64-linux-gcc.cmake .. -DCMAKE_BUILD_TYPE=Release
+        mkdir build-static
+        cd build-static
+        cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/riscv64-linux-gcc.cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_STATIC=ON -DBUILD_SHARED=OFF
 
-    - name: build
-      run: cd build && make -j VERBOSE=1
+    - name: build-static
+      run: cd build-static && make -j VERBOSE=1
 
-    - name: test
+    - name: test-static
       run: |
         export PATH=$GITHUB_WORKSPACE/qemu-install/bin:$PATH
-        cd build
+        cd build-static
+        TESTS_EXECUTABLE_LOADER=qemu-riscv64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/riscv64-linux-gnu" ctest --output-on-failure
+
+    - name: configure-shared
+      run: |
+        mkdir build-shared
+        cd build-shared
+        cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/riscv64-linux-gcc.cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_STATIC=OFF -DBUILD_SHARED=ON
+
+    - name: build-shared
+      run: cd build-shared && make -j VERBOSE=1
+
+    - name: test-shared
+      run: |
+        export PATH=$GITHUB_WORKSPACE/qemu-install/bin:$PATH
+        cd build-shared
         TESTS_EXECUTABLE_LOADER=qemu-riscv64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/riscv64-linux-gnu" ctest --output-on-failure
