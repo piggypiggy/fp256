@@ -82,7 +82,7 @@ ll_sub_limb:
     addi a1, a1, 8   # ad++
     addi a3, a3, -1  # al--
     sub t2, t1, a0
-    sltu a0, t1, t2  # borrow
+    sltu a0, t1, a0  # borrow
     sd t2, 0(a4)
     addi a4, a4, 8  # rd++
     bne a3, x0, .Lsub_limb_loop
@@ -106,9 +106,9 @@ ll_sub_limbs:
     addi a1, a1, 8   # ad++
     addi a2, a2, 8   # bd++
     sub t3, t1, a0
-    sltu t0, t1, t3
+    sltu t0, t1, a0
     sub t1, t3, t2
-    sltu a0, t3, t1
+    sltu a0, t3, t2
     addi a3, a3, -1  # l--
     sd t1, 0(a4)
     add a0, a0, t0   # borrow

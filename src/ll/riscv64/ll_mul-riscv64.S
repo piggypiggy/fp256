@@ -104,14 +104,14 @@ ll_mulsub_limb:
     mulhu t1, t2, a2
     mul t0, t2, a2
     sub t4, t3, a0
-    sltu a0, t3, t4
+    sltu t5, t3, a0
     addi a6, a6, 1   # i++
-    add a0, a0, t1
     sub t3, t4, t0
-    sltu t0, t4, t3
+    add t5, t5, t1
+    sltu t0, t4, t0
     sd t3, 0(a5)
-    add a0, a0, t0   # borrow
     addi a5, a5, 8   # rd++
+    add a0, t5, t0   # borrow
     j .Lmulsub_limb_mul_loop
 
 .Lmulsub_limb_add_loop:  # rl > al, rd[al, rl-1] -= a0
@@ -119,7 +119,7 @@ ll_mulsub_limb:
     ld t2, 0(a5)
     addi a6, a6, 1   # i++
     sub t1, t2, a0
-    sltu a0, t2, t1  # borrow
+    sltu a0, t2, a0  # borrow
     sd t1, 0(a5)
     addi a5, a5, 8   # rd++
     j .Lmulsub_limb_add_loop

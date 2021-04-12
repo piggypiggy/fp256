@@ -408,27 +408,27 @@ ll_u256_mont_mul:
 
     # acc2,acc1,acc0,acc5,acc4 - N3,N2,N1,N0
     sub a0, acc4, N0       # acc4 - N0
-    sltu cy0, acc4, a0     # borrow1
+    sltu cy0, acc4, N0     # borrow1
      ld s0, 0(sp)
     sub t6, acc5, N1       # acc5 - N1
-    sltu cy1, acc5, t6     # borrow2
+    sltu cy1, acc5, N1     # borrow2
      ld s1, 8(sp)
     sub a1, t6, cy0        # acc5 - N1 - borrow1
-    sltu cy0, t6, a1       # borrow2
+    sltu cy0, t6, cy0      # borrow2
      ld s2, 16(sp)
     add cy0, cy0, cy1      # borrow2
     sub t6, acc0, N2       # acc0 - N2
-    sltu cy1, acc0, t6     # borrow3
+    sltu cy1, acc0, N2     # borrow3
      ld s3, 24(sp)
     sub a2, t6, cy0        # acc0 - N2 - borrow2
-    sltu cy0, t6, a2       # borrow3
+    sltu cy0, t6, cy0      # borrow3
      ld s4, 32(sp)
     add cy0, cy0, cy1      # borrow3
     sub t6, acc1, N3       # acc1 - N3
-    sltu cy1, acc1, t6     # borrow4
+    sltu cy1, acc1, N3     # borrow4
      ld s5, 40(sp)
     sub a3, t6, cy0        # acc1 - N3 - borrow3
-    sltu cy0, t6, a3       # borrow4
+    sltu cy0, t6, cy0      # borrow4
      ld s6, 48(sp)
     add cy0, cy0, cy1      # borrow4
     bgeu acc2, cy0, .Lmulge
@@ -757,26 +757,26 @@ ll_u256_mont_sqr:
 
     # a4,acc7,acc6,acc5,acc4 - N3,N2,N1,N0
     sub a0, acc4, N0       # acc4 - N0
-    sltu cy0, acc4, a0     # borrow1
+    sltu cy0, acc4, N0     # borrow1
 #     # ld s0, 0(sp)
     sub t6, acc5, N1       # acc5 - N1
-    sltu cy1, acc5, t6     # borrow2
+    sltu cy1, acc5, N1     # borrow2
 #     # ld s1, 8(sp)
     sub a1, t6, cy0        # acc5 - N1 - borrow1
-    sltu cy0, t6, a1       # borrow2
+    sltu cy0, t6, cy0      # borrow2
      ld s2, 16(sp)
     add cy0, cy0, cy1      # borrow2
     sub t6, acc6, N2       # acc6 - N2
-    sltu cy1, acc6, t6     # borrow3
+    sltu cy1, acc6, N2     # borrow3
      ld s3, 24(sp)
     sub a2, t6, cy0        # acc6 - N2 - borrow2
-    sltu cy0, t6, a2       # borrow3
+    sltu cy0, t6, cy0      # borrow3
      ld s4, 32(sp)
     add cy0, cy0, cy1      # borrow3
     sub t6, acc7, N3       # acc7 - N3
-    sltu cy1, acc7, t6     # borrow4
+    sltu cy1, acc7, N3     # borrow4
     sub a3, t6, cy0        # acc7 - N3 - borrow3
-    sltu cy0, t6, a3       # borrow4
+    sltu cy0, t6, cy0      # borrow4
      ld s5, 40(sp)
     add cy0, cy0, cy1      # borrow4
      ld s6, 48(sp)
