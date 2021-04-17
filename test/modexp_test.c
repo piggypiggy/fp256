@@ -405,6 +405,9 @@ int main(int argc, char **argv)
     RETURN_IF_ERROR(get_test_args(argc, argv, &args));
     test_rand_init();
 
+    /* emmmm */
+    args.N = 20000;
+
     RETURN_IF_ERROR(run_test("fp256_mod_exp", fp256_mod_exp_test_vector, fp256_mod_exp_test, args.N, args.T));
 
     fp256_deinit();

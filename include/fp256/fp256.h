@@ -45,6 +45,7 @@
 typedef SSIZE_T ssize_t;
 #endif
 
+/* TODO : error code? */
 #define FP256_OK      0
 #define FP256_ERR    -1
 

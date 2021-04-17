@@ -69,6 +69,7 @@ FP256_EXPORT void ll_set_limb(u64 *ad, size_t al, u64 limb);
  */
 FP256_EXPORT void ll_copy_limbs(u64 *rd, const u64 *ad, size_t al);
 
+/* TODO : inline? */
 /**
  * count number of limbs of ad.
  * 
