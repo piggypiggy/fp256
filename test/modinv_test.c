@@ -274,6 +274,12 @@ static FP256_MODINV_TEST_VECTOR modinv_test_vector[] = {
         "c4a4dd2916b9b6599bac7c97385d6fcea5179ef7c3c7740ef356ca20a489074d",
         "40289787516396c346929ff580471b19acba4fcb4fbea4d3",
     },
+    /* 42 */
+    {
+        "190d59fcf41d2ae0b9be663c22ae0181",
+        "7fc69b6903b35b8bd38bd179c839458c346631930ccb6409",
+        "82c8f5f5cf2401f9f3f50d835c4f0478",
+    },
 };
 
 int fp256_mod_inv_test_vector(void)

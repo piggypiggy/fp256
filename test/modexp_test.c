@@ -297,6 +297,13 @@ static FP256_MODEXP_TEST_VECTOR modexp_test_vector[] = {
         "1539744cf413c5c08bec84ea6d084c1cac224f599ec1e291773463",
         "56ccb6b7c701b83cf396cfff41259a8526a837fc987617af79ef0ef",
     },
+    /* 42 */
+    {
+        "7b2d159b289e373823e5e3bb1e36fdde3780e76b7c25d1413041e25b8706460",
+        "92ec83dad2d073e350812fe76545fb5283bc788f8d1cedeb",
+        "2e826b576bbcf3d1bc3be07f92da6d8e",
+        "21df0aa3e2250fb8fe6fb3f9f6dc6b394563184fb798527401b66efdff7f2ecf",
+    },
 };
 
 int fp256_mod_exp_test_vector(void)

@@ -182,6 +182,12 @@ static FP256_GCD_TEST_VECTOR gcd_test_vector[] = {
         "1054cffc749a5d42918440",
         "af40f628",
     },
+    /* 27 */
+    {
+        "2",
+        "8ebe18d2d21a90e9ccc1bc25045264d7fcc7e292c29aad78",
+        "4a586095d42c8de3249503a655217a529d4fb02336c040ef756a3529bf1798a2",
+    },
 };
 
 int fp256_gcd_test_vector(void)
