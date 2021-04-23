@@ -116,5 +116,6 @@ int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
         return FP256_ERR;
 
     fp256_set_one(&one);
+    /* TODO ： mont_reduce */
     return fp256_mont_mul(a, A, &one, mctx);
 }

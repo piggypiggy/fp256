@@ -118,6 +118,7 @@ u64 ll_reciprocal2(u64 d1, u64 d0)
     p += t1;
     if (p < t1) {
         v--;
+        /* p,t0 >= d1,d0 */
         if (p > d1 || (p == d1 && t0 >= d0))
             v--;
     }

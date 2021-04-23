@@ -47,7 +47,6 @@ int fp256_lshift(fp256 *r, const fp256 *a, size_t n)
     ll_u256_lshift(rd + 3, a->d, b);
 
     /* set r->d according to l */
-    /* TODO : a is negative */
     fp256_set_limbs(r, rd + 3 - l, 4);
     return FP256_OK;
 }
@@ -77,7 +76,6 @@ int fp256_rshift(fp256 *r, const fp256 *a, size_t n)
     ll_u256_rshift(rd, a->d, b);
 
     /* set r->d according to l */
-    /* TODO : a is negative */
     fp256_set_limbs(r, rd + l, 4);
     return FP256_OK;
 }

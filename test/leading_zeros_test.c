@@ -18,7 +18,7 @@
 
 #include "test.h"
 
-/*  */
+/* alz = number of leading zeros of a */
 typedef struct {
     u64 a;
     size_t alz;

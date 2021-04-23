@@ -18,7 +18,7 @@
 
 #include "test.h"
 
-/* r = a * a */
+/* r = a^2 */
 typedef struct {
     char *r;
     char *a;

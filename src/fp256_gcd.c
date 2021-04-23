@@ -43,7 +43,7 @@ int fp256_gcd(fp256 *r, const fp256 *a, const fp256 *b)
     /* euclid algorithm */
     pa = &tmpa; pb = &tmpb;
     do {
-        fp256_naive_div(pa, NULL, pa, pb);
+        fp256_div(pa, NULL, pa, pb);
         pt = pa;
         pa = pb;
         pb = pt;

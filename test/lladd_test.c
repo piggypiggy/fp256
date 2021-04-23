@@ -119,13 +119,6 @@ int ll_add_test_vector(void)
     size_t trl, rl, al, bl, tal, max;
 
     for (i = 0; i < sizeof(add_test_vector) / sizeof(ADD_TEST_VECTOR); i++) {
-        /* clear */
-        // ll_set_zero(tr, 9);
-        // ll_set_zero(r, 9);
-        // ll_set_zero(a, 8);
-        // ll_set_zero(b, 8);
-        // ll_set_zero(ta, 8);
-
         ll_from_hex(r, &rl, (u8*)add_test_vector[i].r, strlen(add_test_vector[i].r));
         ll_from_hex(a, &al, (u8*)add_test_vector[i].a, strlen(add_test_vector[i].a));
         ll_from_hex(b, &bl, (u8*)add_test_vector[i].b, strlen(add_test_vector[i].b));

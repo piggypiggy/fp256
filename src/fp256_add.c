@@ -24,7 +24,7 @@ int fp256_add(fp256 *r, const fp256 *a, const fp256 *b)
     if (r == NULL || a == NULL || b == NULL)
         return FP256_ERR;
 
-    /* the 257's bit of r is discarded */
+    /* carry is discarded */
     ll_u256_add(r->d, a->d, b->d);
     r->nlimbs = fp256_num_limbs(r);
 
@@ -48,6 +48,7 @@ int fp256_sub(fp256 *r, const fp256 *a, const fp256 *b)
     return FP256_OK;
 }
 
+/* TODO : asm */
 int fp256_add_limb(fp256 *r, const fp256 *a, const u64 b)
 {
     fp256 fb;
@@ -55,6 +56,7 @@ int fp256_add_limb(fp256 *r, const fp256 *a, const u64 b)
     return fp256_add(r, a, &fb);
 }
 
+/* TODO : asm */
 int fp256_sub_limb(fp256 *r, const fp256 *a, const u64 b)
 {
     fp256 fb;
