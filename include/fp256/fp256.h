@@ -391,7 +391,7 @@ FP256_EXPORT int fp256_rand_bits(fp256 *r, size_t nbits);
 FP256_EXPORT int fp256_rand_range(fp256 *r, const fp256 *range);
 
 /**
- * compute r = a + b, r stores lower 256 bit result.
+ * compute r = (a + b) mod 2^256.
  * 
  * @param[out] r          - result.
  * @param[in] a           - 256 bit integer.
@@ -401,7 +401,7 @@ FP256_EXPORT int fp256_rand_range(fp256 *r, const fp256 *range);
 FP256_EXPORT int fp256_add(fp256 *r, const fp256 *a, const fp256 *b);
 
 /**
- * compute r = a + b, r stores lower 256 bit result.
+ * compute r = (a + b) mod 2^256.
  * 
  * @param[out] r          - result.
  * @param[in] a           - 256 bit integer.
@@ -411,7 +411,7 @@ FP256_EXPORT int fp256_add(fp256 *r, const fp256 *a, const fp256 *b);
 FP256_EXPORT int fp256_add_limb(fp256 *r, const fp256 *a, const u64 b);
 
 /**
- * compute r = a - b, r stores lower 256 bit result.
+ * compute r = (a - b) mod 2^256.
  * 
  * @param[out] r          - result.
  * @param[in] a           - 256 bit integer.
@@ -421,7 +421,7 @@ FP256_EXPORT int fp256_add_limb(fp256 *r, const fp256 *a, const u64 b);
 FP256_EXPORT int fp256_sub(fp256 *r, const fp256 *a, const fp256 *b);
 
 /**
- * compute r = a - b, r stores lower 256 bit result.
+ * compute r = (a - b) mod 2^256.
  * 
  * @param[out] r          - result.
  * @param[in] a           - 256 bit integer.

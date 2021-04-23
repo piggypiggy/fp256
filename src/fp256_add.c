@@ -36,14 +36,9 @@ int fp256_sub(fp256 *r, const fp256 *a, const fp256 *b)
     if (r == NULL || a == NULL || b == NULL)
         return FP256_ERR;
 
-    if (fp256_cmp(a, b) >= 0) {
-        ll_u256_sub(r->d, a->d, b->d);
-        r->nlimbs = fp256_num_limbs(r);
-    }
-    else {
-        ll_u256_sub(r->d, b->d, a->d);
-        r->nlimbs = fp256_num_limbs(r);
-    }
+    /* borrow is discarded */
+    ll_u256_sub(r->d, a->d, b->d);
+    r->nlimbs = fp256_num_limbs(r);
 
     return FP256_OK;
 }
