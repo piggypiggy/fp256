@@ -46,7 +46,7 @@ static const u8 inv_ascii_table[128] = {
 
 u32 to_be32(const u32 in)
 {
-    int ret;
+    u32 ret;
 
 #if (ENDIANESS == ORDER_LITTLE_ENDIAN)
     ret = ll_bswap4(in);
@@ -59,7 +59,7 @@ u32 to_be32(const u32 in)
 
 u32 to_le32(const u32 in)
 {
-    int ret;
+    u32 ret;
 
 #if (ENDIANESS == ORDER_BIG_ENDIAN)
     ret = ll_bswap4(in);
@@ -70,10 +70,10 @@ u32 to_le32(const u32 in)
     return ret;
 }
 
-int u8_to_u32(unsigned int *out, const u8 *in, size_t inlen, int order)
+int u8_to_u32(u32 *out, const u8 *in, size_t inlen, int order)
 {
     u8 t[8];
-    unsigned int z;
+    u32 z;
 
     if (in == NULL || inlen > 4 || out == NULL)
         return FP256_ERR;
@@ -83,9 +83,9 @@ int u8_to_u32(unsigned int *out, const u8 *in, size_t inlen, int order)
     z = 0;
 
     if (order == ENDIANESS)
-        z = *(unsigned int*)(t + inlen);
+        z = *(u32*)(t + inlen);
     else {
-        z = *(unsigned int*)(t + inlen);
+        z = *(u32*)(t + inlen);
         z = ll_bswap4(z);
     }
     *out = z;
@@ -93,15 +93,15 @@ int u8_to_u32(unsigned int *out, const u8 *in, size_t inlen, int order)
     return FP256_OK;
 }
 
-int u32_to_u8(u8 out[4], const unsigned int in, int order)
+int u32_to_u8(u8 out[4], const u32 in, int order)
 {
     if (out == NULL)
         return FP256_ERR;
 
     if (order == ENDIANESS)
-        *(unsigned int*)out = in;
+        *(u32*)out = in;
     else
-        *(unsigned int*)out = ll_bswap4(in);
+        *(u32*)out = ll_bswap4(in);
 
     return FP256_OK;
 }
@@ -142,7 +142,7 @@ int u64_to_u8(u8 out[8], const u64 in, int order)
     return FP256_OK;
 }
 
-int u32_to_hex(u8 out[8], const unsigned int in, int order)
+int u32_to_hex(u8 out[8], const u32 in, int order)
 {
     if (out == NULL)
         return FP256_ERR;
@@ -248,5 +248,6 @@ int hex_to_u8(u8 *out, const u8 *in, size_t inlen)
         out[0] = (r1 << 4) | r2;
         out++;
     }
+
     return FP256_OK;
 }
