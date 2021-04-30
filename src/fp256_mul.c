@@ -62,7 +62,7 @@ int fp256_mul(fp256 *rhi, fp256 *rlo, const fp256 *a, const fp256 *b)
     return FP256_OK;
 }
 
-/* r = a * a (lower 256 bits), TODO : optimize sqrlo  */ 
+/* r = a^2 (lower 256 bits) */ 
 int fp256_sqrlo(fp256 *r, const fp256 *a)
 {
     u64 rd[8];
@@ -76,7 +76,7 @@ int fp256_sqrlo(fp256 *r, const fp256 *a)
     return FP256_OK;
 }
 
-/* r = a * a (upper 256 bits) */ 
+/* r = a^2 (upper 256 bits) */ 
 int fp256_sqrhi(fp256 *r, const fp256 *a)
 {
     u64 rd[8];
@@ -90,7 +90,7 @@ int fp256_sqrhi(fp256 *r, const fp256 *a)
     return FP256_OK;
 }
 
-/* rhi:rlo = a * a */ 
+/* rhi:rlo = a^2 */ 
 int fp256_sqr(fp256 *rhi, fp256 *rlo, const fp256 *a)
 {
     u64 rd[8];

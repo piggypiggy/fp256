@@ -29,15 +29,18 @@ u64 ll_lshift(u64 *rd, const u64 *ad, size_t al, size_t n)
     if (al == 0)
         return 0;
 
+    /* n = 64 * l + b */
     b = n & 0x3f;
     l = n >> 6;
     tr = rd + al + l;
 
     tmp = 0;
 
+    /* if b = 0, just left shift l limbs */
     if (b == 0) {
         ad += (al - 1);
         rd += (al - 1 + l);
+        /* most significant limb is 0 */
         rd[1] = 0;
         /* copy */
         for (i = 0; i < al; i++) {
@@ -61,12 +64,13 @@ u64 ll_lshift(u64 *rd, const u64 *ad, size_t al, size_t n)
         rd--;
     }
 
-    /* set (shift / 64) lower limbs to 0 */
+    /* set (l = shift / 64) lower limbs to 0 */
     for(i = 0; i < l; i++) {
         rd[0] = 0;
         rd--;
     }
 
+    /* return most significant limb */
     return tr[0];
 }
 
@@ -79,10 +83,12 @@ u64 ll_rshift(u64 *rd, const u64 *ad, size_t al, size_t n)
     if (al == 0)
         return 0;
 
+    /* n = 64 * l + b */
     b = n & 0x3f;
     l = n >> 6;
     tr = rd + al - l;
 
+    /* result is 0 */
     if (l >= al) {
         tr = rd;
         goto set_zero;
@@ -92,6 +98,7 @@ u64 ll_rshift(u64 *rd, const u64 *ad, size_t al, size_t n)
     ad += l;
     tmp = ad[0];
 
+    /* if b = 0, just right shift l limbs */
     if (b == 0) {
         /* copy */
         for (i = 0; i < (al - l); i++) {
@@ -114,12 +121,13 @@ u64 ll_rshift(u64 *rd, const u64 *ad, size_t al, size_t n)
     }
 
 set_zero:
-    /* set (shift / 64) higher limbs to 0 */
+    /* set (l = shift / 64) higher limbs to 0 */
     for(i = 0; i < l; i++) {
         rd[0] = 0;
         rd++;
     }
 
+    /* return most significant limb */
     return tr[0];
 }
 #endif

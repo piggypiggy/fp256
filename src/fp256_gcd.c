@@ -20,6 +20,7 @@
 #include <fp256/fp256_ll.h>
 
 #if 0
+/* euclid algorithm */
 int fp256_gcd(fp256 *r, const fp256 *a, const fp256 *b)
 {
     fp256 tmpa, tmpb, *pa, *pb, *pt;

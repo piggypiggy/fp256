@@ -28,6 +28,7 @@ int ll_print_hex(const u64 *ad, size_t rl)
     len = 1 + rl * sizeof(u64) * 2;
     hex = malloc(len);
     hex[len - 1] = '\0';
+    /* u64 to hex */
     ll_to_hex(hex, NULL, ad, rl);
     printf("%s\n", hex);
 
@@ -43,6 +44,7 @@ void print_hex(const char *desp, const u8 *s, size_t slen)
         printf("%c", desp[i]);
 
     u8 *hex = (u8*)malloc(2*slen);
+    /* byte to hex */
     u8_to_hex(hex, s, slen);
     for(i = 0; i < 2*slen; i++)
         printf("%c", hex[i]);

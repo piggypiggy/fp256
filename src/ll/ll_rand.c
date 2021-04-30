@@ -32,10 +32,12 @@ int ll_rand_bits(u64 *rd, size_t nbits)
     l = ((nbits - 1) >> 6) + 1;
     b = nbits & 0x3f;
     mask = (1 << b) - 1;
-    if (b == 0)
+    if (b == 0) // b = 64, mask = 2^64 - 1
         mask = (u64)-1;
 
+    /* l limbs random data */
     ret = ll_rand_buf((u8*)rd, sizeof(u64) * l);
+    /* reserve lower b bits of ad[l-1] */
     rd[l - 1] &= mask;
 
     return ret;
@@ -57,10 +59,13 @@ int ll_rand_range(u64 *rd, const u64 *range, size_t rgl)
     size_t nbits;
 
     ret = FP256_ERR;
+    /* maximum number of try */
     count = 50;
+
     if (rgl == 0)
         return FP256_OK;
 
+    /* 2^{nbits-1} <= range < 2^nbits */
     nbits = ll_num_bits(range[rgl - 1]) + (rgl - 1) * 64;
 
     while (count > 0) {
@@ -70,10 +75,12 @@ int ll_rand_range(u64 *rd, const u64 *range, size_t rgl)
             return FP256_ERR;
         }
 
+        /* rd < 2^nbits */
         ret = ll_rand_bits(rd, nbits);
         if (ret != FP256_OK)
             return ret;
 
+        /* rd < range */
         if (ll_cmp_limbs(rd, range, rgl, rgl) < 0)
             return FP256_OK;
     }

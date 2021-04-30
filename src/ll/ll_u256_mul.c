@@ -20,16 +20,6 @@
 #include "ll_local.h"
 
 #ifndef USE_ASM_U256_MUL
-void ll_u256_mul_limbs(u64 rd[8], const u64 ad[4], const u64 bd[4], size_t al, size_t bl)
-{
-    (void) rd;
-    (void) ad;
-    (void) bd;
-    (void) al;
-    (void) bl;
-    return;
-}
-
 void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4])
 {
     (void) rd;
