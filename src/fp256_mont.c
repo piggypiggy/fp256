@@ -18,6 +18,7 @@
 
 #include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
+#include "fp256_local.h"
 
 int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
 {
@@ -108,6 +109,7 @@ int fp256_to_mont(fp256 *A, const fp256 *a, const mont_ctx *mctx)
     return fp256_mont_mul(A, a, &mctx->RR, mctx);
 }
 
+#ifndef ARCH_X86_64
 int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
 {
     fp256 one;
@@ -119,3 +121,19 @@ int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
     /* TODO ： mont_reduce */
     return fp256_mont_mul(a, A, &one, mctx);
 }
+
+#else
+int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
+{
+    u64 rd[4];
+
+    if (a == NULL || A == NULL || mctx == NULL)
+        return FP256_ERR;
+
+    ll_u256_mont_reduce(rd, A->d, mctx->N.d, mctx->k0);
+    fp256_set_limbs(a, rd, 4);
+
+    return FP256_OK;
+}
+
+#endif

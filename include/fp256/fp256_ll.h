@@ -595,6 +595,17 @@ FP256_EXPORT void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], 
 FP256_EXPORT void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 
 /**
+ * montgomery reduction.\n
+ * rd = ad * R^{-1} mod Nd, R = 2^256.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the u64 array to reduce.
+ * @param[in] Nd          - odd modulus, see mont_ctx.
+ * @param[in] k0          - precomputed value, see mont_ctx.
+ */
+FP256_EXPORT void ll_u256_mont_reduce(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
+
+/**
  * montgomery exponential of an integer in montgomery representation.\n
  * rd = ad^ed * R mod Nd, R = 2^256.
  * 

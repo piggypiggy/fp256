@@ -38,6 +38,15 @@ void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0)
     (void) k0;
     return;
 }
+
+void ll_u256_mont_reduce(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0)
+{
+    (void) rd;
+    (void) ad;
+    (void) Nd;
+    (void) k0;
+    return;
+}
 #endif
 
 void ll_u256_mont_exp(u64 rd[4], const u64 ad[4], const u64 *ed, size_t el, const u64 RR[4], const u64 Nd[4], u64 k0)

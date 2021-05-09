@@ -501,6 +501,16 @@ ll_u256_mont_sqr:
 
     ret
 .size	ll_u256_mont_sqr,.-ll_u256_mont_sqr
+
+
+# void ll_u256_mont_reduce(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
+.globl	ll_u256_mont_reduce
+.type	ll_u256_mont_reduce,%function
+.align	5
+ll_u256_mont_reduce:
+    
+    ret
+.size	ll_u256_mont_reduce,.-ll_u256_mont_reduce
 ___
 }
 

@@ -45,7 +45,6 @@ my ($acc0,$acc1,$acc2,$acc3,$acc4,$acc5)=("%r10","%r11","%r12","%r13","%r14","%r
 $code.=<<___;
 # void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 Nd[4], u64 k0);
 .globl	ll_u256_mont_mul
-.export	ll_u256_mont_mul
 .type	ll_u256_mont_mul,\@function,5
 .align	32
 ll_u256_mont_mul:
@@ -373,7 +372,6 @@ my ($acc0,$acc1,$acc2,$acc3,$acc4,$acc5,$acc6,$acc7)=("%r8","%r9","%r10","%r11",
 $code.=<<___;
 # void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
 .globl	ll_u256_mont_sqr
-.export	ll_u256_mont_sqr
 .type	ll_u256_mont_sqr,\@function,4
 .align	32
 ll_u256_mont_sqr:
@@ -650,6 +648,192 @@ ll_u256_mont_sqr:
     pop %rbx
     ret
 .size	ll_u256_mont_sqr,.-ll_u256_mont_sqr
+
+
+# void ll_u256_mont_reduce(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0);
+.globl	ll_u256_mont_reduce
+.type	ll_u256_mont_reduce,\@function,4
+.align	32
+ll_u256_mont_reduce:
+    push %rbx
+    push %r12
+    push %r13
+    push %r14
+    push %r15
+    mov 0($a_ptr), $acc0
+    mov 8($a_ptr), $acc1
+    mov 16($a_ptr), $acc2
+    mov 24($a_ptr), $acc3
+    mov 0($N_org), $N0
+    mov 8($N_org), $N1
+    mov 16($N_org), $N2
+    mov 24($N_org), $N3
+    # loop1: acc0,acc3,acc2,acc1 = (acc3,acc2,acc1,acc0 + ((acc0 * k0) mod 2^64) * N) / 2^64
+    mov $acc0, %rax
+    mulq $k0
+    mov %rax, $t0
+    mulq $N0
+    add %rax, $acc0
+    adc \$0, %rdx
+    mov $t0, %rax
+    mov %rdx, $t1
+
+    mulq $N1
+    add $t1, $acc1
+    adc \$0, %rdx
+    add %rax, $acc1
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N2
+    add $t1, $acc2
+    adc \$0, %rdx
+    add %rax, $acc2
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N3
+    add $t1, $acc3
+    adc \$0, %rdx
+    add %rax, $acc3
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $acc0
+
+    # loop2: acc1,acc0,acc3,acc2 = (acc0,acc3,acc2,acc1 + ((acc1 * k0) mod 2^64) * N) / 2^64
+    mov $acc1, %rax
+    mulq $k0
+    mov %rax, $t0
+    mulq $N0
+    add %rax, $acc1
+    adc \$0, %rdx
+    mov $t0, %rax
+    mov %rdx, $t1
+
+    mulq $N1
+    add $t1, $acc2
+    adc \$0, %rdx
+    add %rax, $acc2
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N2
+    add $t1, $acc3
+    adc \$0, %rdx
+    add %rax, $acc3
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N3
+    add $t1, $acc0
+    adc \$0, %rdx
+    add %rax, $acc0
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $acc1
+
+    # loop3: acc2,acc1,acc0,acc3 = (acc1,acc0,acc3,acc2 + ((acc2 * k0) mod 2^64) * N) / 2^64
+    mov $acc2, %rax
+    mulq $k0
+    mov %rax, $t0
+    mulq $N0
+    add %rax, $acc2
+    adc \$0, %rdx
+    mov $t0, %rax
+    mov %rdx, $t1
+
+    mulq $N1
+    add $t1, $acc3
+    adc \$0, %rdx
+    add %rax, $acc3
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N2
+    add $t1, $acc0
+    adc \$0, %rdx
+    add %rax, $acc0
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N3
+    add $t1, $acc1
+    adc \$0, %rdx
+    add %rax, $acc1
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $acc2
+
+    # loop4: acc3,acc2,acc1,acc0 = (acc2,acc1,acc0,acc3 + ((acc3 * k0) mod 2^64) * N) / 2^64
+    mov $acc3, %rax
+    mulq $k0
+    mov %rax, $t0
+    mulq $N0
+    add %rax, $acc3
+    adc \$0, %rdx
+    mov $t0, %rax
+    mov %rdx, $t1
+
+    mulq $N1
+    add $t1, $acc0
+    adc \$0, %rdx
+    add %rax, $acc0
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N2
+    add $t1, $acc1
+    adc \$0, %rdx
+    add %rax, $acc1
+    mov $t0, %rax
+    adc \$0, %rdx
+    mov %rdx, $t1
+
+    mulq $N3
+    add $t1, $acc2
+    adc \$0, %rdx
+    add %rax, $acc2
+    mov $t0, %rax
+    adc \$0, %rdx
+     xor $t0, $t0
+    mov %rdx, $acc3
+
+    # conditional sub
+    mov $acc0, $t4
+    mov $acc1, $t5
+    mov $acc2, $t6
+    mov $acc3, %rax 
+    sub $N0, $t4
+    mov $t6, $acc2
+    sbb $N1, $t5
+    sbb $N2, $t6
+    mov %rax, $acc3
+    sbb $N3, %rax
+    sbb \$0, $t0
+
+    cmovc $acc0, $t4
+    cmovc $acc1, $t5
+    mov	$t4, 8*0($r_ptr)
+    cmovc $acc2, $t6
+    mov	$t5, 8*1($r_ptr)
+    cmovc $acc3, %rax
+    mov	$t6, 8*2($r_ptr)
+    mov	%rax, 8*3($r_ptr)
+
+    pop %r15
+    pop %r14
+    pop %r13
+    pop %r12
+    pop %rbx
+    ret
+.size	ll_u256_mont_reduce,.-ll_u256_mont_reduce
 ___
 }
 
