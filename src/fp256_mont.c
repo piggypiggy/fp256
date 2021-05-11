@@ -109,20 +109,6 @@ int fp256_to_mont(fp256 *A, const fp256 *a, const mont_ctx *mctx)
     return fp256_mont_mul(A, a, &mctx->RR, mctx);
 }
 
-#ifndef ARCH_X86_64
-int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
-{
-    fp256 one;
-
-    if (a == NULL || A == NULL || mctx == NULL)
-        return FP256_ERR;
-
-    fp256_set_one(&one);
-    /* TODO ： mont_reduce */
-    return fp256_mont_mul(a, A, &one, mctx);
-}
-
-#else
 int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
 {
     u64 rd[4];
@@ -135,5 +121,3 @@ int fp256_from_mont(fp256 *a, const fp256 *A, const mont_ctx *mctx)
 
     return FP256_OK;
 }
-
-#endif

@@ -807,6 +807,229 @@ ll_u256_mont_sqr:
 .globl  ll_u256_mont_reduce
 .align  4
 ll_u256_mont_reduce:
- 
+    addi sp, sp, -48
+    sd s2, 0(sp)
+    sd s3, 8(sp)
+    sd s4, 16(sp)
+    sd s5, 24(sp)
+    sd s6, 32(sp)
+    sd s7, 40(sp)
+    # save rd, K0, Nd
+    mv rd, a0
+    mv k0, a3
+    mv N3, a2
+
+    # load a0~a3
+    ld acc3, 24(a1)
+    ld acc2, 16(a1)
+    ld acc1, 8(a1)
+    ld acc0, 0(a1)
+
+    # load N0~N3
+    ld N0, 0(N3)
+    ld N1, 8(N3)
+    ld N2, 16(N3)
+    ld N3, 24(N3)
+
+    # reduction
+    mul t6, acc0, k0
+    # acc0,acc3,acc2,acc1 = (acc3,acc2,acc1,acc0 + t6 * N) / 2^64
+    # N0 * t6
+    mulhu s7, N0, t6
+    mul s6, N0, t6
+    add acc0, acc0, s6
+    sltu cy1, acc0, s6
+    add s7, s7, cy1
+    # N1 * t6
+    mulhu t0, N1, t6       # reuse acc0 = t0
+    mul s6, N1, t6
+    add acc1, acc1, s7
+    sltu cy0, acc1, s7
+    add acc1, acc1, s6
+    sltu cy1, acc1, s6
+    add t0, t0, cy0
+     add acc2, acc2, cy1
+     sltu cy1, acc2, cy1
+    # N2 * t6
+    mulhu s7, N2, t6
+    mul s6, N2, t6
+    add acc2, acc2, t0
+    sltu cy0, acc2, t0
+    add acc2, acc2, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc2, s6
+    add s7, s7, cy0
+     add acc3, acc3, cy1
+     sltu cy1, acc3, cy1
+    # N3 * t6
+    mulhu t0, N3, t6
+    mul s6, N3, t6
+    add acc3, acc3, s7
+    sltu cy0, acc3, s7
+    add acc3, acc3, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc3, s6
+    add acc0, t0, cy0
+    add acc0, acc0, cy1
+
+    mul t6, acc1, k0
+    # acc1,acc0,acc3,acc2 = (acc0,acc3,acc2,acc1 + t6 * N) / 2^64
+    # N0 * t6
+    mulhu s7, N0, t6
+    mul s6, N0, t6
+    add acc1, acc1, s6
+    sltu cy1, acc1, s6
+    add s7, s7, cy1
+    # N1 * t6
+    mulhu t1, N1, t6       # reuse acc1 = t1
+    mul s6, N1, t6
+    add acc2, acc2, s7
+    sltu cy0, acc2, s7
+    add acc2, acc2, s6
+    sltu cy1, acc2, s6
+    add t1, t1, cy0
+     add acc3, acc3, cy1
+     sltu cy1, acc3, cy1
+    # N2 * t6
+    mulhu s7, N2, t6
+    mul s6, N2, t6
+    add acc3, acc3, t1
+    sltu cy0, acc3, t1
+    add acc3, acc3, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc3, s6
+    add s7, s7, cy0
+     add acc0, acc0, cy1
+     sltu cy1, acc0, cy1
+    # N3 * t6
+    mulhu t1, N3, t6
+    mul s6, N3, t6
+    add acc0, acc0, s7
+    sltu cy0, acc0, s7
+    add acc0, acc0, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc0, s6
+    add acc1, t1, cy0
+    add acc1, acc1, cy1
+
+    mul t6, acc2, k0
+    # acc2,acc1,acc0,acc3 = (acc1,acc0,acc3,acc2 + t6 * N) / 2^64
+    # N0 * t6
+    mulhu s7, N0, t6
+    mul s6, N0, t6
+    add acc2, acc2, s6
+    sltu cy1, acc2, s6
+    add s7, s7, cy1
+    # N1 * t6
+    mulhu t2, N1, t6       # reuse acc2 = t2
+    mul s6, N1, t6
+    add acc3, acc3, s7
+    sltu cy0, acc3, s7
+    add acc3, acc3, s6
+    sltu cy1, acc3, s6
+    add t2, t2, cy0
+     add acc0, acc0, cy1
+     sltu cy1, acc0, cy1
+    # N2 * t6
+    mulhu s7, N2, t6
+    mul s6, N2, t6
+    add acc0, acc0, t2
+    sltu cy0, acc0, t2
+    add acc0, acc0, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc0, s6
+    add s7, s7, cy0
+     add acc1, acc1, cy1
+     sltu cy1, acc1, cy1
+    # N3 * t6
+    mulhu t2, N3, t6
+    mul s6, N3, t6
+    add acc1, acc1, s7
+    sltu cy0, acc1, s7
+    add acc1, acc1, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc1, s6
+    add acc2, t2, cy0
+    add acc2, acc2, cy1
+
+    mul t6, acc3, k0
+    # acc3,acc2,acc1,acc0 = (acc2,acc1,acc0,acc3 + t6 * N) / 2^64
+    # N0 * t6
+    mulhu s7, N0, t6
+    mul s6, N0, t6
+    add acc3, acc3, s6
+    sltu cy1, acc3, s6
+    add s7, s7, cy1
+    # N1 * t6
+    mulhu t3, N1, t6       # reuse acc3 = t3
+    mul s6, N1, t6
+    add acc0, acc0, s7
+    sltu cy0, acc0, s7
+    add acc0, acc0, s6
+    sltu cy1, acc0, s6
+    add t3, t3, cy0
+     add acc1, acc1, cy1
+     sltu cy1, acc1, cy1
+    # N2 * t6
+    mulhu s7, N2, t6
+    mul s6, N2, t6
+    add acc1, acc1, t3
+    sltu cy0, acc1, t3
+    add acc1, acc1, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc1, s6
+    add s7, s7, cy0
+     add acc2, acc2, cy1
+     sltu cy1, acc2, cy1
+    # N3 * t6
+    mulhu t3, N3, t6
+    mul s6, N3, t6
+    add acc2, acc2, s7
+    sltu cy0, acc2, s7
+    add acc2, acc2, s6
+    add cy0, cy0, cy1
+    sltu cy1, acc2, s6
+    add acc3, t3, cy0
+    add acc3, acc3, cy1
+
+    mv a4, x0
+    # a4,acc3,acc2,acc1,acc0 - N3,N2,N1,N0
+    sub a0, acc0, N0       # acc0 - N0
+    sltu cy0, acc0, a0     # borrow1
+    sub t6, acc1, N1       # acc1 - N1
+    sltu cy1, acc1, t6     # borrow2
+    sub a1, t6, cy0        # acc1 - N1 - borrow1
+    sltu cy0, t6, a1       # borrow2
+     ld s2, 0(sp)
+    add cy0, cy0, cy1      # borrow2
+    sub t6, acc2, N2       # acc2 - N2
+    sltu cy1, acc2, t6     # borrow3
+     ld s3, 8(sp)
+    sub a2, t6, cy0        # acc2 - N2 - borrow2
+    sltu cy0, t6, a2       # borrow3
+     ld s4, 16(sp)
+    add cy0, cy0, cy1      # borrow3
+    sub t6, acc3, N3       # acc3 - N3
+    sltu cy1, acc3, t6     # borrow4
+    sub a3, t6, cy0        # acc3 - N3 - borrow3
+    sltu cy0, t6, a3       # borrow4
+     ld s5, 24(sp)
+    add cy0, cy0, cy1      # borrow4
+     ld s6, 32(sp)
+     ld s7, 40(sp)
+    bgeu a4, cy0, .Lreducege
+
+    sd acc0, 0(rd)
+    sd acc1, 8(rd)
+    sd acc2, 16(rd)
+    sd acc3, 24(rd)
+    addi sp, sp, 48
+    ret
+.Lreducege:
+    sd a0, 0(rd)
+    sd a1, 8(rd)
+    sd a2, 16(rd)
+    sd a3, 24(rd)
+    addi sp, sp, 48
     ret
 .size ll_u256_mont_reduce, .-ll_u256_mont_reduce
