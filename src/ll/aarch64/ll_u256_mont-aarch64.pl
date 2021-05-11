@@ -508,7 +508,137 @@ ll_u256_mont_sqr:
 .type	ll_u256_mont_reduce,%function
 .align	5
 ll_u256_mont_reduce:
-    
+    ldp $acc0,$acc1,[$ad]
+    ldp $acc2,$acc3,[$ad,#16]
+    // reduction
+    ldp $N0,$N1,[$Nd]
+    ldp $N2,$N3,[$Nd,#16]
+    // loop1: acc0,acc3,acc2,acc1 = (acc3,acc2,acc1,acc0 + ((acc0 * k0) mod 2^64) * N) / 2^64
+    // $t0 = (acc0 * k0) mod 2^64
+    mul $t0,$acc0,$k0
+    // acc0,acc3,acc2,acc1 = (acc3,acc2,acc1,acc0 + t0 * N) / 2^64
+    // $t0 * N0
+    mul $t1,$t0,$N0
+    umulh $t2,$t0,$N0
+    adds $acc0,$acc0,$t1
+    // $t0 * N1
+    umulh $t3,$t0,$N1
+     adcs $acc1,$acc1,$t2
+    mul $t1,$t0,$N1
+    adc $t3,$t3,xzr
+    adds $acc1,$acc1,$t1
+    // $t0 * N2
+    umulh $t2,$t0,$N2
+     adcs $acc2,$acc2,$t3
+    mul $t1,$t0,$N2
+    adc $t2,$t2,xzr
+    adds $acc2,$acc2,$t1
+    // $t0 * N3
+    umulh $acc0,$t0,$N3
+     adcs $acc3,$acc3,$t2
+    mul $t1,$t0,$N3
+    adc $acc0,$acc0,xzr
+    adds $acc3,$acc3,$t1
+    adc $acc0,$acc0,xzr
+
+    // loop2: acc1,acc0,acc3,acc2 = (acc0,acc3,acc2,acc1 + ((acc1 * k0) mod 2^64) * N) / 2^64
+    // $t0 = (acc1 * k0) mod 2^64
+    mul $t0,$acc1,$k0
+    // acc1,acc0,acc3,acc2 = (acc0,acc3,acc2,acc1 + t0 * N) / 2^64
+    // $t0 * N0
+    mul $t1,$t0,$N0
+    umulh $t2,$t0,$N0
+    adds $acc1,$acc1,$t1
+    // $t0 * N1
+    umulh $t3,$t0,$N1
+     adcs $acc2,$acc2,$t2
+    mul $t1,$t0,$N1
+    adc $t3,$t3,xzr
+    adds $acc2,$acc2,$t1
+    // $t0 * N2
+    umulh $t2,$t0,$N2
+     adcs $acc3,$acc3,$t3
+    mul $t1,$t0,$N2
+    adc $t2,$t2,xzr
+    adds $acc3,$acc3,$t1
+    // $t0 * N3
+    umulh $acc1,$t0,$N3
+     adcs $acc0,$acc0,$t2
+    mul $t1,$t0,$N3
+    adc $acc1,$acc1,xzr
+    adds $acc0,$acc0,$t1
+    adc $acc1,$acc1,xzr
+
+    // loop3: acc2,acc1,acc0,acc3 = (acc1,acc0,acc3,acc2 + ((acc2 * k0) mod 2^64) * N) / 2^64
+    // $t0 = (acc2 * k0) mod 2^64
+    mul $t0,$acc2,$k0
+    // acc2,acc1,acc0,acc3 = (acc1,acc0,acc3,acc2 + t0 * N) / 2^64
+    // $t0 * N0
+    mul $t1,$t0,$N0
+    umulh $t2,$t0,$N0
+    adds $acc2,$acc2,$t1
+    // $t0 * N1
+    umulh $t3,$t0,$N1
+     adcs $acc3,$acc3,$t2
+    mul $t1,$t0,$N1
+    adc $t3,$t3,xzr
+    adds $acc3,$acc3,$t1
+    // $t0 * N2
+    umulh $t2,$t0,$N2
+     adcs $acc0,$acc0,$t3
+    mul $t1,$t0,$N2
+    adc $t2,$t2,xzr
+    adds $acc0,$acc0,$t1
+    // $t0 * N3
+    umulh $acc2,$t0,$N3
+     adcs $acc1,$acc1,$t2
+    mul $t1,$t0,$N3
+    adc $acc2,$acc2,xzr
+    adds $acc1,$acc1,$t1
+    adc $acc2,$acc2,xzr
+
+    // loop4: acc3,acc2,acc1,acc0 = (acc2,acc1,acc0,acc3 + ((acc3 * k0) mod 2^64) * N) / 2^64
+    // $t0 = (acc3 * k0) mod 2^64
+    mul $t0,$acc3,$k0
+    // acc3,acc2,acc1,acc0 = (acc2,acc1,acc0,acc3 + t0 * N) / 2^64
+    // $t0 * N0
+    mul $t1,$t0,$N0
+    umulh $t2,$t0,$N0
+    adds $acc3,$acc3,$t1
+    // $t0 * N1
+    umulh $t3,$t0,$N1
+     adcs $acc0,$acc0,$t2
+    mul $t1,$t0,$N1
+    adc $t3,$t3,xzr
+    adds $acc0,$acc0,$t1
+    // $t0 * N2
+    umulh $t2,$t0,$N2
+     adcs $acc1,$acc1,$t3
+    mul $t1,$t0,$N2
+    adc $t2,$t2,xzr
+    adds $acc1,$acc1,$t1
+    // $t0 * N3
+    umulh $acc3,$t0,$N3
+     adcs $acc2,$acc2,$t2
+    mul $t1,$t0,$N3
+    adc $acc3,$acc3,xzr
+    adds $acc2,$acc2,$t1
+    adc $acc3,$acc3,xzr
+
+    mov $t0, xzr
+    subs x8,$acc0,$N0
+    sbcs x9,$acc1,$N1
+    sbcs x10,$acc2,$N2
+    sbcs x11,$acc3,$N3
+    sbcs $t0,$t0,xzr
+
+    csel $acc0,$acc0,x8,cc
+    csel $acc1,$acc1,x9,cc
+    csel $acc2,$acc2,x10,cc
+    stp $acc0,$acc1,[$rd]
+    csel $acc3,$acc3,x11,cc
+    stp $acc2,$acc3,[$rd,#16]
+
     ret
 .size	ll_u256_mont_reduce,.-ll_u256_mont_reduce
 ___
