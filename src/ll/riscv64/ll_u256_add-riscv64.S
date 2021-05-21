@@ -18,6 +18,31 @@
 
 .text
 
+# u64 ll_u256_add_limb(u64 rd[4], const u64 ad[4], u64 b)
+.globl	ll_u256_add_limb
+.align	4
+ll_u256_add_limb:
+    ld t0, 0(a1)
+    ld t1, 8(a1)
+    add t0, t0, a2        # ad[0] + b
+    sltu a6, t0, a2       # carry
+    sd t0, 0(a0)          # rd[0]
+    add t1, t1, a6        # ad[1] + carry
+    ld t2, 16(a1)
+    sltu a6, t1, a6       # carry
+    sd t1, 8(a0)          # rd[1]
+    add t2, t2, a6        # ad[2] + carry
+    ld t3, 24(a1)
+    sltu a6, t2, a6       # carry
+    sd t2, 16(a0)         # rd[2]
+    add t3, t3, a6        # ad[3] + carry
+    sltu a6, t3, a6       # carry
+    sd t3, 24(a0)         # rd[3]
+    mv a0, a6
+    ret
+.size ll_u256_add_limb, .-ll_u256_add_limb
+
+
 # u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4])
 .globl	ll_u256_add
 .align	4
