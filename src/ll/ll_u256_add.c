@@ -28,16 +28,16 @@ u64 ll_u256_add_limb(u64 rd[4], const u64 ad[4], u64 b)
     carry = (t < b);
     rd[0] = t;
 
-    t = ad[1] + b;
-    carry = (t < b);
+    t = ad[1] + carry;
+    carry = (t < carry);
     rd[1] = t;
 
-    t = ad[2] + b;
-    carry = (t < b);
+    t = ad[2] + carry;
+    carry = (t < carry);
     rd[2] = t;
 
-    t = ad[3] + b;
-    carry = (t < b);
+    t = ad[3] + carry;
+    carry = (t < carry);
     rd[3] = t;
 
     return carry;
@@ -74,6 +74,29 @@ u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4])
     rd[3] = r;
 
     return carry;
+}
+
+u64 ll_u256_sub_limb(u64 rd[4], const u64 ad[4], u64 b)
+{
+    u64 t, borrow;
+
+    t = ad[0];
+    rd[0] = t - b;
+    borrow = (b > t);
+
+    t = ad[1];
+    rd[1] = t - borrow;
+    borrow = (borrow > t);
+
+    t = ad[2];
+    rd[2] = t - borrow;
+    borrow = (borrow > t);
+
+    t = ad[3];
+    rd[3] = t - borrow;
+    borrow = (borrow > t);
+
+    return borrow;
 }
 
 u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4])
