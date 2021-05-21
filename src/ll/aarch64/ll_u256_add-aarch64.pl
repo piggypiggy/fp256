@@ -79,6 +79,25 @@ ll_u256_add:
 .size	ll_u256_add,.-ll_u256_add
 
 
+// u64 ll_u256_sub_limb(u64 rd[4], const u64 ad[4], u64 b);
+.globl	ll_u256_sub_limb
+.type	ll_u256_sub_limb,%function
+.align	5
+ll_u256_sub_limb:
+    ldp $a0,$a1,[$ad]
+    mov $rd,x0
+    subs $r0,$a0,$b       // r0 = a0 - b
+    ldp $a2,$a3,[$ad,#16]
+    sbcs $r1,$a1,xzr      // r1 = a1 - borrow
+    sbcs $r2,$a2,xzr      // r2 = a2 - borrow
+    stp $r0,$r1,[$rd]
+    sbcs $r3,$a3,xzr      // r3 = a3 - borrow
+    stp $r2,$r3,[$rd,#16]
+    csinc x0,xzr,xzr,cs   // borrow
+    ret
+.size	ll_u256_sub_limb,.-ll_u256_sub_limb
+
+
 // u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 .globl	ll_u256_sub
 .type	ll_u256_sub,%function
