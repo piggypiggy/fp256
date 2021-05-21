@@ -80,6 +80,31 @@ ll_u256_add:
 .size ll_u256_add, .-ll_u256_add
 
 
+# u64 ll_u256_sub_limb(u64 rd[4], const u64 ad[4], u64 b)
+.globl	ll_u256_sub_limb
+.align	4
+ll_u256_sub_limb:
+    ld t0, 0(a1)
+    ld t1, 8(a1)
+    sltu a6, t0, a2       # borrow
+    sub t0, t0, a2        # ad[0] - b
+    sltu a5, t1, a6       # borrow
+    sd t0, 0(a0)          # rd[0]
+    sub t1, t1, a6        # ad[1] - borrow
+    ld t2, 16(a1)
+    ld t3, 24(a1)
+    sltu a6, t2, a5       # borrow
+    sub t2, t2, a5        # ad[2] - borrow
+    sd t1, 8(a0)
+    sltu a5, t3, a6       # borrow
+    sub t3, t3, a6        # ad[3] - borrow
+    sd t2, 16(a0)
+    sd t3, 24(a0)
+    mv a0, a5
+    ret
+.size ll_u256_sub_limb, .-ll_u256_sub_limb
+
+
 # u64 ll_u256_sub(u64 rd[4], const u64 ad[4], const u64 bd[4])
 .globl	ll_u256_sub
 .align	4

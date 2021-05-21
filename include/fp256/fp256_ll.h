@@ -360,6 +360,17 @@ FP256_EXPORT u64 ll_u256_add_limb(u64 rd[4], const u64 ad[4], u64 b);
 FP256_EXPORT u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 
 /**
+ * subtract a 64 bit integer from a 256 bit integers, return borrow.\n
+ * rd = ad - b.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - 256 bit integer.
+ * @param[in] b           - 64 bit integer.
+ * @return borrow.
+ */
+FP256_EXPORT u64 ll_u256_sub_limb(u64 rd[4], const u64 ad[4], u64 b);
+
+/**
  * subtract two 256 bit integers, return borrow.\n
  * rd = ad - bd.
  * 
