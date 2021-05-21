@@ -45,6 +45,7 @@ macro(fp256_add_test test_name test_exe test_src)
     endif()
 endmacro()
 
+fp256_add_test(U256ADDLIMB_TEST   u256addlimb_test   u256addlimb_test.c)
 fp256_add_test(U256ADD_TEST       u256add_test       u256add_test.c)
 fp256_add_test(U256MUL_TEST       u256mul_test       u256mul_test.c)
 fp256_add_test(U256SHIFT_TEST     u256shift_test     u256shift_test.c)
