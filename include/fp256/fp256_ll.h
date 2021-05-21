@@ -338,6 +338,17 @@ FP256_EXPORT int ll_to_hex(u8 *hex, size_t *hlen, const u64 *rd, size_t rl);
 FP256_EXPORT u64 ll_invert_limb(u64 a);
 
 /**
+ * add a 256 bit integer and a 64 bit integer, return carry.\n
+ * rd = ad + b.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first 256 bit integer to add.
+ * @param[in] b           - the second 64 bit integer to add.
+ * @return carry.
+ */
+FP256_EXPORT u64 ll_u256_add_limb(u64 rd[4], const u64 ad[4], u64 b);
+
+/**
  * add two 256 bit integers, return carry.\n
  * rd = ad + bd.
  * 

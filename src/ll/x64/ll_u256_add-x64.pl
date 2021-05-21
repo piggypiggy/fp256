@@ -38,10 +38,34 @@ $code.=<<___;
 ___
 
 {
-my ($r_ptr,$a_ptr,$b_ptr,$l,$offset)=("%rdi","%rsi","%rdx","%rcx","%rax");
+my ($r_ptr,$a_ptr,$b_ptr,$b,$l,$offset)=("%rdi","%rsi","%rdx","%rdx","%rcx","%rax");
 my ($a0,$a1,$a2,$a3)=map("%r$_",(8..11));
 
 $code.=<<___;
+# u64 ll_u256_add_limb(u64 r[5], u64 a[4], u64 b);
+.globl	ll_u256_add_limb
+.export	ll_u256_add_limb
+.type	ll_u256_add_limb,\@function,3
+.align	32
+ll_u256_add_limb:
+    mov	8*0($a_ptr), $a0
+    mov	8*1($a_ptr), $a1
+    xor %rax, %rax
+    add    $b, $a0               # a0 + b
+    mov	8*2($a_ptr), $a2
+    adc    \$0, $a1              # a1 + carry
+    mov $a0, 8*0($r_ptr)
+    mov	8*3($a_ptr), $a3
+    adc	   \$0, $a2              # a2 + carry
+    mov $a1, 8*1($r_ptr)
+    adc	   \$0, $a3              # a3 + carry
+    mov $a2, 8*2($r_ptr)
+    mov $a3, 8*3($r_ptr)
+    adc \$0, %rax
+    ret
+.size	ll_u256_add_limb,.-ll_u256_add_limb
+
+
 # u64 ll_u256_add(u64 r[5], u64 a[4], u64 b[4]);
 .globl	ll_u256_add
 .export	ll_u256_add
@@ -64,6 +88,31 @@ ll_u256_add:
     adc \$0, %rax
     ret
 .size	ll_u256_add,.-ll_u256_add
+
+
+# u64 ll_u256_sub_limb(u64 r[4], u64 a[4], u64 b);
+.globl	ll_u256_sub_limb
+.export	ll_u256_sub_limb
+.type	ll_u256_sub_limb,\@function,3
+.align	32
+ll_u256_sub_limb:
+    mov	8*0($a_ptr), $a0
+    mov	8*1($a_ptr), $a1
+    xor %rax, %rax
+    sub    $b, $a0               # a0 - b
+    mov	8*2($a_ptr), $a2
+    sbb    \$0, $a1              # a1 - borrow
+    mov $a0, 8*0($r_ptr)
+    mov	8*3($a_ptr), $a3
+    sbb	   \$0, $a2              # a2 - borrow
+    mov $a1, 8*1($r_ptr)
+    sbb	   \$0, $a3              # a3 - borrow
+    mov $a2, 8*2($r_ptr)
+    mov $a3, 8*3($r_ptr)
+    adc \$0, %rax 
+    ret
+.size	ll_u256_sub_limb,.-ll_u256_sub_limb
+
 
 # u64 ll_u256_sub(u64 r[4], u64 a[4], u64 b[4]);
 .globl	ll_u256_sub
