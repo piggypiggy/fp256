@@ -20,6 +20,29 @@
 #include "ll_local.h"
 
 #ifndef USE_ASM_U256_ADD
+u64 ll_u256_add_limb(u64 rd[4], const u64 ad[4], u64 b)
+{
+    u64 t, carry;
+
+    t = ad[0] + b;
+    carry = (t < b);
+    rd[0] = t;
+
+    t = ad[1] + b;
+    carry = (t < b);
+    rd[1] = t;
+
+    t = ad[2] + b;
+    carry = (t < b);
+    rd[2] = t;
+
+    t = ad[3] + b;
+    carry = (t < b);
+    rd[3] = t;
+
+    return carry;
+}
+
 u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4])
 {
     u64 t, r, carry;
