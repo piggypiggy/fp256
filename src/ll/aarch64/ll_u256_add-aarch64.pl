@@ -34,11 +34,30 @@ $code.=<<___;
 ___
 
 {
-my($rd,$ad,$bd)=("x15","x1","x2");
+my($rd,$ad,$bd,$b)=("x15","x1","x2","x2");
 my($a0,$a1,$a2,$a3,$b0,$b1,$b2,$b3)=map("x$_",(3..10));
 my($r0,$r1,$r2,$r3)=map("x$_",(11..14));
 
 $code.=<<___;
+// u64 ll_u256_add_limb(u64 rd[4], const u64 ad[4], u64 b);
+.globl	ll_u256_add_limb
+.type	ll_u256_add_limb,%function
+.align	5
+ll_u256_add_limb:
+    ldp $a0,$a1,[$ad]
+    mov $rd,x0
+    adds $r0,$a0,$b       // r0 = a0 + b
+    ldp $a2,$a3,[$ad,#16]
+    adcs $r1,$a1,xzr      // r1 = a1 + carry
+    adcs $r2,$a2,xzr      // r2 = a2 + carry
+    stp $r0,$r1,[$rd]
+    adcs $r3,$a3,xzr      // r3 = a3 + carry
+    stp $r2,$r3,[$rd,#16]
+    adc x0,xzr,xzr        // carry
+    ret
+.size	ll_u256_add_limb,.-ll_u256_add_limb
+
+
 // u64 ll_u256_add(u64 rd[4], const u64 ad[4], const u64 bd[4]);
 .globl	ll_u256_add
 .type	ll_u256_add,%function
