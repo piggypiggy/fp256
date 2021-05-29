@@ -10,10 +10,15 @@
 *~
 /bin/
 /build/
+/build-x64/
+/build-aarch64/
+/build-riscv64/
 /doc/Doxyfile
 /src/ll/*.s
 /src/ll/*.S
 /.vscode/
+
+.travis.yml
 
 # generated header
 config.h
