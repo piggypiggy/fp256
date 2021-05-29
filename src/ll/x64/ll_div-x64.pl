@@ -115,6 +115,7 @@ __ll_reciprocal1:
     ret
 .size	__ll_reciprocal1,.-__ll_reciprocal1
 
+
 # u64 ll_reciprocal1(u64 d)
 .globl	ll_reciprocal1
 .type	ll_reciprocal1,\@function,1

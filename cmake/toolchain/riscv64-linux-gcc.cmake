@@ -1,4 +1,6 @@
 # cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/riscv64-linux-gcc.cmake ..
+# qemu-riscv64 -L /usr/riscv64-linux-gnu
+# TESTS_EXECUTABLE_LOADER=qemu-riscv64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/riscv64-linux-gnu" ctest --output-on-failure
 
 set(toolchain_path /usr/bin)
 set(CMAKE_SYSTEM_NAME Linux)
