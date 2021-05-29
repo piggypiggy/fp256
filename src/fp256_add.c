@@ -43,18 +43,24 @@ int fp256_sub(fp256 *r, const fp256 *a, const fp256 *b)
     return FP256_OK;
 }
 
-/* TODO : asm */
 int fp256_add_limb(fp256 *r, const fp256 *a, const u64 b)
 {
-    fp256 fb;
-    fp256_set_limb(&fb, b);
-    return fp256_add(r, a, &fb);
+    if (r == NULL || a == NULL)
+        return FP256_ERR;
+
+    ll_u256_add_limb(r->d, a->d, b);
+    r->nlimbs = fp256_num_limbs(r);
+
+    return FP256_OK;
 }
 
-/* TODO : asm */
 int fp256_sub_limb(fp256 *r, const fp256 *a, const u64 b)
 {
-    fp256 fb;
-    fp256_set_limb(&fb, b);
-    return fp256_sub(r, a, &fb);
+    if (r == NULL || a == NULL)
+        return FP256_ERR;
+
+    ll_u256_sub_limb(r->d, a->d, b);
+    r->nlimbs = fp256_num_limbs(r);
+
+    return FP256_OK;
 }
