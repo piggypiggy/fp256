@@ -122,7 +122,90 @@ static U256_MUL_TEST_VECTOR u256_mul_test_vector[] = {
         "11f34eff91d52ed0fad6484abf60e37d71151e1ad314e34744c124b39b8fe3",
         "3bdd1282c7b867d0ca304b83fd24ed1e179c7f72b05c6423e01348755173e0",
     },
-
+    /* 17 */
+    {
+        "ffffffffffff222222222222ffffff8888900000003456722255551a2b42c59ccca06d3a070dddddddddddd000000eeeee0000000666666660000000000002",
+        "ffffffffffff222222222222ffffffffffffffffffffffffffffffffffffffe",
+        "ffffffffffffffffffffffffffffff88888fffffffccccccccfffffffffffff",
+    },
+    /* 18 */
+    {
+        "19c1c84ec46a860cc1e26a2cb20210b797b3b37c9b4fa08c3d6a265a06ac982f34bfc6a207aba2510",
+        "7ee5d0cff6c4cb21956da88556e955df827fe2b0",
+        "33f61dff7ec6c15c19321f7bb46c5d9765c67df73",
+    },
+    /* 19 */
+    {
+        "a9ab6f985a8961183c9a85b7734bf993e2b0338c348588118c87cd3102172bfe13b13601042b02b8cee8d0d3a29be0f1d854599a5eb73",
+        "ad82c83dd6d49a32b6ecd0dbb566a8f340f9dcd418c6f9b7a4b5b933",
+        "fa5528c15786ca767c1086e79c3e4b287a1593bef18fa083d84c1",
+    },
+    /* 20 */
+    {
+        "a47c2209e5ea9d08493d437286c2620d101a2c280b45aa0da3559eb10a2b968a9121e904e84cc6ce8c3022b327e488",
+        "1537f95930323ffa0909f69b2fe68c9f5e09eb23ddf1bf739af5f36c3a56734",
+        "7c07caea74ad192b0d1aa6de7632b3aa",
+    },
+    /* 21 */
+    {
+        "3a8aab462a76395c8ba3f36aac87a583667212fdbf8f5cd53cfaab7bb7cd56c3eafa678858e4194e594ce8425e2aa840eab692390f6c4304c0",
+        "163a34bf1910937359d47cdf1dc65436b752595fb3f8b2489dc78",
+        "2a23e76b1cb14c4c330e7e24962af0387e3391c6b0a6cc95bbc33f9457a9e8",
+    },
+    /* 22 */
+    {
+        "10f40eb385c5ada88cbe52beb173ecf4063e9990d5957a272983f03e36b49155fce2b66f87f0593e331b70",
+        "1b7699f9dbc8294ebd3cc5d3b3ce0176a30bc349b64ed0",
+        "9e07ffa774fc43a0bb6f6de6f0bd00ab735620b3",
+    },
+    /* 23 */
+    {
+        "56f7a170bccb26abb1472c82d41dc786b68415e93e9e32c79d2d914607c2a8f3c3155990dd1f61fc8badbbe3b9d0074517fb9c124855f246f5",
+        "f2dee6a288efe657e17e1761d80c9de25bd5a887704864a1a32f5a67",
+        "5bab2cddfa51e39cd63919ef8421c7a59b0ae9c4e6229011ea037eb243",
+    },
+    /* 24 */
+    {
+        "10b3ac70a2434bc21774c654a57bf0938713a526eae837b691cb65dfa27828eb32a218158e711767c4a1f0cc",
+        "de4f2c6763c3e68d68c4a8c6369be9ed",
+        "133ba5b471b4be459687f6d146096146077846f69f62812bf132ea7c",
+    },
+    /* 25 */
+    {
+        "31570edf83f9d0df0ff703e3cbc847716c5a0848f707cbf77c6ead0d386834ecba6334b1433def53e4574c93d17c10972e6e6beee5784ad1d810",
+        "7159a41ee05607ab883ece715096ecd5ae0e6ad2e0dbeda3ea1e6e5f30",
+        "6f6f187d7c9496e742007fb490cebba2bba6a0e35897a4b50a3b4087bb",
+    },
+    /* 26 */
+    {
+        "1ed90186946115be1a558ea0948a9bcdd5fdda8668bfef0008a47cf598fcb85f75caaee872b08006bfb2b73181da92c29e139bfff27fb1875deb81098",
+        "12c08dee5d10f85ebb5bee934af63a659481406b859481e5eb8cf2a6ecb66558",
+        "1a52000a1a9c164f7eca161fcef09b3786c09a45dfa30ee2a793ea5039",
+    },
+    /* 27 */
+    {
+        "165ec7def1310085a4d91ad8b28245c0ffe9808637929618b8e4258f29ca39aee14719f5b47e22042064b95d1d53b0de522345fef6824",
+        "c646c134120c1ecb87d342a83ae334f07405482240d81fdb54d",
+        "1ce2005b4343d8bb120424d23303681f8395adc845f5fff05f1feca6b4",
+    },
+    /* 28 */
+    {
+        "a6c2d755da20a1399c8b60bc6b0f5b65d46939cf8df8c38aa0c91b64024c23d37700e0b09c37357a164a9d860",
+        "19d2f2b2da153c627df96abcbcabdd31ceb404f25fb8a9f4b79a65c",
+        "675251b1a81be1ff52c2bbf238d90fb8da8",
+    },
+    /* 29 */
+    {
+        "14e89d9b6e72cf301eb19ddae2e8573c661e7aa6c5ac8bab5488118890d92665aeee15f8c",
+        "127b79a13724d43cf3b500f3d6b13288189b504",
+        "1219b76438d5cb870d5fb815dd29ca16823",
+    },
+    /* 30 */
+    {
+        "7c600f2d2f1ecd99823329d6f82cee3d3026f58eabd496a348f47bce62aafd00624c385868b44134e7e4cd94518101187e965e0e99",
+        "83f3e038a42711e677dae7b20e2a8347b9064411f9",
+        "f14c94ca5c8f8560a3587e831dddcebf193b2ccb2fed437d660583f3e39509a1",
+    },
 };
 
 int ll_u256_mul_test_vector(void)
@@ -149,6 +232,19 @@ int ll_u256_mul_test_vector(void)
             test_print_hex("a = ", a, 4);
             test_print_hex("b = ", b, 4);
             printf("a * b should be :\n");
+            test_print_hex("r = ", r, 8);
+            return FP256_ERR;
+        }
+
+        /* r = b * a */
+        ll_set_zero(tr, 8);
+        ll_u256_mul(tr, b, a);
+        if (ll_cmp_limbs(tr, r, 8, 8) != 0) {
+            printf("ll_u256_mul_test_vector %d failed\n", i + 1);
+            test_print_hex("r = ", tr, 8);
+            test_print_hex("a = ", a, 4);
+            test_print_hex("b = ", b, 4);
+            printf("b * a should be :\n");
             test_print_hex("r = ", r, 8);
             return FP256_ERR;
         }
