@@ -556,6 +556,16 @@ FP256_EXPORT void ll_to_mont(u64 *Ad, const u64 *ad, const u64 *Nd, const u64 *R
 FP256_EXPORT void ll_from_mont(u64 *ad, const u64 *Ad, const u64 *Nd, u64 k0, size_t l);
 
 /**
+ * multiply a 256 bit integer and a 64 bit integer.\n
+ * rd = ad * b.
+ * 
+ * @param[out] rd         - result.
+ * @param[in] ad          - the first u64 array to multiply.
+ * @param[in] b           - the second 64 bit integer to multiply.
+ */
+FP256_EXPORT u64 ll_u256_mul_limb(u64 rd[4], const u64 ad[4], u64 b);
+
+/**
  * multiply two 256 bit integer represented by u64 array.\n
  * rd = ad * bd.
  * 

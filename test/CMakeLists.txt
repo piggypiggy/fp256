@@ -47,6 +47,7 @@ endmacro()
 
 fp256_add_test(U256ADDLIMB_TEST   u256addlimb_test   u256addlimb_test.c)
 fp256_add_test(U256ADD_TEST       u256add_test       u256add_test.c)
+fp256_add_test(U256MULLIMB_TEST   u256mullimb_test   u256mullimb_test.c)
 fp256_add_test(U256MUL_TEST       u256mul_test       u256mul_test.c)
 fp256_add_test(U256SHIFT_TEST     u256shift_test     u256shift_test.c)
 fp256_add_test(U256SQR_TEST       u256sqr_test       u256sqr_test.c)
