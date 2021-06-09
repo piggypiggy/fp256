@@ -32,6 +32,49 @@
 #define cy0  a6
 #define cy1  a7
 
+# u64 ll_u256_mul_limb(u64 rd[4], const u64 ad[4], u64 b)
+.globl	ll_u256_mul_limb
+.align	4
+ll_u256_mul_limb:
+    # save b, rd
+    mv b, a2
+    mv rd, a0
+    # load a0~a3
+    ld a3, 24(a1)
+    ld a2, 16(a1)
+    ld a0, 0(a1)
+    ld a1, 8(a1)
+
+    # a0 * b
+    mulhu acc1, a0, b
+    mul acc0, a0, b
+    # a1 * b
+    mulhu acc2, a1, b
+    mul t5, a1, b
+     sd acc0, 0(rd)        # rd[0]
+    add acc1, acc1, t5
+    sltu cy0, acc1, t5
+    # a2 * b
+    mulhu acc3, a2, b
+    mul t4, a2, b
+    add acc2, acc2, cy0
+     sd acc1, 8(rd)        # rd[1]
+    add acc2, acc2, t4
+    sltu cy0, acc2, t4
+    # a3 * b
+    mulhu acc4, a3, b
+    mul t5, a3, b
+    add acc3, acc3, cy0
+     sd acc2, 16(rd)       # rd[2]
+    add acc3, acc3, t5
+    sltu cy0, acc3, t5
+     sd acc3, 24(rd)       # rd[3]
+
+    add a0, acc4, cy0      # carry
+    ret
+.size ll_u256_mul_limb, .-ll_u256_mul_limb
+
+
 # void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4])
 .globl	ll_u256_mul
 .align	4
