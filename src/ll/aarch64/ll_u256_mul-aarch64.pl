@@ -34,12 +34,47 @@ $code.=<<___;
 ___
 
 {
-my($rd,$ad,$bd)=("x0","x1","x2");
+my($rd,$ad,$bd,$b)=("x0","x1","x2","x2");
 my($a0,$a1,$a2,$a3,$b0,$b1,$b2,$b3)=map("x$_",(3..10));
 my($acc0,$acc1,$acc2,$acc3,$acc4,$acc5,$acc6,$acc7)=map("x$_",(11..17,10));
 my($t0,$t1,$t2,$t3,$t4)=map("x$_",(1,2,7..9));
 
 $code.=<<___;
+// u64 ll_u256_mul_limb(u64 r[4], u64 a[4], u64 b);
+.globl	ll_u256_mul_limb
+.type	ll_u256_mul_limb,%function
+.align	5
+ll_u256_mul_limb:
+    ldp $a0,$a1,[$ad]
+    ldp $a2,$a3,[$ad,#16]
+    // a0 * b
+    mul   $acc0,$a0,$b
+    umulh $acc1,$a0,$b
+    // a1 * b
+    mul     $t0,$a1,$b
+    umulh $acc2,$a1,$b
+    adds $acc1,$acc1,$t0
+     mul    $t2,$a2,$b
+    adc $acc2,$acc2,xzr
+    // a2 * b
+    umulh $acc3,$a2,$b
+    adds $acc2,$acc2,$t2
+     mul    $t0,$a3,$b
+    adc $acc3,$acc3,xzr
+    // rd[0] = $acc0, rd[1] = $acc1
+    stp $acc0,$acc1,[$rd]
+    // a3 * b
+    adds $acc3,$acc3,$t0
+    umulh $acc4,$a3,$b
+
+    // rd[2] = $acc2, rd[3] = $acc3
+    stp $acc2,$acc3,[$rd,#16]
+    // carry
+    adc x0,$acc4,xzr
+    ret
+.size	ll_u256_mul_limb,.-ll_u256_mul_limb
+
+
 // void ll_u256_mul(u64 r[8], u64 a[4], u64 b[4]);
 .globl	ll_u256_mul
 .type	ll_u256_mul,%function
