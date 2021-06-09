@@ -43,6 +43,44 @@ my ($al,$bl)=("%r14","%r15");
 my ($acc0,$acc1,$acc2,$acc3)=map("%r$_",(8..11));
 my ($t0,$t1,$t2,$t3,$t4)=("%rcx","%rbp","%rbx","%rsi","%r12");
 $code.=<<___;
+# u64 ll_u256_mul_limb(u64 r[4], u64 a[4], u64 b);
+.globl	ll_u256_mul_limb
+.export	ll_u256_mul_limb
+.type	ll_u256_mul_limb,\@function,3
+.align	32
+ll_u256_mul_limb:
+    mov $b_org, %rcx        # save b
+
+    mov %rcx, %rax
+    mulq 0*8($a_ptr)        # a[0]*b
+    mov %rax, $acc0
+    mov %rdx, $acc1
+     mov %rcx, %rax
+    mov $acc0, 0*8($r_ptr)
+
+    mulq 1*8($a_ptr)        # a[1]*b
+    add %rax, $acc1
+    mov %rdx, $acc2
+     mov %rcx, %rax
+    mov $acc1, 1*8($r_ptr)
+    adc \$0, $acc2
+
+    mulq 2*8($a_ptr)        # a[2]*b
+    add %rax, $acc2
+    mov %rdx, $acc3
+     mov %rcx, %rax
+    mov $acc2, 2*8($r_ptr)
+    adc \$0, $acc3
+
+    mulq 3*8($a_ptr)        # a[3]*b
+    add %rax, $acc3
+    adc \$0, %rdx           # carry
+    mov $acc3, 3*8($r_ptr)
+    mov %rdx, %rax
+
+    ret
+.size	ll_u256_mul_limb,.-ll_u256_mul_limb
+
 
 # void ll_u256_mul(u64 r[8], u64 a[4], u64 b[4]);
 .globl	ll_u256_mul
