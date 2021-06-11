@@ -72,7 +72,7 @@ extern "C" {
     (r0) = ((a0) & __mask1) | (__c0 & __mask2); \
 } while(0);
 
-/* very slow multiplication */
+/* very very very slow multiplication */
 # define LL_MUL64(rh, rl, a, b) do { \
     u64 __t1, __t2, __ah, __al, __bh, __bl; \
     __ah = (a) >> 32; \
@@ -90,6 +90,43 @@ extern "C" {
         (rh) += 0x100000000ULL; \
     (rl) |= (__t1 << 32); \
     (rh) += (__t1 >> 32); \
+} while(0);
+
+# define LL_MULLO64(rl, a, b) do { \
+    u64 __t1, __t2, __ah, __al, __bh, __bl; \
+    __ah = (a) >> 32; \
+    __al = (a) & 0xffffffffULL; \
+    __bh = (b) >> 32; \
+    __bl = (b) & 0xffffffffULL; \
+    __t1 = __al * __bh; \
+    __t2 = __ah * __bl; \
+    (rl) = __al * __bl; \
+    __t1 += ((rl) >> 32); \
+    (rl) &= 0xffffffffULL; \
+    __t1 += __t2; \
+    (rl) |= (__t1 << 32); \
+} while(0);
+
+# define LL_SQR64(rh, rl, a) do { \
+    u64 __t1, __t2, __ah, __al; \
+    __ah = (a) >> 32; \
+    __al = (a) & 0xffffffffULL; \
+    __t1 = __al * __ah; \
+    (rl) = __al * __al; \
+    (rh) = __ah * __ah; \
+    __t2 = (__t1 << 33); \
+    (rl) = (rl) + __t2; \
+    (rh) += (__t1 >> 31); \
+    (rh) += (rl < __t2); \
+} while(0);
+
+# define LL_SQRLO64(rl, a) do { \
+    u64 __t1, __t2, __ah, __al; \
+    __ah = (a) >> 32; \
+    __al = (a) & 0xffffffffULL; \
+    __t1 = __al * __ah; \
+    (rl) = __al * __al; \
+    (rl) = (rl) + (__t1 << 33); \
 } while(0);
 
 # define LL_ALIGN_NUM(num, align) \
