@@ -60,20 +60,17 @@ void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4])
     LL_MUL64(hi, lo, a0, b);
     rd[0] = lo;
 
-    LL_MUL64(t, lo, a1, b);
-    lo += hi;
-    t += (lo < hi);
-    r1 = lo;
+    LL_MUL64(t, r1, a1, b);
+    r1 += hi;
+    t += (r1 < hi);
 
-    LL_MUL64(hi, lo, a2, b);
-    lo += t;
-    hi += (lo < t);
-    r2 = lo;
+    LL_MUL64(hi, r2, a2, b);
+    r2 += t;
+    hi += (r2 < t);
 
-    LL_MUL64(r0, lo, a3, b);
-    lo += hi;
-    r0 += (lo < hi);
-    r3 = lo;
+    LL_MUL64(r0, r3, a3, b);
+    r3 += hi;
+    r0 += (r3 < hi);
 
     /* + ad * bd[1] */
     b = bd[1];
@@ -171,15 +168,13 @@ void ll_u256_mullo(u64 rd[4], const u64 ad[4], const u64 bd[4])
     LL_MUL64(hi, lo, a0, b);
     rd[0] = lo;
 
-    LL_MUL64(t, lo, a1, b);
-    lo += hi;
-    t += (lo < hi);
-    r1 = lo;
+    LL_MUL64(t, r1, a1, b);
+    r1 += hi;
+    t += (r1 < hi);
 
-    LL_MUL64(hi, lo, a2, b);
-    lo += t;
-    hi += (lo < t);
-    r2 = lo;
+    LL_MUL64(hi, r2, a2, b);
+    r2 += t;
+    hi += (r2 < t);
 
     LL_MULLO64(lo, a3, b);
     r3 = lo + hi;
