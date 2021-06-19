@@ -22,29 +22,182 @@
 #ifndef USE_ASM_U256_MONT
 void ll_u256_mont_mul(u64 rd[4], const u64 ad[4], const u64 bd[4], const u64 Nd[4], u64 k0)
 {
-    (void) rd;
-    (void) ad;
-    (void) bd;
-    (void) Nd;
-    (void) k0;
+    u64 hi, lo, t;
+    u64 a0, a1, a2, a3;
+    u64 n0, n1, n2, n3;
+    u64 r0, r1, r2, r3, r4, r5;
+
+    a0 = ad[0]; a1 = ad[1]; a2 = ad[2]; a3 = ad[3];
+    n0 = Nd[0]; n1 = Nd[1]; n2 = Nd[2]; n3 = Nd[3];
+
+    /* ad * bd[0] */
+    r5 = 0;
+    LL_U256_MUL_U64(r4, r3, r2, r1, r0, a3, a2, a1, a0, bd[0], hi, lo, t);
+    /* reduction 1 */
+    LL_U256_MONT_REDC1(r5, r4, r3, r2, r1, r0, n3, n2, n1, n0, k0, hi, lo, t);
+
+    /* r0,r5,r4,r3,r2,r1 += ad * bd[1] */
+    LL_U256_MONT_MUL_ADD(r0, r5, r4, r3, r2, r1, a3, a2, a1, a0, bd[1], hi, lo, t);
+    /* reduction 2 */
+    LL_U256_MONT_REDC1(r0, r5, r4, r3, r2, r1, n3, n2, n1, n0, k0, hi, lo, t);
+
+    /* r1,r0,r5,r4,r3,r2 += ad * bd[2] */
+    LL_U256_MONT_MUL_ADD(r1, r0, r5, r4, r3, r2, a3, a2, a1, a0, bd[2], hi, lo, t);
+    /* reduction 3 */
+    LL_U256_MONT_REDC1(r1, r0, r5, r4, r3, r2, n3, n2, n1, n0, k0, hi, lo, t);
+
+    /* r2,r1,r0,r5,r4,r3 += ad * bd[3] */
+    LL_U256_MONT_MUL_ADD(r2, r1, r0, r5, r4, r3, a3, a2, a1, a0, bd[3], hi, lo, t);
+    /* reduction 4 */
+    LL_U256_MONT_REDC1(r2, r1, r0, r5, r4, r3, n3, n2, n1, n0, k0, hi, lo, t);
+
+    /* r2,r1,r0,r5,r4 conditional sub N */
+    LL_U256_MONT_COND_SUB(a3, a2, a1, a0, r2, r1, r0, r5, r4, n3, n2, n1, n0, b, t);
+    rd[0] = a0;
+    rd[1] = a1;
+    rd[2] = a2;
+    rd[3] = a3;
+
     return;
 }
 
 void ll_u256_mont_sqr(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0)
 {
-    (void) rd;
-    (void) ad;
-    (void) Nd;
-    (void) k0;
+    u64 hi, lo, t;
+    u64 a0, a1, a2, a3;
+    u64 n0, n1, n2, n3;
+    u64 r0, r1, r2, r3, r4, r5, r6, r7;
+    u64 z;
+
+    a0 = ad[0]; a1 = ad[1]; a2 = ad[2]; a3 = ad[3];
+    n0 = Nd[0]; n1 = Nd[1]; n2 = Nd[2]; n3 = Nd[3];
+
+    /* emmm, a copy of ll_u256_sqr */
+
+    /* ad[0] * ad[1] */
+    LL_MUL64(r2, r1, a0, a1);
+
+    /* + ad[0] * ad[2] */
+    LL_MUL64(r3, lo, a0, a2);
+    r2 += lo;
+    r3 += (r2 < lo);
+
+    /* + ad[0] * ad[3] */
+    LL_MUL64(r4, lo, a0, a3);
+    r3 += lo;
+    r4 += (r3 < lo);
+
+    /* + ad[1] * ad[2] */
+    LL_MUL64(hi, lo, a1, a2);
+    r3 += lo;
+    hi += (r3 < lo);
+
+    /* + ad[1] * ad[3] */
+    LL_MUL64(r5, lo, a1, a3);
+    r4 += hi;
+    r5 += (r4 < hi);
+    r4 += lo;
+    r5 += (r4 < lo);
+
+    /* + ad[2] * ad[3] */
+    LL_MUL64(r6, lo, a2, a3);
+    r5 += lo;
+    r6 += (r5 < lo);
+
+    /* ad[6]~ad[1] << 1 */
+    r7 = r6 >> 63;
+    r6 = (r6 << 1) | (r5 >> 63);
+    r5 = (r5 << 1) | (r4 >> 63);
+    r4 = (r4 << 1) | (r3 >> 63);
+    r3 = (r3 << 1) | (r2 >> 63);
+    r2 = (r2 << 1) | (r1 >> 63);
+    r1 <<= 1;
+
+    /* + ad[0]^2 */
+    LL_SQR64(hi, r0, a0);
+    r1 += hi;
+    t = (r1 < hi);
+
+    /* + ad[1]^2 */
+    LL_SQR64(hi, lo, a1);
+    r2 += t;
+    hi += (r2 < t);
+    r2 += lo;
+    hi += (r2 < lo);
+    r3 += hi;
+    t = (r3 < hi);
+
+    /* + ad[2]^2 */
+    LL_SQR64(hi, lo, a2);
+    r4 += t;
+    hi += (r4 < t);
+    r4 += lo;
+    hi += (r4 < lo);
+    r5 += hi;
+    t = (r5 < hi);
+
+    /* + ad[3]^2 */
+    LL_SQR64(hi, lo, a3);
+    r6 += t;
+    hi += (r6 < t);
+    r6 += lo;
+    hi += (r6 < lo);
+    r7 += hi;
+
+    /* reduction 1 */
+    LL_U256_MONT_REDC2(r3, r2, r1, r0, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* reduction 2 */
+    LL_U256_MONT_REDC2(r0, r3, r2, r1, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* reduction 3 */
+    LL_U256_MONT_REDC2(r1, r0, r3, r2, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* reduction 4 */
+    LL_U256_MONT_REDC2(r2, r1, r0, r3, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* r7,r6,r5,r4 += r3,r2,r1,r0 */
+    LL_U256_ADD(z, r7, r6, r5, r4, r3, r2, r1, r0, t);
+
+    /* z,r7,r6,r5,r4 conditional sub N */
+    LL_U256_MONT_COND_SUB(a3, a2, a1, a0, z, r7, r6, r5, r4, n3, n2, n1, n0, b, t);
+    rd[0] = a0;
+    rd[1] = a1;
+    rd[2] = a2;
+    rd[3] = a3;
+
     return;
 }
 
 void ll_u256_mont_reduce(u64 rd[4], const u64 ad[4], const u64 Nd[4], u64 k0)
 {
-    (void) rd;
-    (void) ad;
-    (void) Nd;
-    (void) k0;
+    u64 hi, lo, t;
+    u64 a0, a1, a2, a3;
+    u64 n0, n1, n2, n3;
+    u64 r0, r1, r2, r3;
+
+    r0 = ad[0]; r1 = ad[1]; r2 = ad[2]; r3 = ad[3];
+    n0 = Nd[0]; n1 = Nd[1]; n2 = Nd[2]; n3 = Nd[3];
+
+    /* reduction 1 */
+    LL_U256_MONT_REDC2(r3, r2, r1, r0, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* reduction 2 */
+    LL_U256_MONT_REDC2(r0, r3, r2, r1, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* reduction 3 */
+    LL_U256_MONT_REDC2(r1, r0, r3, r2, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* reduction 4 */
+    LL_U256_MONT_REDC2(r2, r1, r0, r3, n3, n2, n1, n0, k0, hi ,lo, t);
+
+    /* r3,r2,r1,r0 conditional sub N */
+    LL_U256_MONT_COND_SUB(a3, a2, a1, a0, 0, r3, r2, r1, r0, n3, n2, n1, n0, b, t);
+    rd[0] = a0;
+    rd[1] = a1;
+    rd[2] = a2;
+    rd[3] = a3;
+
     return;
 }
 #endif
