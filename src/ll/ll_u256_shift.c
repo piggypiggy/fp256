@@ -22,20 +22,41 @@
 #ifndef USE_ASM_U256_SHIFT
 void ll_u256_lshift(u64 rd[5], const u64 ad[4], const size_t n)
 {
-    rd[4] = ad[3] >> (64 - n);
-    rd[3] = (ad[2] >> (64 - n)) | (ad[3] << n);
-    rd[2] = (ad[1] >> (64 - n)) | (ad[2] << n);
-    rd[1] = (ad[0] >> (64 - n)) | (ad[1] << n);
-    rd[0] = ad[0] << n;
+    assert(n < 64);
+
+    if (n > 0) {
+        rd[4] = ad[3] >> (64 - n);
+        rd[3] = (ad[2] >> (64 - n)) | (ad[3] << n);
+        rd[2] = (ad[1] >> (64 - n)) | (ad[2] << n);
+        rd[1] = (ad[0] >> (64 - n)) | (ad[1] << n);
+        rd[0] = ad[0] << n;
+    }
+    else {
+        rd[4] = 0;
+        rd[3] = ad[3];
+        rd[2] = ad[2];
+        rd[1] = ad[1];
+        rd[0] = ad[0];
+    }
     return;
 }
 
 void ll_u256_rshift(u64 rd[4], const u64 ad[4], const size_t n)
 {
-    rd[0] = (ad[0] >> n) | (ad[1] << (64 - n));
-    rd[1] = (ad[1] >> n) | (ad[2] << (64 - n));
-    rd[2] = (ad[2] >> n) | (ad[3] << (64 - n));
-    rd[3] = ad[3] >> n;
+    assert(n < 64);
+
+    if (n > 0) {
+        rd[0] = (ad[0] >> n) | (ad[1] << (64 - n));
+        rd[1] = (ad[1] >> n) | (ad[2] << (64 - n));
+        rd[2] = (ad[2] >> n) | (ad[3] << (64 - n));
+        rd[3] = ad[3] >> n;
+        }
+    else {
+        rd[3] = ad[3];
+        rd[2] = ad[2];
+        rd[1] = ad[1];
+        rd[0] = ad[0];
+    }
     return;
 }
 
