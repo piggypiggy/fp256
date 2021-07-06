@@ -42,7 +42,6 @@ set(FP256_C_SRC
     ${LL_DIR}/ll_shift.c
     ${LL_DIR}/ll_sys_rand.c
     ${LL_DIR}/ll_u256_add.c
-    ${LL_DIR}/ll_u256_fmod.c
     ${LL_DIR}/ll_u256_mont.c
     ${LL_DIR}/ll_u256_mul.c
     ${LL_DIR}/ll_u256_shift.c

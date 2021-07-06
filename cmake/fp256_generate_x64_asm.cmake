@@ -7,7 +7,6 @@ if(USE_ASM)
     set(USE_ASM_SHIFT      1)    # ll_shift-x64.pl
     set(USE_ASM_U256_ADD   1)    # ll_u256_add-x64.pl
     set(USE_ASM_U256_DIV   1)    # ll_u256_div-x64.pl
-    set(USE_ASM_U256_FMOD  1)    # ll_u256_fmod-x64.pl
     set(USE_ASM_U256_MONT  1)    # ll_u256_mont-x64.pl
     set(USE_ASM_U256_MUL   1)    # ll_u256_mul-x64.pl
     set(USE_ASM_U256_SHIFT 1)    # ll_u256_shift-x64.pl
@@ -80,7 +79,6 @@ if(USE_ASM)
     ll_add_asm(${LL_ASM_DIR}/ll_shift-x64.pl      USE_ASM_SHIFT)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_add-x64.pl   USE_ASM_U256_ADD)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_div-x64.pl   USE_ASM_U256_DIV)
-    ll_add_asm(${LL_ASM_DIR}/ll_u256_fmod-x64.pl  USE_ASM_U256_FMOD)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_mont-x64.pl  USE_ASM_U256_MONT)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_mul-x64.pl   USE_ASM_U256_MUL)
     ll_add_asm(${LL_ASM_DIR}/ll_u256_shift-x64.pl USE_ASM_U256_SHIFT)
