@@ -11,6 +11,8 @@ if(USE_ASM)
     elseif(ARCH_RISCV64)
         include(${CMAKE_MODULE_DIR}/fp256_generate_riscv64_asm.cmake)
     endif()
+else()
+    set(LL_ASM_SRC ${LL_DIR}/dummy.c)
 endif()
 
 # generate config.h
