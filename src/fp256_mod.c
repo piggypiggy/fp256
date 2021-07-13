@@ -42,7 +42,9 @@ int fp256_mod_add(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     rd[4] = ll_u256_add(rd, a->d, b->d);
     rl = ll_num_limbs(rd, 5);
 
-    ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs);
+    if (ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs) != FP256_OK)
+        return FP256_ERR;
+
     fp256_set_limbs(r, remd, reml);
 
     return FP256_OK;
@@ -68,7 +70,9 @@ int fp256_mod_sub(fp256 *r, const fp256 *a, const fp256 *b, const fp256 *m)
     }
     rl = ll_num_limbs(rd, 4);
 
-    ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs);
+    if (ll_div(remd, NULL, &reml, NULL, rd, m->d, rl, m->nlimbs) != FP256_OK)
+        return FP256_ERR;
+
     fp256_set_limbs(r, remd, reml);
     if (neg && reml)
         fp256_sub(r, m, r);
