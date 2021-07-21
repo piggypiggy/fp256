@@ -72,6 +72,6 @@ fp256_add_test(MONTMUL_TEST       montmul_test       montmul_test.c)
 fp256_add_test(MONTSQR_TEST       montsqr_test       montsqr_test.c)
 fp256_add_test(SHIFT_TEST         shift_test         shift_test.c)
 
-if(ARCH_X86_64)
+if(ARCH_X86_64 AND USE_ASM_U256_DIV)
     fp256_add_test(NAIVEDIV_TEST      naivediv_test      naivediv_test.c div_test_local.h)
 endif()
