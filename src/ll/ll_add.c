@@ -150,9 +150,17 @@ u64 ll_sub(u64 *rd, const u64 *ad, const u64 *bd, size_t al, size_t bl)
 #ifndef USE_ASM_ADD
 void ll_mont_cond_sub_limbs(u64 *rd, const u64 *ad, const u64 *bd, size_t l)
 {
-    (void) rd;
-    (void) ad;
-    (void) bd;
-    (void) l;
+    size_t i;
+    u64 *td, borrow, mask_t, mask_a;
+
+    td = (u64*)alloca(l * sizeof(u64));
+    borrow = ll_sub_limbs(td, ad, bd, l);
+    mask_t = (ad[l] >= borrow);
+    mask_a = ~mask_t;
+
+    for (i = 0; i < l; i++)
+        rd[i] = (td[i] & mask_t) | (ad[i] & mask_a);
+
+    return;
 }
 #endif
