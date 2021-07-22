@@ -22,15 +22,19 @@ configure_file(${FP256_DIR}/config.h.in ${FP256_DIR}/config.h @ONLY)
 
 # source file
 set(FP256_HEADER
-    ${FP256_DIR}/config.h
     ${FP256_INCLUDE_DIR}/fp256/fp256.h
     ${FP256_INCLUDE_DIR}/fp256/fp256_ll.h
+)
+
+set(FP256_HEADER_LOCAL
+    ${FP256_DIR}/config.h
     ${FP256_SRC_DIR}/fp256_local.h
     ${LL_DIR}/ll_local.h
 )
 
 set(FP256_C_SRC
     ${FP256_HEADER}
+    ${FP256_HEADER_LOCAL}
     ${LL_DIR}/ll_add.c
     ${LL_DIR}/ll_convert.c
     ${LL_DIR}/ll_cpuid.c

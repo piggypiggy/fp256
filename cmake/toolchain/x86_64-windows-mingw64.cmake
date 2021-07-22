@@ -1,4 +1,6 @@
 # cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/x86_64-windows-mingw64.cmake ..
+# qemu-x86_64 -L /usr/x86_64-w64-mingw32 ./hello_world
+# TESTS_EXECUTABLE_LOADER=qemu-x86_64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/x86_64-w64-mingw32" ctest --output-on-failure
 
 set(toolchain_path /usr/bin)
 set(CMAKE_SYSTEM_NAME Windows)
