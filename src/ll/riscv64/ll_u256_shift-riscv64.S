@@ -67,13 +67,13 @@ ll_u256_rshift:
 
     srl t0, t0, a2     # a[0] >> n
     sll t6, t1, a3     # a[1] << (64-n)
-     srl t1, t1, a2     # a[1] >> n
+     srl t1, t1, a2    # a[1] >> n
     or t0, t0, t6      # r[0] = (a[1] << (64-n)) | (a[0] >> n)
     sll t6, t2, a3     # a[2] << (64-n)
-     srl t2, t2, a2     # a[2] >> n
+     srl t2, t2, a2    # a[2] >> n
     or t1, t1, t6      # r[1] = (a[2] << (64-n)) | (a[1] >> n)
     sll t6, t3, a3     # a[3] << (64-n)
-     srl t3, t3, a2     # r[3] = a[3] >> n
+     srl t3, t3, a2    # r[3] = a[3] >> n
     or t2, t2, t6      # r[2] = (a[3] << (64-n)) | (a[2] >> n)
 
 .Lu256_rshift_done:
