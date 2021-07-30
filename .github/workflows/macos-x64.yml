@@ -60,3 +60,18 @@ jobs:
       
       - name: test-shared
         run: cd build-shared && make test
+
+      # shared library no asm
+      - name: configure-shared-no-asm
+        env:
+          CC: ${{matrix.config.cc}}
+        run: |
+          mkdir build-shared-no-asm
+          cd build-shared-no-asm
+          cmake .. -DCMAKE_BUILD_TYPE=${{matrix.config.build_type}} -DBUILD_STATIC=OFF -DBUILD_SHARED=ON -DUSE_ASAN=ON -DUSE_ASM=OFF
+
+      - name: build-shared-no-asm
+        run: cd build-shared-no-asm && make -j VERBOSE=1
+
+      - name: test-shared-no-asm
+        run: cd build-shared-no-asm && make test

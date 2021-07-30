@@ -12,6 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    # static library
     - name: build-static
       run: |
         mkdir build-static
@@ -21,6 +22,7 @@ jobs:
     - name: test-static
       run: cd build-static; ctest -C Release --output-on-failure
 
+    # shared library
     - name: build-shared
       run: |
         mkdir build-shared
@@ -29,3 +31,13 @@ jobs:
         cmake --build . --config Release -j
     - name: test-shared
       run: cd build-shared; ctest -C Release --output-on-failure
+
+    # shared library no asm
+    - name: build-shared-no-asm
+      run: |
+        mkdir build-shared-no-asm
+        cd build-shared-no-asm
+        cmake -DBUILD_STATIC=OFF -DBUILD_SHARED=ON -DUSE_ASM=OFF ..
+        cmake --build . --config Release -j
+    - name: test-shared-no-asm
+      run: cd build-shared-no-asm; ctest -C Release --output-on-failure

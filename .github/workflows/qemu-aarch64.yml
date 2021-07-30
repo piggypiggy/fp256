@@ -41,6 +41,7 @@ jobs:
         sudo apt-get update
         sudo apt-get install gcc-aarch64-linux-gnu
 
+    # static library
     - name: configure-static
       run: |
         mkdir build-static
@@ -56,6 +57,7 @@ jobs:
         cd build-static
         TESTS_EXECUTABLE_LOADER=qemu-aarch64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/aarch64-linux-gnu" ctest --output-on-failure
 
+    # shared library
     - name: configure-shared
       run: |
         mkdir build-shared
@@ -69,4 +71,20 @@ jobs:
       run: |
         export PATH=$GITHUB_WORKSPACE/qemu-install/bin:$PATH
         cd build-shared
+        TESTS_EXECUTABLE_LOADER=qemu-aarch64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/aarch64-linux-gnu" ctest --output-on-failure
+
+    # shared library no asm
+    - name: configure-shared-no-asm
+      run: |
+        mkdir build-shared-no-asm
+        cd build-shared-no-asm
+        cmake -DCMAKE_TOOLCHAIN_FILE=../cmake/toolchain/aarch64-linux-gcc.cmake .. -DCMAKE_BUILD_TYPE=Release -DBUILD_STATIC=OFF -DBUILD_SHARED=ON -DUSE_ASM=OFF
+
+    - name: build-shared-no-asm
+      run: cd build-shared-no-asm && make -j VERBOSE=1
+
+    - name: test-shared-no-asm
+      run: |
+        export PATH=$GITHUB_WORKSPACE/qemu-install/bin:$PATH
+        cd build-shared-no-asm
         TESTS_EXECUTABLE_LOADER=qemu-aarch64 TESTS_EXECUTABLE_LOADER_ARGUMENTS="-L;/usr/aarch64-linux-gnu" ctest --output-on-failure
