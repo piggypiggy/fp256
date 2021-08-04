@@ -37,7 +37,7 @@ int ll_rand_bits(u64 *rd, size_t nbits)
 
     /* l limbs random data */
     ret = ll_rand_buf((u8*)rd, sizeof(u64) * l);
-    /* reserve lower b bits of ad[l-1] */
+    /* reserve lower b bits of rd[l-1] */
     rd[l - 1] &= mask;
 
     return ret;

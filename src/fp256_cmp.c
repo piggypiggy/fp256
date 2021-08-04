@@ -40,5 +40,6 @@ int fp256_cmp(const fp256 *a, const fp256 *b)
         if (a->d[i] < b->d[i])
             return -1;
     }
+
     return 0;
 }

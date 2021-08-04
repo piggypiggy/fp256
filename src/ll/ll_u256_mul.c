@@ -151,6 +151,7 @@ void ll_u256_mul(u64 rd[8], const u64 ad[4], const u64 bd[4])
     rd[5] = r1;
     rd[6] = r2;
     rd[7] = r3;
+
     return;
 }
 

@@ -78,7 +78,6 @@ typedef struct {
     void (*clear) (void *data);
     int64_t N;
     int64_t T;
-    int64_t R;
     int ok;
 } TEST_THREAD_DATA;
 

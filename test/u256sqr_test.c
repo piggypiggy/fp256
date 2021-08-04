@@ -203,7 +203,6 @@ int ll_u256_sqr_test_vector(void)
         }
 
         /* r = a * a */
-        ll_set_zero(tr, 8);
         ll_u256_mul(tr, a, a);
         if (ll_cmp_limbs(tr, r, 8, 8) != 0) {
             printf("ll_u256_mul_test_vector %d failed\n", i + 1);
@@ -214,7 +213,7 @@ int ll_u256_sqr_test_vector(void)
             return FP256_ERR;
         }
 
-        ll_set_zero(tr, 8);
+        /* tr = lower 256 bits of a^2 */
         ll_u256_sqrlo(tr, a);
         if (ll_cmp_limbs(tr, r, 4, 4) != 0) {
             printf("ll_u256_sqrlo_test_vector %d failed\n", i + 1);

@@ -179,7 +179,7 @@ int fp256_mont_sqr_test_vector(void)
 void* fp256_mont_sqr_test(void *p)
 {
     int64_t i, N;
-    fp256 r, tr1, a, ta, A, odd, mod, k0;
+    fp256 r, tr, a, ta, A, odd, mod, k0;
     size_t al, ol, w;
     mont_ctx mctx;
     TEST_THREAD_DATA *td;
@@ -220,8 +220,8 @@ void* fp256_mont_sqr_test(void *p)
         fp256_from_mont(&ta, &A, &mctx);
         /* r = aaR mod N */
         fp256_mont_sqr(&r, &A, &mctx);
-        /* tr1 = Aa mod N = aaR mod N */
-        fp256_mod_mul(&tr1, &A, &a, &mctx.N);
+        /* tr = Aa mod N = aaR mod N */
+        fp256_mod_mul(&tr, &A, &a, &mctx.N);
 
         /* check a = ta */
         if (fp256_cmp(&a, &ta) != 0) {
@@ -233,14 +233,14 @@ void* fp256_mont_sqr_test(void *p)
             goto end;
         }
 
-        /* check r = tr1 */
-        if (fp256_cmp(&r, &tr1) != 0) {
+        /* check r = tr */
+        if (fp256_cmp(&r, &tr) != 0) {
             printf("fp256_mont_sqr %" PRId64 " failed\n", i + 1);
             test_fp256_print_mont_ctx("mont ctx:\n", &mctx);
             test_fp256_print_hex("a   = ", &a);
             test_fp256_print_hex("A   = ", &A);
             test_fp256_print_hex("r   = ", &r);
-            test_fp256_print_hex("tr1 = ", &tr1);
+            test_fp256_print_hex("tr  = ", &tr);
             goto end;
         }
     }
