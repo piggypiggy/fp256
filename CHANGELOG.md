@@ -1,3 +1,10 @@
+## v0.6.0
+- implement u256mulhi, u256mullo, u256sqrhi, u256sqrlo, mont_reduce, etc in c, x64, aarch64 and riscv64.
+- implement add, shift, div, lehmer exgcd in c and riscv64.
+- all riscv64 tests, more test vectors.
+- improve build on visual studio.
+- remove unused functions(fmod).
+
 ## v0.5.0
 - implement faster division algorithm(ll_div) in x64 and aarch64 assembly.
 - implement modular exponentiation(ll_u256_mont_exp) for odd modulus.

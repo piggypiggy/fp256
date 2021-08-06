@@ -19,7 +19,7 @@ It supports Windows, Linux and Macosx on x86_64 and arm64 processor, and can be 
 low level api operates directly on integer array, most low level api are specific for 256 bit integer, there are also a few api for arbitrary length array.  
 high level api operates on 256 bit integer.
 
-* Most low level arithmetic are implemented in assembly, including `add`, `mul`, `u256 mul`, `div`, `shift`, `fmod`, `exgcd`, `mont mul`, etc, they are very efficient and (maybe)well commented, see [ll/x64](https://github.com/piggypiggy/fp256/tree/master/src/ll/x64), [ll/aarch64](https://github.com/piggypiggy/fp256/tree/master/src/ll/aarch64) and [ll/riscv64](https://github.com/piggypiggy/fp256/tree/master/src/ll/riscv64).
+* Most low level arithmetic are implemented in assembly, including `add`, `mul`, `u256 mul`, `div`, `shift`, `exgcd`, `mont mul`, etc, they are very efficient and (maybe)well commented, see [ll/x64](https://github.com/piggypiggy/fp256/tree/master/src/ll/x64), [ll/aarch64](https://github.com/piggypiggy/fp256/tree/master/src/ll/aarch64) and [ll/riscv64](https://github.com/piggypiggy/fp256/tree/master/src/ll/riscv64).
 
 * 
 
@@ -49,7 +49,6 @@ Or cross compilation (cmake toolchain files are [here](https://github.com/piggyp
 # TODO
 * Add prime test, modular exponential, square root related, etc.
 * Constant-time implementation of division and exgcd.
-* RISC-V implementation.
 * more tests.
 
 # benchmark
