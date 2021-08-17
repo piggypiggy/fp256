@@ -284,6 +284,7 @@ int get_test_args(int argc, char **argv, TEST_ARGS *args)
         memset(do_which, 1, sizeof(DO_WHICH));
     }
     return 0;
+
 err:
     printf("invalid argument\n");
     printf("%s \n", bench_help_string);

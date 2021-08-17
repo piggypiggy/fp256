@@ -11,10 +11,6 @@ elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "riscv64")
 elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "(x86_64)|(AMD64|amd64)")
     set(ARCH_X86_64 1)
 
-elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "(powerpc64|ppc64)")
-    set(ARCH_PPC64 1)
-    message(FATAL_ERROR "powerpc64 processor is not supported yet :(")
-
 else()
     message(FATAL_ERROR "Unsupported processor: ${CMAKE_SYSTEM_PROCESSOR}")
 

@@ -228,23 +228,27 @@ int hex_to_u8(u8 *out, const u8 *in, size_t inlen)
 
     i = 0;
     if (inlen % 2 == 1) {
-        if (in[i] > 128U)
+        if (in[i] >= 128U)
             return FP256_ERR;
+
         r1 = inv_ascii_table[in[i]];
         if (r1 == 0xff)
             return FP256_ERR;
+
         out[0] = r1;
         out++;
         i++;
     }
 
     for (; i < inlen; i += 2) {
-        if (in[i] > 128U || in[i+1] > 128U)
+        if (in[i] >= 128U || in[i+1] >= 128U)
             return FP256_ERR;
+
         r1 = inv_ascii_table[in[i]];
         r2 = inv_ascii_table[in[i+1]];
         if (r1 == 0xff || r2 == 0xff)
             return FP256_ERR;
+
         out[0] = (r1 << 4) | r2;
         out++;
     }
