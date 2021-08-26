@@ -184,7 +184,7 @@ int fp256_shift_test_vector(void)
 {
     unsigned int i;
     int n;
-    fp256 tr, r, a;
+    fp256 tr, tr1, r, a;
 
     for (i = 0; i < sizeof(shift_test_vector) / sizeof(FP256_SHIFT_TEST_VECTOR); i++) {
         fp256_from_hex(&r, (u8*)shift_test_vector[i].r, strlen(shift_test_vector[i].r));
@@ -192,10 +192,27 @@ int fp256_shift_test_vector(void)
 
         /* tr = a << n */
         n = shift_test_vector[i].n;
-        if (n >= 0)
+        if (n > 0)
             fp256_lshift(&tr, &a, (size_t)n);
-        else 
+        else if (n < 0)
             fp256_rshift(&tr, &a, (size_t)-n);
+        else { /* n = 0 */
+            fp256_lshift(&tr, &a, 0);
+            fp256_rshift(&tr1, &a, 0);
+
+            /* lshift(a, 0) ?= rshift(a, 0) */
+            if (fp256_cmp(&tr, &tr1) != 0) {
+                printf("fp256_shift_test_vector %d failed\n", i + 1);
+                printf("lshift(a, 0) != rshift(a, 0)\n");
+                test_fp256_print_hex("a << 0 = ", &tr);
+                test_fp256_print_hex("a >> 0 = ", &tr1);
+                test_fp256_print_hex("a = ", &a);
+                printf("n = %d\n", n);
+                printf("a << 0, a >> 0 should be :\n");
+                test_fp256_print_hex("r = ", &r);
+                return FP256_ERR;
+            }
+        }
 
         if (fp256_cmp(&tr, &r) != 0) {
             printf("fp256_shift_test_vector %d failed\n", i + 1);

@@ -263,7 +263,6 @@ int get_test_args(int argc, char **argv, TEST_ARGS *args)
                 continue;
             }
 
-            /* TODO : add help */
             if (arg_cmp(argv[i], "-h") > 0 || arg_cmp(argv[i], "-help") > 0) {
                 printf("%s \n", bench_help_string);
                 do_all = 0;

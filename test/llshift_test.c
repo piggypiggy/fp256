@@ -178,39 +178,69 @@ static SHIFT_TEST_VECTOR shift_test_vector[] = {
         "0",
         -64,
     },
+    /* 26 */
+    {
+        "8888888888888888",
+        "8888888888888888",
+        0,
+    },
 };
 
-/* TODO : test ll_rshift for shift = 0 */
 int ll_shift_test_vector(void)
 {
     unsigned int i;
     int n;
-    u64 tr[12], r[12], a[12];
-    size_t trl, rl, al, max;
+    /* result has at most 12 limbs */
+    u64 tr[12], tr1[12], r[12], a[12];
+    size_t trl, trl1, rl, al, max;
 
     for (i = 0; i < sizeof(shift_test_vector) / sizeof(SHIFT_TEST_VECTOR); i++) {
         /* clear */
-        ll_set_zero(r, 12);
+        ll_set_zero(tr, 12);
+        ll_set_zero(tr1, 12);
 
         ll_from_hex(r, &rl, (u8*)shift_test_vector[i].r, strlen(shift_test_vector[i].r));
         ll_from_hex(a, &al, (u8*)shift_test_vector[i].a, strlen(shift_test_vector[i].a));
 
         /* tr = a << n */
         n = shift_test_vector[i].n;
-        if (n >= 0) {
+        if (n > 0) {
             ll_lshift(tr, a, al, (size_t)n);
-            trl = (al == 0 ? 0 : ll_num_limbs(tr, al + (n >> 6) + 1));
+            trl = (al == 0 ? 0 : ll_num_limbs(tr, 12));
         }
-        else {
+        else if (n < 0) {
             ll_rshift(tr, a, al, (size_t)-n);
-            trl = (al == 0 ? 0 : ll_num_limbs(tr, al));
+            trl = (al == 0 ? 0 : ll_num_limbs(tr, 12));
+        }
+        else { /* n = 0 */
+            ll_lshift(tr, a, al, 0);
+            trl = (al == 0 ? 0 : ll_num_limbs(tr, 12));
+
+            ll_rshift(tr1, a, al, 0);
+            trl1 = (al == 0 ? 0 : ll_num_limbs(tr1, 12));
+
+            /* lshift(a, 0) ?= rshift(a, 0) */
+            if (trl != trl1 || (ll_cmp_limbs(tr, tr1, trl, trl1) != 0)) {
+                printf("ll_shift_test_vector %d failed\n", i + 1);
+                printf("lshift(a, 0) != rshift(a, 0)\n");
+                printf("al = %zu, rl = %zu, trl = %zu, trl1 = %zu\n", al, rl, trl, trl1);
+                max = (trl > rl ? trl : rl);
+                max = (max > trl1 ? max : trl1);
+                max = (max > al ? max : al);
+                test_print_hex("a << 0 = ", tr, max);
+                test_print_hex("a >> 0 = ", tr1, max);
+                test_print_hex("a = ", a, al);
+                printf("a << 0, a >> 0 should be :\n");
+                test_print_hex("r = ", r, max);
+                return FP256_ERR;
+            }
         }
 
         if (ll_cmp_limbs(tr, r, trl, rl) != 0) {
+            printf("ll_shift_test_vector %d failed\n", i + 1);
             printf("al = %zu, rl = %zu, trl = %zu\n", al, rl, trl);
             max = (trl > rl ? trl : rl);
             max = (max > al ? max : al);
-            printf("ll_shift_test_vector %d failed\n", i + 1);
             test_print_hex("r = ", tr, max);
             test_print_hex("a = ", a, al);
             printf("n = %d\n", n);
