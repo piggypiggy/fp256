@@ -131,6 +131,7 @@ ll_rshift:
     mov 0($a_ptr), %rax
     test $shift, $shift         # start shifting from the (l+1)'s limb
     jnz .ll_rshift_loop
+    inc $al
     jmp .ll_rshift_copy         # if shift % 64 = 0, then copy limbs from a to r
 
 .ll_rshift_r_is_zero:           # clear r
