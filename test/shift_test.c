@@ -206,10 +206,10 @@ int fp256_shift_test_vector(void)
                 printf("lshift(a, 0) != rshift(a, 0)\n");
                 test_fp256_print_hex("a << 0 = ", &tr);
                 test_fp256_print_hex("a >> 0 = ", &tr1);
-                test_fp256_print_hex("a = ", &a);
+                test_fp256_print_hex("a      = ", &a);
                 printf("n = %d\n", n);
                 printf("a << 0, a >> 0 should be :\n");
-                test_fp256_print_hex("r = ", &r);
+                test_fp256_print_hex("r      = ", &r);
                 return FP256_ERR;
             }
         }

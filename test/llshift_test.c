@@ -229,9 +229,9 @@ int ll_shift_test_vector(void)
                 max = (max > al ? max : al);
                 test_print_hex("a << 0 = ", tr, max);
                 test_print_hex("a >> 0 = ", tr1, max);
-                test_print_hex("a = ", a, al);
+                test_print_hex("a      = ", a, al);
                 printf("a << 0, a >> 0 should be :\n");
-                test_print_hex("r = ", r, max);
+                test_print_hex("r      = ", r, max);
                 return FP256_ERR;
             }
         }
