@@ -27,7 +27,6 @@
 #cmakedefine ARCH_MIPS64
 #cmakedefine ARCH_AARCH64
 #cmakedefine ARCH_RISCV64
-#cmakedefine ARCH_PPC64
 
 #cmakedefine USE_DEV_RANDOM
 

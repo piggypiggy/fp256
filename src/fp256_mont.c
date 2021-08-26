@@ -18,7 +18,6 @@
 
 #include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
-#include "fp256_local.h"
 
 int fp256_mont_ctx_init(mont_ctx *mctx, size_t w, const fp256 *N)
 {
