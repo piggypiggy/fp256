@@ -18,35 +18,30 @@
 
 #include <fp256/fp256.h>
 #include <fp256/fp256_ll.h>
+#include "ll/ll_local.h"
 
-/* TODO ： inline? */
-int fp256_num_limbs(const fp256 *a)
+size_t fp256_num_limbs(const fp256 *a)
 {
-    int l;
+    size_t l;
 
-    if (a == NULL)
-        return -1;
-
-    l = 3; // FP256_LIMBS - 1
-    while (l >= 0 && a->d[l] == 0ULL)
-        l--;
-
-    return (l + 1);
+    LL_NUM_LIMBS(a->d, 4, l);
+    return l;
 }
 
-int fp256_num_bits(const fp256 *a)
+size_t fp256_num_bits(const fp256 *a)
 {
-    int l, b;
+    size_t l, b;
 
     if (a == NULL)
         return -1;
 
-    l = ll_num_limbs(a->d, 4);
+    LL_NUM_LIMBS(a->d, 4, l);
     if (l == 0)
         return 0;
 
     l--;
-    b = ll_num_bits(a->d[l]);
+    LL_NUM_BITS(a->d[l], b)
+
     return (l << 6) + b;
 }
 

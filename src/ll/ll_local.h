@@ -300,6 +300,56 @@ extern "C" {
     LL_COND_SWAP_LIMB((a), (b), __cond); \
 } while(0);
 
+/* number of limbs of a */
+# define LL_NUM_LIMBS(a, max, nlimbs) do { \
+    size_t n = max; \
+    nlimbs = 0; \
+    while (n > 0) { \
+        n--; \
+        if (a[n] > 0ULL) { \
+            nlimbs = n + 1; \
+            break; \
+        } \
+    } \
+} while(0);
+
+/* number of bits of a(64 bit integer) */
+# define LL_NUM_BITS(a, nbits) do { \
+    u64 t, x, mask; \
+ \
+    t = a; \
+    nbits = (t != 0); \
+ \
+    x = t >> 32; \
+    mask = (0 - ((-x) >> 63)); \
+    nbits += 32 & mask; \
+    t ^= (x ^ t) & mask; \
+ \
+    x = t >> 16; \
+    mask = (0 - ((-x) >> 63)); \
+    nbits += 16 & mask; \
+    t ^= (x ^ t) & mask; \
+ \
+    x = t >> 8; \
+    mask = (0 - ((-x) >> 63)); \
+    nbits += 8 & mask; \
+    t ^= (x ^ t) & mask; \
+ \
+    x = t >> 4; \
+    mask = (0 - ((-x) >> 63)); \
+    nbits += 4 & mask; \
+    t ^= (x ^ t) & mask; \
+ \
+    x = t >> 2; \
+    mask = (0 - ((-x) >> 63)); \
+    nbits += 2 & mask; \
+    t ^= (x ^ t) & mask; \
+ \
+    x = t >> 1; \
+    mask = (0 - ((-x) >> 63)); \
+    nbits += 1 & mask; \
+} while(0);
+
 /* for _alloca, variable length array. */
 # if defined(_MSC_VER)
 #  include <malloc.h>

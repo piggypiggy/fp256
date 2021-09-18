@@ -136,7 +136,7 @@ FP256_EXPORT int fp256_crit_leave(void);
  * @param[in] a           - 256 bit integer.
  * @return number of limbs.
  */
-FP256_EXPORT int fp256_num_limbs(const fp256 *a);
+FP256_EXPORT size_t fp256_num_limbs(const fp256 *a);
 
 /**
  * count number of bits of a.
@@ -144,7 +144,7 @@ FP256_EXPORT int fp256_num_limbs(const fp256 *a);
  * @param[in] a           - 256 bit integer.
  * @return number of bits.
  */
-FP256_EXPORT int fp256_num_bits(const fp256 *a);
+FP256_EXPORT size_t fp256_num_bits(const fp256 *a);
 
 /** 
  * set r = a.

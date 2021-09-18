@@ -32,7 +32,7 @@ int fp256_cmp(const fp256 *a, const fp256 *b)
         return 0;
 
     if (a->nlimbs != b->nlimbs)
-        return ((a->nlimbs - b->nlimbs));
+        return (a->nlimbs - b->nlimbs);
 
     for (i = a->nlimbs - 1; i >= 0; i--) {
         if (a->d[i] > b->d[i])

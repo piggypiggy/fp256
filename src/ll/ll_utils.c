@@ -35,39 +35,10 @@ size_t ll_leading_zeros(u64 a)
 /* constant-time from openssl. */
 size_t ll_num_bits(u64 a)
 {
-    u64 x, mask;
-    size_t bits = (a != 0);
+    size_t nbits;
 
-    x = a >> 32;
-    mask = (0 - ((-x) >> 63));
-    bits += 32 & mask;
-    a ^= (x ^ a) & mask;
-
-    x = a >> 16;
-    mask = (0 - ((-x) >> 63));
-    bits += 16 & mask;
-    a ^= (x ^ a) & mask;
-
-    x = a >> 8;
-    mask = (0 - ((-x) >> 63));
-    bits += 8 & mask;
-    a ^= (x ^ a) & mask;
-
-    x = a >> 4;
-    mask = (0 - ((-x) >> 63));
-    bits += 4 & mask;
-    a ^= (x ^ a) & mask;
-
-    x = a >> 2;
-    mask = (0 - ((-x) >> 63));
-    bits += 2 & mask;
-    a ^= (x ^ a) & mask;
-
-    x = a >> 1;
-    mask = (0 - ((-x) >> 63));
-    bits += 1 & mask;
-
-    return bits;
+    LL_NUM_BITS(a, nbits);
+    return nbits;
 }
 
 inline u32 ll_bswap4(u32 in)
@@ -160,13 +131,10 @@ void ll_set_limb(u64 *ad, size_t al, u64 limb)
 
 size_t ll_num_limbs(const u64 *ad, size_t max)
 {
-    while (max > 0) {
-        max--;
-        if (ad[max] > 0ULL)
-            return (max + 1);
-    }
+    size_t nlimbs;
 
-    return max;
+    LL_NUM_LIMBS(ad, max, nlimbs);
+    return nlimbs;
 }
 
 void ll_normalize(u64 *ad, size_t al, size_t max)
