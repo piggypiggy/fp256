@@ -13,13 +13,13 @@ jobs:
     strategy:
       matrix:
         config:
-        - {
-            name: "x64-ubuntu16.04-gcc release",
-            arch: x64,
-            os: ubuntu-16.04,
-            cc: gcc,
-            build_type: Release
-          }
+        # - {
+        #     name: "x64-ubuntu16.04-gcc release",
+        #     arch: x64,
+        #     os: ubuntu-16.04,
+        #     cc: gcc,
+        #     build_type: Release
+        #   }
         - {
             name: "x64-ubuntu18.04-gcc release",
             arch: x64,
