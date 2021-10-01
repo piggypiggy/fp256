@@ -130,40 +130,40 @@ extern "C" {
 
 /* y4,y3,y2,y1,y0 = y3,y2,y1,y0 + x3,x2,x1,x0 */
 # define LL_U256_ADD(y4, y3, y2, y1, y0, x3, x2, x1, x0, t) do { \
-    u64 w; \
+    u64 __w; \
     y0 += x0; \
-    w = (y0 < x0); \
+    __w = (y0 < x0); \
  \
-    t = y1 + w; \
-    w = (t < y1); \
+    t = y1 + __w; \
+    __w = (t < y1); \
     y1 = t + x1; \
-    w |= (y1 < t); \
+    __w |= (y1 < t); \
  \
-    t = y2 + w; \
-    w = (t < y2); \
+    t = y2 + __w; \
+    __w = (t < y2); \
     y2 = t + x2; \
-    w |= (y2 < t); \
+    __w |= (y2 < t); \
  \
-    t = y3 + w; \
+    t = y3 + __w; \
     y4 = (t < y3); \
     y3 = t + x3; \
     y4 |= (y3 < t); \
 } while(0);
 
 # define LL_U256_MUL_U64(y4, y3, y2, y1, y0, x3, x2, x1, x0, b, hi, lo, t) do { \
-    u64 w; \
-    w = b; \
-    LL_MUL64(hi, y0, x0, w); \
+    u64 __w; \
+    __w = b; \
+    LL_MUL64(hi, y0, x0, __w); \
  \
-    LL_MUL64(t, y1, x1, w); \
+    LL_MUL64(t, y1, x1, __w); \
     y1 += hi; \
     t += (y1 < hi); \
  \
-    LL_MUL64(hi, y2, x2, w); \
+    LL_MUL64(hi, y2, x2, __w); \
     y2 += t; \
     hi += (y2 < t); \
  \
-    LL_MUL64(y4, y3, x3, w); \
+    LL_MUL64(y4, y3, x3, __w); \
     y3 += hi; \
     y4 += (y3 < hi); \
 } while(0);
@@ -197,39 +197,39 @@ extern "C" {
 } while(0);
 
 # define LL_U256_MONT_MUL_ADD(y5, y4, y3, y2, y1, y0, x3, x2, x1, x0, b, hi, lo, t) do { \
-    u64 w; \
-    w = b; \
+    u64 __w; \
+    __w = b; \
     y5 = 0; \
-    LL_U256_MUL_ADD1(y5, y4, y3, y2, y1, y0, x3, x2, x1, x0, w, hi, lo, t); \
+    LL_U256_MUL_ADD1(y5, y4, y3, y2, y1, y0, x3, x2, x1, x0, __w, hi, lo, t); \
 } while(0);
 
 # define LL_U256_MONT_REDC1(y5, y4, y3, y2, y1, y0, x3, x2, x1, x0, k0, hi, lo, t) do { \
-    u64 w; \
-    w = y0 * k0; \
-    LL_U256_MUL_ADD1(y5, y4, y3, y2, y1, y0, x3, x2, x1, x0, w, hi, lo, t); \
+    u64 __w; \
+    __w = y0 * k0; \
+    LL_U256_MUL_ADD1(y5, y4, y3, y2, y1, y0, x3, x2, x1, x0, __w, hi, lo, t); \
 } while(0);
 
 /* y0,y3,y2,y1 = (y3,y2,y1,y0 + x3,x2,x1,x0 * (y0 * k0)) / 2^64 */
 # define LL_U256_MONT_REDC2(y3, y2, y1, y0, x3, x2, x1, x0, k0, hi, lo, t) do { \
-    u64 w; \
-    w = y0 * k0; \
-    LL_MUL64(hi, lo, x0, w); \
+    u64 __w; \
+    __w = y0 * k0; \
+    LL_MUL64(hi, lo, x0, __w); \
     y0 += lo; \
     hi += (y0 < lo); \
  \
-    LL_MUL64(t, lo, x1, w); \
+    LL_MUL64(t, lo, x1, __w); \
     y1 += hi; \
     t += (y1 < hi); \
     y1 += lo; \
     t += (y1 < lo); \
  \
-    LL_MUL64(hi, lo, x2, w); \
+    LL_MUL64(hi, lo, x2, __w); \
     y2 += t; \
     hi += (y2 < t); \
     y2 += lo; \
     hi += (y2 < lo); \
  \
-    LL_MUL64(y0, lo, x3, w); \
+    LL_MUL64(y0, lo, x3, __w); \
     y3 += hi; \
     y0 += (y3 < hi); \
     y3 += lo; \
@@ -241,26 +241,26 @@ extern "C" {
  * = y3,y2,y1,y0                  if y < x
  */
 # define LL_U256_MONT_COND_SUB(t3, t2, t1, t0, y4, y3, y2, y1, y0, x3, x2, x1, x0, b, t) do { \
-    u64 b; \
+    u64 __b; \
     t0 = y0 - x0; \
-    b = (y0 < x0); \
+    __b = (y0 < x0); \
  \
-    t = y1 - b; \
-    b = (y1 < b); \
+    t = y1 - __b; \
+    __b = (y1 < __b); \
     t1 = t - x1; \
-    b |= (t < x1); \
+    __b |= (t < x1); \
  \
-    t = y2 - b; \
-    b = (y2 < b); \
+    t = y2 - __b; \
+    __b = (y2 < __b); \
     t2 = t - x2; \
-    b |= (t < x2); \
+    __b |= (t < x2); \
  \
-    t = y3 - b; \
-    b = (y3 < b); \
+    t = y3 - __b; \
+    __b = (y3 < __b); \
     t3 = t - x3; \
-    b |= (t < x3); \
+    __b |= (t < x3); \
  \
-    t = -(u64)(y4 >= b); \
+    t = -(u64)(y4 >= __b); \
     t0 = (t0 & t) | (y0 & (~t)); \
     t1 = (t1 & t) | (y1 & (~t)); \
     t2 = (t2 & t) | (y2 & (~t)); \
@@ -290,65 +290,71 @@ extern "C" {
 
 /* swap a and b if a < b */
 # define LL_CONDLO_SWAP_LIMB(a, b) do { \
-    _cond = ((a) - (b)) >> 63; \
+    __cond = ((a) - (b)) >> 63; \
     LL_COND_SWAP_LIMB((a), (b), __cond); \
 } while(0);
 
 /* swap a and b if a > b */
 # define LL_CONDHI_SWAP_LIMB(a, b) do { \
-    _cond = ((b) - (a)) >> 63; \
+    __cond = ((b) - (a)) >> 63; \
     LL_COND_SWAP_LIMB((a), (b), __cond); \
 } while(0);
 
-/* number of limbs of a */
+/* number of limbs of a(u64 array) */
 # define LL_NUM_LIMBS(a, max, nlimbs) do { \
-    size_t n = max; \
+    size_t __n = max; \
     nlimbs = 0; \
-    while (n > 0) { \
-        n--; \
-        if (a[n] > 0ULL) { \
-            nlimbs = n + 1; \
+ \
+    while (__n > 0) { \
+        __n--; \
+        if (a[__n] > 0ULL) { \
+            nlimbs = 1; \
             break; \
         } \
     } \
+    nlimbs += __n; \
 } while(0);
 
-/* number of bits of a(64 bit integer) */
+/* number of bits of a(64 bit integer), from openssl. 
+ * ...
+ */
+/*
 # define LL_NUM_BITS(a, nbits) do { \
-    u64 t, x, mask; \
+    u64 __t, __x, __mask; \
  \
-    t = a; \
-    nbits = (t != 0); \
+    __t = a; \
+    nbits = (__t != 0); \
  \
-    x = t >> 32; \
-    mask = (0 - ((-x) >> 63)); \
-    nbits += 32 & mask; \
-    t ^= (x ^ t) & mask; \
+    __x = __t >> 32; \
+    __mask = (0 - ((-__x) >> 63)); \
+    nbits += 32 & __mask; \
+    __t ^= (__x ^ __t) & __mask; \
  \
-    x = t >> 16; \
-    mask = (0 - ((-x) >> 63)); \
-    nbits += 16 & mask; \
-    t ^= (x ^ t) & mask; \
+    __x = __t >> 16; \
+    __mask = (0 - ((-__x) >> 63)); \
+    nbits += 16 & __mask; \
+    __t ^= (__x ^ __t) & __mask; \
  \
-    x = t >> 8; \
-    mask = (0 - ((-x) >> 63)); \
-    nbits += 8 & mask; \
-    t ^= (x ^ t) & mask; \
+    __x = __t >> 8; \
+    __mask = (0 - ((-__x) >> 63)); \
+    nbits += 8 & __mask; \
+    __t ^= (__x ^ __t) & __mask; \
  \
-    x = t >> 4; \
-    mask = (0 - ((-x) >> 63)); \
-    nbits += 4 & mask; \
-    t ^= (x ^ t) & mask; \
+    __x = __t >> 4; \
+    __mask = (0 - ((-__x) >> 63)); \
+    nbits += 4 & __mask; \
+    __t ^= (__x ^ __t) & __mask; \
  \
-    x = t >> 2; \
-    mask = (0 - ((-x) >> 63)); \
-    nbits += 2 & mask; \
-    t ^= (x ^ t) & mask; \
+    __x = __t >> 2; \
+    __mask = (0 - ((-__x) >> 63)); \
+    nbits += 2 & __mask; \
+    __t ^= (__x ^ __t) & __mask; \
  \
-    x = t >> 1; \
-    mask = (0 - ((-x) >> 63)); \
-    nbits += 1 & mask; \
+    __x = __t >> 1; \
+    __mask = (0 - ((-__x) >> 63)); \
+    nbits += 1 & __mask; \
 } while(0);
+*/
 
 /* for _alloca, variable length array. */
 # if defined(_MSC_VER)
