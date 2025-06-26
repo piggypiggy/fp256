@@ -275,7 +275,7 @@ void ll_div_n_limbs_pi1(u64 *qd, u64 *nd, u64 *dd, size_t nl, size_t dl, u64 v)
     for (i = nl; i > 0; i--) {
         if (nd[2] == d1 && nd[1] == d0) {
             q = -1ULL;
-            ll_mulsub_limb(nd - dl, dd, q, dl + 2, dl + 2);
+            ll_mulsub_limb(nd - dl, dd, q, dl + 3, dl + 2);
         }
         else {
             /* divrem((nd[2],nd[1],nd[0]), (d1,d0)) */
